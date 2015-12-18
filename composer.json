@@ -1,0 +1,15 @@
+{
+    "name": "cottonwoodgulch/alumni",
+    "description": "A web interface for our alumni to engage!",
+    "require": {
+        "battis/bootstrapsmarty": "^1.0"
+    },
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Tom Hyde",
+            "email": "tom@russellhyde.net"
+        }
+    ],
+    "minimum-stability": "dev"
+}
