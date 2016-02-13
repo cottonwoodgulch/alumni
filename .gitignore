@@ -1,1 +1,6 @@
+# composer files
 /vendor/
+
+# secret files
+config.php
+AllQueries.sql

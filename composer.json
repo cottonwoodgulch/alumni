@@ -1,8 +1,26 @@
 {
     "name": "cottonwoodgulch/alumni",
-    "description": "A web interface for our alumni to engage!",
+    "description": "A web interface for our alumni to engage",
+    "repositories": [
+    {
+        "type": "package",
+        "package": {
+            "name": "openwall/phpass",
+            "version": "0.3",
+            "dist": {
+                "url": "http://www.openwall.com/phpass/phpass-0.3.tar.gz",
+                "type": "tar"
+            },
+            "autoload": {
+                "classmap": ["PasswordHash.php"]
+            }
+        }
+    }
+    ],
     "require": {
-        "battis/bootstrapsmarty": "^1.0"
+        "smarty/smarty": "3.1.*",
+    	"owasp/phprbac": "2.0.*@dev",
+        "openwall/phpass": "0.3"
     },
     "license": "GPL-3.0",
     "authors": [
