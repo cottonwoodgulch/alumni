@@ -1,11 +1,12 @@
 <?php
-/* Smarty version 3.1.30-dev/18, created on 2016-01-25 15:17:29
+/* Smarty version 3.1.30-dev/44, created on 2016-02-15 18:45:32
   from "/var/www/html/alumni/templates/login.tpl" */
 
+/* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
+  'version' => '3.1.30-dev/44',
+  'unifunc' => 'content_56c21ccc728bd3_69808605',
   'has_nocache_code' => false,
-  'version' => '3.1.30-dev/18',
-  'unifunc' => 'content_56a63c8987d600_06246012',
   'file_dependency' => 
   array (
     'ef66f034eb2275c1af723426951964716cfd42e1' => 
@@ -20,47 +21,50 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
     'file:page.tpl' => 1,
   ),
 ),false)) {
-function content_56a63c8987d600_06246012 ($_smarty_tpl) {
+function content_56c21ccc728bd3_69808605 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->ext->_inheritance->init($_smarty_tpl, true);
 ?>
 
 
 
 <?php 
-new Block_nav_24474705856a63c8986b4c4_29313232($_smarty_tpl);
+new Block_nav_161570259756c21ccc717dc5_65916654($_smarty_tpl);
 ?>
 
 
 <?php 
-new Block_edit_94241759356a63c89870729_91932041($_smarty_tpl);
+new Block_edit_27734229056c21ccc71cb09_03868771($_smarty_tpl);
 ?>
 
 
 <?php 
-new Block_content_wrapper_160188250256a63c89874da3_12117200($_smarty_tpl);
+new Block_content_wrapper_142319231256c21ccc720bd3_73821334($_smarty_tpl);
 ?>
 
 
 <?php 
-new Block_footer_144008367456a63c8987c0e1_16025609($_smarty_tpl);
+new Block_footer_810868656c21ccc727823_49898393($_smarty_tpl);
 ?>
 
 <?php $_smarty_tpl->ext->_inheritance->endChild($_smarty_tpl);
-$_smarty_tpl->_subTemplateRender("file:page.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 66, false);
+$_smarty_tpl->_subTemplateRender("file:page.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 2, false);
 }
-/* {block 'nav'} file:login.tpl */
-class Block_nav_24474705856a63c8986b4c4_29313232 extends Smarty_Internal_Block
+/* {block 'nav'} /var/www/html/alumni/templates/login.tpl */
+class Block_nav_161570259756c21ccc717dc5_65916654 extends Smarty_Internal_Block
 {
 public $name = "nav";
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->ext->_inheritance->blockNesting++;
+$_smarty_tpl->ext->_inheritance->blockNesting--;
 }
 }
 /* {/block 'nav'} */
-/* {block 'edit'} file:login.tpl */
-class Block_edit_94241759356a63c89870729_91932041 extends Smarty_Internal_Block
+/* {block 'edit'} /var/www/html/alumni/templates/login.tpl */
+class Block_edit_27734229056c21ccc71cb09_03868771 extends Smarty_Internal_Block
 {
 public $name = "edit";
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->ext->_inheritance->blockNesting++;
 ?>
 
       <form method="post" action="login.php">
@@ -81,27 +85,32 @@ public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
       </form>
       <p>Forgot your password? Need an account? Call the office - 505-248-0563</p>
 <?php
+$_smarty_tpl->ext->_inheritance->blockNesting--;
 }
 }
 /* {/block 'edit'} */
-/* {block 'content_wrapper'} file:login.tpl */
-class Block_content_wrapper_160188250256a63c89874da3_12117200 extends Smarty_Internal_Block
+/* {block 'content_wrapper'} /var/www/html/alumni/templates/login.tpl */
+class Block_content_wrapper_142319231256c21ccc720bd3_73821334 extends Smarty_Internal_Block
 {
 public $name = "content_wrapper";
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->ext->_inheritance->blockNesting++;
+$_smarty_tpl->ext->_inheritance->blockNesting--;
 }
 }
 /* {/block 'content_wrapper'} */
-/* {block 'footer'} file:login.tpl */
-class Block_footer_144008367456a63c8987c0e1_16025609 extends Smarty_Internal_Block
+/* {block 'footer'} /var/www/html/alumni/templates/login.tpl */
+class Block_footer_810868656c21ccc727823_49898393 extends Smarty_Internal_Block
 {
 public $name = "footer";
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->ext->_inheritance->blockNesting++;
 ?>
 
   <?php echo $_smarty_tpl->tpl_vars['footer']->value;?>
 
 <?php
+$_smarty_tpl->ext->_inheritance->blockNesting--;
 }
 }
 /* {/block 'footer'} */

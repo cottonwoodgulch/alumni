@@ -1,11 +1,12 @@
 <?php
-/* Smarty version 3.1.30-dev/18, created on 2016-02-13 20:43:17
+/* Smarty version 3.1.30-dev/44, created on 2016-02-15 19:33:35
   from "/var/www/html/alumni/templates/roster_members.tpl" */
 
+/* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
+  'version' => '3.1.30-dev/44',
+  'unifunc' => 'content_56c2280febdd86_66473617',
   'has_nocache_code' => false,
-  'version' => '3.1.30-dev/18',
-  'unifunc' => 'content_56bf9565628b12_05499318',
   'file_dependency' => 
   array (
     'a9f1ac2c5c6602acaea5be7c1db42f56474ad127' => 
@@ -20,37 +21,40 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
     'file:page.tpl' => 1,
   ),
 ),false)) {
-function content_56bf9565628b12_05499318 ($_smarty_tpl) {
+function content_56c2280febdd86_66473617 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->ext->_inheritance->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-new Block_edit_wrapper_7069954556bf95655b5b45_24312870($_smarty_tpl);
+new Block_edit_wrapper_108208791256c2280fe4a2b2_51046557($_smarty_tpl);
 ?>
 
 
 <?php 
-new Block_content_56510323256bf95656224d1_56689361($_smarty_tpl);
+new Block_content_15680458756c2280feb6f35_53882797($_smarty_tpl);
 $_smarty_tpl->ext->_inheritance->endChild($_smarty_tpl);
-$_smarty_tpl->_subTemplateRender("file:page.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 66, false);
+$_smarty_tpl->_subTemplateRender("file:page.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 2, false);
 }
-/* {block 'edit_wrapper'} file:roster_members.tpl */
-class Block_edit_wrapper_7069954556bf95655b5b45_24312870 extends Smarty_Internal_Block
+/* {block 'edit_wrapper'} /var/www/html/alumni/templates/roster_members.tpl */
+class Block_edit_wrapper_108208791256c2280fe4a2b2_51046557 extends Smarty_Internal_Block
 {
 public $name = "edit_wrapper";
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->ext->_inheritance->blockNesting++;
 ?>
 
 <?php
+$_smarty_tpl->ext->_inheritance->blockNesting--;
 }
 }
 /* {/block 'edit_wrapper'} */
-/* {block 'content'} file:roster_members.tpl */
-class Block_content_56510323256bf95656224d1_56689361 extends Smarty_Internal_Block
+/* {block 'content'} /var/www/html/alumni/templates/roster_members.tpl */
+class Block_content_15680458756c2280feb6f35_53882797 extends Smarty_Internal_Block
 {
 public $name = "content";
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->ext->_inheritance->blockNesting++;
 ?>
 
   <table class="edit">
@@ -228,6 +232,7 @@ $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl);
 ?>
   </table>
 <?php
+$_smarty_tpl->ext->_inheritance->blockNesting--;
 }
 }
 /* {/block 'content'} */

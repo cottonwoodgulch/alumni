@@ -1,11 +1,12 @@
 <?php
-/* Smarty version 3.1.30-dev/18, created on 2016-02-13 14:16:17
+/* Smarty version 3.1.30-dev/44, created on 2016-02-15 19:33:24
   from "/var/www/html/alumni/templates/home.tpl" */
 
+/* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
+  'version' => '3.1.30-dev/44',
+  'unifunc' => 'content_56c22804d5ad28_36092221',
   'has_nocache_code' => false,
-  'version' => '3.1.30-dev/18',
-  'unifunc' => 'content_56bf3ab1daeff2_40255631',
   'file_dependency' => 
   array (
     '1b1698b4694e16731dbe8eb5cab075079529525a' => 
@@ -20,27 +21,28 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
     'file:page.tpl' => 1,
   ),
 ),false)) {
-function content_56bf3ab1daeff2_40255631 ($_smarty_tpl) {
+function content_56c22804d5ad28_36092221 (Smarty_Internal_Template $_smarty_tpl) {
 if (!is_callable('smarty_modifier_formatPhone')) require_once '/var/www/html/alumni/plugins/modifier.formatPhone.php';
 $_smarty_tpl->ext->_inheritance->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-new Block_edit_148798101056bf3ab1d90984_63311081($_smarty_tpl);
+new Block_edit_134818828256c22804d3c228_54947175($_smarty_tpl);
 ?>
 
 
 <?php 
-new Block_content_127759075956bf3ab1dad652_98341048($_smarty_tpl);
+new Block_content_195511294356c22804d59364_01784376($_smarty_tpl);
 $_smarty_tpl->ext->_inheritance->endChild($_smarty_tpl);
-$_smarty_tpl->_subTemplateRender("file:page.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 66, false);
+$_smarty_tpl->_subTemplateRender("file:page.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 2, false);
 }
-/* {block 'edit'} file:home.tpl */
-class Block_edit_148798101056bf3ab1d90984_63311081 extends Smarty_Internal_Block
+/* {block 'edit'} /var/www/html/alumni/templates/home.tpl */
+class Block_edit_134818828256c22804d3c228_54947175 extends Smarty_Internal_Block
 {
 public $name = "edit";
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->ext->_inheritance->blockNesting++;
 ?>
 
   <table class="edit">
@@ -169,14 +171,16 @@ $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl);
     </tr>
   </table>
 <?php
+$_smarty_tpl->ext->_inheritance->blockNesting--;
 }
 }
 /* {/block 'edit'} */
-/* {block 'content'} file:home.tpl */
-class Block_content_127759075956bf3ab1dad652_98341048 extends Smarty_Internal_Block
+/* {block 'content'} /var/www/html/alumni/templates/home.tpl */
+class Block_content_195511294356c22804d59364_01784376 extends Smarty_Internal_Block
 {
 public $name = "content";
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->ext->_inheritance->blockNesting++;
 ?>
 
   <ul class="link">
@@ -210,6 +214,7 @@ $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl);
 ?>
   </ul>
 <?php
+$_smarty_tpl->ext->_inheritance->blockNesting--;
 }
 }
 /* {/block 'content'} */

@@ -30,7 +30,7 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
     }
   }
   else {
-    exit("Unable to create mysql statement object: ".$msi->error);
+    exit("Login: unable to create mysql statement object: ".$msi->error);
   }
 }
 

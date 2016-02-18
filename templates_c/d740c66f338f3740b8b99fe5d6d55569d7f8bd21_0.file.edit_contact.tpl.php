@@ -1,11 +1,12 @@
 <?php
-/* Smarty version 3.1.30-dev/18, created on 2016-02-13 00:17:13
+/* Smarty version 3.1.30-dev/44, created on 2016-02-18 16:28:35
   from "/var/www/html/alumni/templates/edit_contact.tpl" */
 
+/* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
+  'version' => '3.1.30-dev/44',
+  'unifunc' => 'content_56c5f13357a5f9_08024250',
   'has_nocache_code' => false,
-  'version' => '3.1.30-dev/18',
-  'unifunc' => 'content_56be7609a6e1a9_50884681',
   'file_dependency' => 
   array (
     'd740c66f338f3740b8b99fe5d6d55569d7f8bd21' => 
@@ -20,36 +21,39 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
     'file:page.tpl' => 1,
   ),
 ),false)) {
-function content_56be7609a6e1a9_50884681 ($_smarty_tpl) {
-if (!is_callable('smarty_modifier_date_format')) require_once '/var/www/html/smarty-3.1.29/libs/smarty/libs/plugins/modifier.date_format.php';
+function content_56c5f13357a5f9_08024250 (Smarty_Internal_Template $_smarty_tpl) {
+if (!is_callable('smarty_modifier_date_format')) require_once '/var/www/html/alumni/vendor/smarty/smarty/libs/plugins/modifier.date_format.php';
 if (!is_callable('smarty_modifier_formatPhone')) require_once '/var/www/html/alumni/plugins/modifier.formatPhone.php';
 $_smarty_tpl->ext->_inheritance->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-new Block_edit_wrapper_37844441556be76099d99e0_38349843($_smarty_tpl);
+new Block_edit_wrapper_686087856c5f1334b01b9_40060864($_smarty_tpl);
 ?>
 
 
 <?php 
-new Block_content_99725886056be7609a67460_30000423($_smarty_tpl);
+new Block_content_172592464056c5f133573f63_65961340($_smarty_tpl);
 $_smarty_tpl->ext->_inheritance->endChild($_smarty_tpl);
-$_smarty_tpl->_subTemplateRender("file:page.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 66, false);
+$_smarty_tpl->_subTemplateRender("file:page.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 2, false);
 }
-/* {block 'edit_wrapper'} file:edit_contact.tpl */
-class Block_edit_wrapper_37844441556be76099d99e0_38349843 extends Smarty_Internal_Block
+/* {block 'edit_wrapper'} /var/www/html/alumni/templates/edit_contact.tpl */
+class Block_edit_wrapper_686087856c5f1334b01b9_40060864 extends Smarty_Internal_Block
 {
 public $name = "edit_wrapper";
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->ext->_inheritance->blockNesting++;
+$_smarty_tpl->ext->_inheritance->blockNesting--;
 }
 }
 /* {/block 'edit_wrapper'} */
-/* {block 'content'} file:edit_contact.tpl */
-class Block_content_99725886056be7609a67460_30000423 extends Smarty_Internal_Block
+/* {block 'content'} /var/www/html/alumni/templates/edit_contact.tpl */
+class Block_content_172592464056c5f133573f63_65961340 extends Smarty_Internal_Block
 {
 public $name = "content";
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->ext->_inheritance->blockNesting++;
 ?>
 
   <form action="save_contact.php" method="post">
@@ -250,6 +254,7 @@ $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl);
     </table>
   </form>
 <?php
+$_smarty_tpl->ext->_inheritance->blockNesting--;
 }
 }
 /* {/block 'content'} */

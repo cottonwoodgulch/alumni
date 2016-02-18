@@ -3,7 +3,7 @@
   <title>Alumni Connections</title>
   <link rel="stylesheet" href="css/alumni.css" />
   <link rel="icon" href="images/skull.ico" />
-  <script src="vendor/jquery/jquery-1.12.0.js"></script>
+  <script src="vendor/components/jquery/jquery.min.js"></script>
   <script src="js/alumni.js"></script>
   {block name="js"}
     <script>
@@ -26,7 +26,7 @@
 {block name="header"}
   <div id="{$header_format}">
     <div id="header">
-      <img src="images/logo.png" class="Logo" />
+      <img src="images/transparent logo.gif" class="Logo" />
     </div>
     <div id="header2">
       <h2>Cottonwood Gulch Alumni Connections<br /><br /></h2>

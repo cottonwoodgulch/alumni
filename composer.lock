@@ -4,9 +4,51 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5ba960e03aeb1af96570ec5f2bce8436",
-    "content-hash": "fc7c0276b930ac995606c6086dcd4857",
+    "hash": "683e51672c94fb381fc3592f371f2563",
+    "content-hash": "caace18bc91f9cb461c6dc19633393fb",
     "packages": [
+        {
+            "name": "components/jquery",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/components/jquery.git",
+                "reference": "d8b2ac0c1978e9ed8602789123976b1c7161ef96"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/components/jquery/zipball/d8b2ac0c1978e9ed8602789123976b1c7161ef96",
+                "reference": "d8b2ac0c1978e9ed8602789123976b1c7161ef96",
+                "shasum": ""
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "scripts": [
+                        "jquery.js"
+                    ],
+                    "files": [
+                        "jquery.min.js",
+                        "jquery.min.map",
+                        "jquery-migrate.js",
+                        "jquery-migrate.min.js"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "John Resig",
+                    "email": "jeresig@gmail.com"
+                }
+            ],
+            "description": "jQuery JavaScript Library",
+            "homepage": "http://jquery.com",
+            "time": "2016-01-08 23:29:41"
+        },
         {
             "name": "openwall/phpass",
             "version": "0.3",
@@ -76,12 +118,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/smarty-php/smarty.git",
-                "reference": "dd0f4c7c36c349931684723323220889eca635a3"
+                "reference": "0735ff9605fbe540f88c90a0b3fbc27a9b15d5ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/dd0f4c7c36c349931684723323220889eca635a3",
-                "reference": "dd0f4c7c36c349931684723323220889eca635a3",
+                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/0735ff9605fbe540f88c90a0b3fbc27a9b15d5ad",
+                "reference": "0735ff9605fbe540f88c90a0b3fbc27a9b15d5ad",
                 "shasum": ""
             },
             "require": {
@@ -123,7 +165,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-01-02 16:58:58"
+            "time": "2016-02-14 19:57:21"
         }
     ],
     "packages-dev": [],
