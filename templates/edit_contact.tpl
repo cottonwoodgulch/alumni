@@ -5,8 +5,6 @@
 {block name="content"}
   <form action="save_contact.php" method="post">
     <table class="edit">
-    <tr><td>
-    <table class="edit">
       <tr>
         <td class="label">
           <label for="title">Title</label>
@@ -23,13 +21,14 @@
             {/foreach}
           </select>  
         </td>
+        <td colspan="3">Edit Name</td>
       </tr>
       <tr>
         <td class="label">
           <label for="first_name">First Name</label>
         </td>
         <td>
-          <input id="first_name" class="contact" value="{$user->ud.first_name}">
+          <input id="first_name" value="{$user->ud.first_name}">
         </td>
       </tr>
       <tr>
@@ -37,7 +36,7 @@
           <label for="nickname">Nickname</label>
         </td>
         <td>
-          <input id="nickname" class="contact" value="{$user->ud.nickname}">
+          <input id="nickname" value="{$user->ud.nickname}">
         </td>
       </tr>
       <tr>
@@ -45,7 +44,7 @@
           <label for="middle_name">Middle/Maiden Name</label>
         </td>
         <td>
-          <input id="middle_name" class="contact" value="{$user->ud.middle_name}">
+          <input id="middle_name" value="{$user->ud.middle_name}">
         </td>
       </tr>
       <tr>
@@ -53,7 +52,7 @@
           <label for="primary_name">Last Name</label>
         </td>
         <td>
-          <input id="primary_name" class="contact" value="{$user->ud.primary_name}">
+          <input id="primary_name" value="{$user->ud.primary_name}">
         </td>
       </tr>
       <tr>
@@ -73,14 +72,14 @@
           </select>  
         </td>
       </tr>
-      <tr><td>&nbsp;</td></tr>
-      <tr>
-        <td class="label">
+    <tr><td>&nbsp;</td></tr>
+    <tr><td class="label">
           <label for="DOB">Date of Birth</label>
         </td>
         <td>
-          <input type="date" id="DOB" class="contact" value="{$user->ud.birth_date|date_format:"%D"}">
+          <input type="date" id="DOB" value="{$user->ud.birth_date|date_format:"%D"}">
         </td>
+        <td colspan="3">Edit DOB and Gender</td>
       </tr>
       <tr>
         <td class="label">
@@ -100,7 +99,13 @@
       </tr>
       <tr><td>&nbsp;</td></tr>
       {foreach $contact->address as $tx}
-        <tr><td class="label">{$tx.address_type}</td><td>{$tx.street_address_1}</td></tr>
+        <tr><td class="label">{$tx.address_type}</td>
+          <td>{$tx.street_address_1}</td>
+          <td>Edit</td><td>Delete</td>
+          {if $tx@first}
+            <td>Add Address</td>
+          {/if}
+        </tr>
         <tr><td></td><td>{$tx.street_address_2}</td></tr>
         <tr><td></td><td>{$tx.city}</td></tr>
         <tr><td></td><td>{$tx.state}</td></tr>
@@ -110,11 +115,24 @@
       <tr><td>&nbsp;</td></tr>
       {foreach $contact->phone as $tx}
         <tr><td class="label">{$tx.phone_type}</td>
-            <td>{$tx.number|formatPhone:$tx.formatted}</td>
+          <td>{$tx.number|formatPhone:$tx.formatted}</td>
+          <td>Edit</td><td>Delete</td>
+          {if $tx@first}
+            <td>Add Phone</td>
+          {/if}
+        </tr>
       {/foreach}
       <tr><td>&nbsp;</td></tr>
       {foreach $contact->email as $tx}
-        <tr><td class="label">{$tx.email_type}</td><td>{$tx.email}</td>
+        <tr>
+          <td class="label">{$tx.email_type}</td>
+          <td>{$tx.email}</td>
+          <td>Edit</td>
+          <td>Delete</td>
+          {if $tx@first}
+            <td>Add Phone</td>
+          {/if}
+        </tr>
       {/foreach}
     </table>
   </form>

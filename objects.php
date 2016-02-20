@@ -163,11 +163,10 @@ class RosterMemberData {
            if they have e-mail address, get contact_id */
         if($stmt=$msi->prepare("select c.contact_id,c.primary_name,".
             "c.first_name,c.middle_name,c.nickname,c.deceased, ".
-            "ifnull(dex.contact_id,0) is_email,".
-            "ifnull(ro.role,'') role ".
+            "ifnull(dex.contact_id,0) is_email,ro.role ".
             "from roster_memberships rm ".
             "inner join contacts c on c.contact_id=rm.contact_id ".
-            "left join roles ro on ro.role_id=rm.role_id ".
+            "left join roles ro on ro.role_id=ifnull(rm.role_id,3) ".
             "left join (select c.contact_id ".
                "from email_associations ea ".
                "inner join contacts c on c.contact_id=ea.contact_id ".

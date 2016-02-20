@@ -19,7 +19,7 @@
           </tr>
           <tr><td>&nbsp;</td></tr>
           <tr><td><form action="edit_contact.php" method="post">
-            <button type="submit">Edit My Data</button>
+            <input type="submit" value="Edit My Data" /></td>
             <input name="contact_id" type="hidden" value="{$user->contact_id}">
           </form></td></tr>
         </table>
