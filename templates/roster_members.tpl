@@ -18,6 +18,7 @@
   <td style="width: 45%;">
       <ul class="drop-down">
         <li><b>Other expeditions in {$roster_members->roster_year}</b>
+           <img src="images/dropdownarrow.png" />
           <ul class="fallback">
           {foreach $this_year as $y}
             <li>
@@ -29,6 +30,7 @@
         </li>
       
         <li><b>{$roster_members->roster_year - 1} expeditions</b>
+           <img src="images/dropdownarrow.png" />
           <ul class="fallback">
             {foreach $last_year as $y}
             <li>
@@ -40,6 +42,7 @@
         </li>
       
         <li><b>{$roster_members->roster_year + 1} expeditions</b>
+           <img src="images/dropdownarrow.png" />
           <ul class="fallback">
           {foreach $next_year as $y}
             <li>

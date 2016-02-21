@@ -21,7 +21,7 @@
             {/foreach}
           </select>  
         </td>
-        <td colspan="3">Edit Name</td>
+        <td><input type="submit" value="Save Changes" /></td>
       </tr>
       <tr>
         <td class="label">
@@ -79,7 +79,6 @@
         <td>
           <input type="date" id="DOB" value="{$user->ud.birth_date|date_format:"%D"}">
         </td>
-        <td colspan="3">Edit DOB and Gender</td>
       </tr>
       <tr>
         <td class="label">
@@ -101,9 +100,9 @@
       {foreach $contact->address as $tx}
         <tr><td class="label">{$tx.address_type}</td>
           <td>{$tx.street_address_1}</td>
-          <td>Edit</td><td>Delete</td>
+          <td><input type="submit" value="Delete this Address" /></td>
           {if $tx@first}
-            <td>Add Address</td>
+            <td><input type="submit" value="Add Address" /></td>
           {/if}
         </tr>
         <tr><td></td><td>{$tx.street_address_2}</td></tr>
@@ -116,9 +115,9 @@
       {foreach $contact->phone as $tx}
         <tr><td class="label">{$tx.phone_type}</td>
           <td>{$tx.number|formatPhone:$tx.formatted}</td>
-          <td>Edit</td><td>Delete</td>
+          <td><input type="submit" value="Delete this Phone" /></td>
           {if $tx@first}
-            <td>Add Phone</td>
+            <td><input type="submit" value="Add Phone" /></td>
           {/if}
         </tr>
       {/foreach}
@@ -127,10 +126,9 @@
         <tr>
           <td class="label">{$tx.email_type}</td>
           <td>{$tx.email}</td>
-          <td>Edit</td>
-          <td>Delete</td>
+          <td><input type="submit" value="Delete this E-mail" /></td>
           {if $tx@first}
-            <td>Add Phone</td>
+            <td><input type="submit" value="Add E-mail" /></td>
           {/if}
         </tr>
       {/foreach}

@@ -46,6 +46,7 @@
         <div id="nav2">
           <ul class="drop-down">
           <li><b>{$HelloName}</b>
+              <img src="images/dropdownarrow.png" />
             <ul class="fallback">
               <li>Change Password</li>
               <li><a class="filelist_normal" href="index.php?page_request=logout" >Logout</a></li>
