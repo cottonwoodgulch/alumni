@@ -6,25 +6,12 @@ body {
 
 /* header-wrapper (because of image?) stays in front of
  *   scrollable content-wrapper */
-#header-wrapper-edit {
+#header-wrapper {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 140px;
-  margin: 0;
-  background-color: #F0BE8B;
-  /*background-color: #fCCFA6;*/
-  background-image: url("../images/Header.jpg");
-  background-repeat: no-repeat;
-}
-
-#header-wrapper-content {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 305px;
   margin: 0;
   background-color: #F0BE8B;
   /*background-color: #fCCFA6;*/
@@ -55,53 +42,14 @@ img.Logo {
 }
 
 #nav1 {
-  width: 80%;
+  width: 70%;
   float: left;
 }
 #nav2 {
   float: left;
 }
 
-#edit-wrapper {
-  position: relative;
-  top: 140px;
-  /*left: 10px;*/
-  width: 98%;
-  height: 150px;
-}
-
-#edit {
-  height: 100%;
-  padding: 10px 0 0 10px;
-  background-color: #C49F75;
-}
-
-#sub-edit1 {
-  height: 100%;
-  width: 20%;
-  float: left;
-}
-
-#sub-edit2 {
-  height: 100%;
-  margin-left: 10%;
-  width: 25%;
-  float: left;
-}
-
-#sub-edit3 {
-  height: 100%;
-  margin-left: 10%;
-  float: left;
-}
-
-#content-wrapper-edit {
-  width: 98%;
-  padding: 305px 0 0 0;
-  background-color: #C49F75;
-}
-
-#content-wrapper-content {
+#content-wrapper {
   width: 98%;
   padding: 140px 0 0 10px;
   background-color: #C49F75;
@@ -109,15 +57,6 @@ img.Logo {
 
 #content {
   padding: 0 0 10px 0;
-}
-
-#sub-content1 {
-  float: left;
-  width: 30%;
-}
-
-#sub-content2 {
-  float: left;
 }
 
 #footer {
@@ -144,6 +83,7 @@ li {
   margin: 0;
   padding: 0 10px 5px 10px;
 }
+
 .navbar li {
   float: left;
   margin: 0 50px 0 0;
@@ -164,16 +104,14 @@ li {
   margin: 0;
   padding: 0;
 }
+
 .drop-down li:hover ul.fallback {
   display: block;
 }
 
-ul.HelloName li nav {
-  display: none;
-}
-
-ul.HelloName li:hover nav {
-  display: inline;
+#nav2 ul li ul li {
+  background-color: #F0BE8B;
+  padding: 1px 5px;
 }
 
 table.edit {

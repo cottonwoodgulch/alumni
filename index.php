@@ -24,14 +24,11 @@ switch($page_request) {
           $params["secure"], $params["httponly"]
     );
     session_destroy();
-    $smarty->assign('header_format','header-wrapper-edit');
     $smarty->display('login.tpl');
     break;
   case 'rosters':
     /* get all available roster years for roster lookup dropdown */
     $smarty->assign('roster_years', get_roster_years($msi));
-    $smarty->assign('header_format','header-wrapper-content');
-    $smarty->assign('content_format','content-wrapper-edit');
     $smarty->display('roster_members.tpl');
     break;
   case 'home':
@@ -43,9 +40,6 @@ switch($page_request) {
     $smarty->assign('roster',$tr);
        //new RosterData($msi,$smarty,$_SESSION['contact_id']));
     $smarty->assign('rostercount',$tr->roster_count);
-    // use header-wrapper with space for edit box
-    $smarty->assign('header_format','header-wrapper-content');
-    $smarty->assign('content_format','content-wrapper-edit');
     $smarty->display('home.tpl');
     break;
 }

@@ -3,7 +3,7 @@
 {* prevent nav <div> from showing *}
 {block name="nav"}{/block}
 
-{block name="edit"}
+{block name="content"}
       <form method="post" action="login.php">
         <table class="edit">
           <tr>
@@ -22,8 +22,6 @@
       </form>
       <p>Forgot your password? Need an account? Call the office - 505-248-0563</p>
 {/block}
-
-{block name="content_wrapper"}{/block}
 
 {block name="footer"}
   {$footer}

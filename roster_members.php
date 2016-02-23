@@ -35,8 +35,6 @@ if(isset($_GET['roster_id'])) {
   /* get all available roster years for roster lookup dropdown */
 $smarty->assign('roster_years',
    get_roster_years($msi));
-$smarty->assign('header_format','header-wrapper-edit');
-$smarty->assign('content_format','content-wrapper-content');
 $smarty->display('roster_members.tpl');
 
 

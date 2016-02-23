@@ -35,6 +35,5 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
 }
 
 /* if we didn't have a good login re-display form */
-$smarty->assign('header_format','header-wrapper-edit');
 $smarty->display('login.tpl');
 ?>

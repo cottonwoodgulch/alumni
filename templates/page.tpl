@@ -24,7 +24,7 @@
 <body>
 
 {block name="header"}
-  <div id="{$header_format}">
+  <div id="header-wrapper">
     <div id="header">
       <img src="images/transparent logo.gif" class="Logo" />
     </div>
@@ -44,41 +44,28 @@
           </ul>
         </div>
         <div id="nav2">
-          <ul class="HelloName">
+          <ul class="drop-down">
           <li><b>{$HelloName}</b>
               <img src="images/dropdownarrow.png" />
-            <nav>
-            <ul>
-              <li>Change Password</li>
+            <ul class="fallback">
+              <li class="filelist_normal">Change Password</li>
               <li><a class="filelist_normal" href="index.php?page_request=logout" >Logout</a></li>
             </ul>
             </div>
           </ul>
-        </nav>
       </div>
       {/block}
       
     </div>
   </div>
 {/block}
-  
-{block name="edit_wrapper"}
-  <div id="edit-wrapper">
-    <div id="edit">
-      {block name="edit"}
-      {/block}
-    </div>
-  </div>
-{/block}
 
-{block name="content_wrapper"}
-  <div id="{$content_format}">
-    <div id="content">
-      {block name="content"}
-      {/block}
-    </div>
+<div id="content-wrapper">
+  <div id="content">
+    {block name="content"}
+    {/block}
   </div>
-{/block}
+</div>
 
 {if isset($footer)}
   {block name="footer_wrapper"}

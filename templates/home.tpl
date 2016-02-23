@@ -1,6 +1,6 @@
 {extends file="page.tpl"}
 
-{block name="edit"}
+{block name="content"}
   <table class="edit">
     <tr>
       <td>
@@ -68,9 +68,8 @@
       </td>
     </tr>
   </table>
-{/block}
 
-{block name="content"}
+  <br />
   <ul class="link">
   {foreach $roster->rd as $rd}
     <li><a class="filelist_normal" 

@@ -1,8 +1,5 @@
 {extends file="page.tpl"}
 
-{block name="edit_wrapper"}
-{/block}
-
 {block name="content"}
   <table class="edit">
   <tr>
@@ -89,7 +86,9 @@
   </table>
   </div>
 
+  {if isset($roster_members) && $roster_members->rostermember_count >0}
   <p class="thin">Use &#34;Invite&#34; to send a message to a trekker whose e-mail address you know. &#34;Send E-Mail&#34; option is available for trekkers where there is an e-mail address in the database. Many e-mail addresses in the database are out of date, so if you have a good address, please consider using Invite.</p>
+  {/if}
   <p></p>
   <table class="edit">
     {foreach $roster_members->rm as $rd}

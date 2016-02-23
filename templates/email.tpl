@@ -1,7 +1,5 @@
 {extends file="page.tpl"}
 
-{block name="edit_wrapper"}{/block}
-
 {block name="content"}
 <form>
 <table class="edit">

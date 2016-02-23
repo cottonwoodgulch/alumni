@@ -12,8 +12,6 @@ if(!$cid) {
 
 $smarty->assign('menu',array('home','rosters'));
 $smarty->assign('HelloName',$_SESSION['HelloName']);
-$smarty->assign('header_format','header-wrapper-edit');
-$smarty->assign('content_format','content-wrapper-content');
 
 $email_type=isset($_GET['email_type']) ? $_GET['email_type'] : 'invite';
 $smarty->assign('email_type',$email_type);

@@ -12,8 +12,6 @@ if(!$cid) {
 
 $smarty->assign('menu',array('home','rosters'));
 $smarty->assign('HelloName',$_SESSION['HelloName']);
-$smarty->assign('header_format','header-wrapper-edit');
-$smarty->assign('content_format','content-wrapper-content');
 
 if(isset($_GET['target_id'])) {
   $target_id=$_GET['target_id'];
