@@ -49,9 +49,6 @@ img.Logo {
   float: left;
 }
 
-#header3 {
-}
-
 #nav-wrapper {
   height: 25px;
   width: 100%;
@@ -66,7 +63,7 @@ img.Logo {
 }
 
 #edit-wrapper {
-  position: fixed;
+  position: relative;
   top: 140px;
   /*left: 10px;*/
   width: 98%;
@@ -132,35 +129,34 @@ img.Logo {
   background-color: #F0BE8B;
 }
 
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+  font-family: Palatino, "Times New Roman", "Times Roman", Serif;
+  font-size: .9em;
+}
+
 .navbar {
   margin: 0;
   padding: 0 10px 5px 10px;
-  /*border-bottom: 1px solid black;*/
 }
 .navbar li {
   float: left;
   margin: 0 50px 0 0;
   display: inline;
   color: black;
-  list-style-type: none;
-  font-family: Palatino, "Times New Roman", "Times Roman", Serif;
-  font-size: .9em;
 }
 
 .navbar a {
   text-decoration: none;
 }
 
-ul {
-  margin: 0;
-  padding: 0;
-}
-
 .drop-down li {
-  list-style-type: none;
   margin-left: 10px;
-  font-family: Palatino, "Times New Roman", "Times Roman", Serif;
-  font-size: .9em;
 }
 
 .drop-down li ul.fallback {
@@ -172,6 +168,14 @@ ul {
   display: block;
 }
 
+ul.HelloName li nav {
+  display: none;
+}
+
+ul.HelloName li:hover nav {
+  display: inline;
+}
+
 table.edit {
   border-spacing: 10px 0;
   background-color: #C49F75;
@@ -181,6 +185,7 @@ table.edit {
 td {
   border: 0;
   background-color: #C49F75;
+  vertical-align: top;
 }
 
 td.label {
@@ -210,7 +215,7 @@ ul.link {
   font-size: .9em;
 }
 
-input {
+input, select {
   background-color: #F0BE8B;
   box-sizing: border-box;
   height: 20px;
@@ -229,15 +234,6 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
   background-color: #fCCFA6;
-}
-
-select {
-  background-color: #F0BE8B;
-  box-sizing: border-box;
-  height: 20px;
-  margin-top: 1px;
-  box-shadow: 2px 2px 2px #87654A;
-  border: 0;
 }
 
 input[readonly] {

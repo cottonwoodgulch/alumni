@@ -3,6 +3,8 @@
 {block name="edit_wrapper"}{/block}
 
 {block name="content"}
+<form>
+<table class="edit">
 {block name="addresses"}
 {/block}
   <tr><td class="label"><label for="subject">Subject:</label></td>
@@ -28,8 +30,10 @@ Yours,
 {$user->ud.first_name} {$user->ud.middle_name} {$user->ud.primary_name}
   </textarea>
   </td></tr>
-  <tr><td>
-  {block name="submit_send"}{/block}
+  <tr><td></td><td>
+  {block name="submit_send"}
+    <input type="submit" value="Send" disabled="disabled"/>
+  {/block}
   </td></tr>
 </table>
 </form>

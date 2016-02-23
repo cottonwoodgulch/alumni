@@ -44,15 +44,17 @@
           </ul>
         </div>
         <div id="nav2">
-          <ul class="drop-down">
+          <ul class="HelloName">
           <li><b>{$HelloName}</b>
               <img src="images/dropdownarrow.png" />
-            <ul class="fallback">
+            <nav>
+            <ul>
               <li>Change Password</li>
               <li><a class="filelist_normal" href="index.php?page_request=logout" >Logout</a></li>
             </ul>
+            </div>
           </ul>
-        </div>
+        </nav>
       </div>
       {/block}
       

@@ -89,7 +89,7 @@
   </table>
   </div>
 
-  <p class="thin">Use &#34;Invite&#34; to send a message to a trekker whose e-mail address you know. &#34;Send E-Mail&#34; option is available for trekkers where there is an e-mail address in the database.</p>
+  <p class="thin">Use &#34;Invite&#34; to send a message to a trekker whose e-mail address you know. &#34;Send E-Mail&#34; option is available for trekkers where there is an e-mail address in the database. Many e-mail addresses in the database are out of date, so if you have a good address, please consider using Invite.</p>
   <p></p>
   <table class="edit">
     {foreach $roster_members->rm as $rd}
