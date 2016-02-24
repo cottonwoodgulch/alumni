@@ -12,7 +12,8 @@ class ContactData {
   
   function __construct($msi, $smarty, $cid) {
     $this->contact_id = $cid;
-    if($stmt=$msi->prepare("select at.address_type,a.street_address_1,a.street_address_2,".
+    if($stmt=$msi->prepare("select a.address_id,at.address_type,".
+          "a.street_address_1,a.street_address_2,".
           "a.city,a.state,a.country,a.postal_code ".
           "from address_associations aa ".
           "left join addresses a on a.address_id=aa.address_id ".
@@ -33,7 +34,8 @@ class ContactData {
       $smarty->assign('footer',"Address: unable to create mysql statement object: ".
           $msi->error);
     }
-    if($stmt=$msi->prepare("select pt.phone_type,p.number,p.formatted ".
+    if($stmt=$msi->prepare("select p.phone_id,pt.phone_type,".
+          "p.number,p.formatted ".
           "from phone_associations pa ".
           "left join phones p on p.phone_id=pa.phone_id ".
           "left join phone_types pt on pt.phone_type_id=p.phone_type_id ".
@@ -53,9 +55,10 @@ class ContactData {
       $smarty->assign('footer',"Phone: unable to create mysql statement object: ".
          $msi->error);
     }
-    if($stmt=$msi->prepare("select et.email_type,e.email ".
+    if($stmt=$msi->prepare("select et.email_type,".
+          "e.email_id,e.email ".
           "from email_associations ea ".
-          "left join emails e on e.email_id=ea.email_id ".
+          "inner join emails e on e.email_id=ea.email_id ".
           "left join email_types et on et.email_type_id=e.email_type_id ".
           "where ea.contact_id=? ".
           "order by et.rank")) {
@@ -85,7 +88,8 @@ class UserData {
     $this->contact_id = $cid;
     if($stmt=$msi->prepare("select c.contact_id,ifnull(c.title_id,0) title_id,".
           "t.title,c.first_name,c.middle_name,c.primary_name,c.nickname,".
-          "ifnull(c.degree_id,0) degree_id,d.degree,c.birth_date,c.gender ".
+          "ifnull(c.degree_id,0) degree_id,".
+          "d.degree,c.birth_date,ifnull(c.gender,'') gender ".
           "from contacts c ".
           "left join titles t on t.title_id=c.title_id ".
           "left join degrees d on d.degree_id=c.degree_id ".

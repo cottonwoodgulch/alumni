@@ -26,7 +26,7 @@
           <label for="first_name">First Name</label>
         </td>
         <td>
-          <input id="first_name" value="{$user->ud.first_name}">
+          <input id="first_name" value="{$user->ud.first_name}"/>
         </td>
       </tr>
       <tr>
@@ -34,7 +34,7 @@
           <label for="nickname">Nickname</label>
         </td>
         <td>
-          <input id="nickname" value="{$user->ud.nickname}">
+          <input id="nickname" value="{$user->ud.nickname}"/>
         </td>
       </tr>
       <tr>
@@ -42,7 +42,7 @@
           <label for="middle_name">Middle/Maiden Name</label>
         </td>
         <td>
-          <input id="middle_name" value="{$user->ud.middle_name}">
+          <input id="middle_name" value="{$user->ud.middle_name}"/>
         </td>
       </tr>
       <tr>
@@ -50,7 +50,7 @@
           <label for="primary_name">Last Name</label>
         </td>
         <td>
-          <input id="primary_name" value="{$user->ud.primary_name}">
+          <input id="primary_name" value="{$user->ud.primary_name}" />
         </td>
       </tr>
       <tr>
@@ -75,7 +75,7 @@
           <label for="DOB">Date of Birth</label>
         </td>
         <td>
-          <input type="date" id="DOB" value="{$user->ud.birth_date|date_format:"%D"}">
+          <input type="date" id="DOB" value="{$user->ud.birth_date|date_format:"%D"}" />
         </td>
       </tr>
       <tr>
@@ -84,7 +84,7 @@
         </td>
         <td>
           <select id="gender">
-            {foreach array('Female','Male') as $tx}
+            {foreach array('Female','Male','') as $tx}
               {if $user->ud.gender == $tx}
                 <option value="{$tx}" selected="selected">{$tx}</option>
               {else}
@@ -97,38 +97,61 @@
       <tr><td>&nbsp;</td></tr>
       {foreach $contact->address as $tx}
         <tr><td class="label">{$tx.address_type}</td>
-          <td>{$tx.street_address_1}</td>
+          <td><input id="{$tx.address_id}_street_address_1" value="{$tx.street_address_1}" /></td>
           <td><input type="submit" value="Delete this Address"  disabled="disabled"/></td>
           {if $tx@first}
             <td><input type="submit" value="Add Address"  disabled="disabled" /></td>
           {/if}
         </tr>
-        <tr><td></td><td>{$tx.street_address_2}</td></tr>
-        <tr><td></td><td>{$tx.city}</td></tr>
-        <tr><td></td><td>{$tx.state}</td></tr>
-        <tr><td></td><td>{$tx.postal_code}</td></tr>
-        <tr><td></td><td>{$tx.country}</td></tr>
+        <tr><td></td><td><input
+          id="{$tx.address_id}_street_address_2"
+          value="{$tx.street_address_2}" /></td></tr>
+        <tr><td></td><td><input
+          id="{$tx.address_id}_city"
+          value="{$tx.city}" /></td></tr>
+        <tr><td></td><td><input
+          id="{$tx.address_id}_state"
+          value="{$tx.state}" /></td></tr>
+        <tr><td></td><td><input
+          id="{$tx.address_id}_postal_code"
+          value="{$tx.postal_code}" /></td></tr>
+        <tr><td></td><td><input
+          id="{$tx.address_id}_country"
+          value="{$tx.country}" /></td></tr>
+      {foreachelse}
+        <tr><td></td><td></td>
+        <td><input type="submit" value="Add Address"  disabled="disabled" /></td></tr>
       {/foreach}
       <tr><td>&nbsp;</td></tr>
       {foreach $contact->phone as $tx}
         <tr><td class="label">{$tx.phone_type}</td>
-          <td>{$tx.number|formatPhone:$tx.formatted}</td>
+          <td><input
+            id="{$tx.phone_id}_number"
+            value="{$tx.number|formatPhone:$tx.formatted}" /></td>
           <td><input type="submit" value="Delete this Phone"  disabled="disabled" /></td>
           {if $tx@first}
             <td><input type="submit" value="Add Phone"  disabled="disabled"/></td>
           {/if}
         </tr>
+      {foreachelse}
+        <tr><td></td><td></td>
+        <td><input type="submit" value="Add Phone"  disabled="disabled"/></td></tr>
       {/foreach}
       <tr><td>&nbsp;</td></tr>
       {foreach $contact->email as $tx}
         <tr>
           <td class="label">{$tx.email_type}</td>
-          <td>{$tx.email}</td>
+          <td><input
+            id="{$tx.email_id}_email"
+            value="{$tx.email}" /></td>
           <td><input type="submit" value="Delete this E-mail"  disabled="disabled"/></td>
           {if $tx@first}
             <td><input type="submit" value="Add E-mail"  disabled="disabled"/></td>
           {/if}
         </tr>
+      {foreachelse}
+        <tr><td></td><td></td>
+        <td><input type="submit" value="Add E-mail"  disabled="disabled"/></td></tr>
       {/foreach}
     </table>
   </form>

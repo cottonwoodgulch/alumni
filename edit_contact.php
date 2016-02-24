@@ -43,6 +43,10 @@ if(isset($_POST['contact_id'])) {
     $degrees[]=array(degree_id => 0, degree => '');
     $smarty->assign('degrees',$degrees);
   }
+  /* need array of genders for gender select dropdown values
+        need '' for null values in db
+  $genders=array('Female','Male','');
+  $smarty->assign('genders',$genders);*/
 }
 else {
   $smarty->assign('footer','No contact specified');
