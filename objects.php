@@ -1,7 +1,15 @@
 <?php
 
 class ContactData {
-  /* contact info - addresses, phones, e-mails, relationships? */
+  /* contact info - addresses, phones, e-mails
+   Initially blank status field will be:
+     D - this record has been marked for deletion
+     A - this record was added
+     C - this record contains changes to the row with the same data_id
+         data_id {address_id, phone_id, email_id}
+     blank - live data
+   */
+
   public $contact_id;
   public $address_count=0;
   public $address = array();
@@ -14,7 +22,7 @@ class ContactData {
     $this->contact_id = $cid;
     if($stmt=$msi->prepare("select a.address_id,at.address_type,".
           "a.street_address_1,a.street_address_2,".
-          "a.city,a.state,a.country,a.postal_code ".
+          "a.city,a.state,a.country,a.postal_code,' ' status ".
           "from address_associations aa ".
           "left join addresses a on a.address_id=aa.address_id ".
           "left join address_types at on at.address_type_id=a.address_type_id ".
@@ -35,7 +43,7 @@ class ContactData {
           $msi->error);
     }
     if($stmt=$msi->prepare("select p.phone_id,pt.phone_type,".
-          "p.number,p.formatted ".
+          "p.number,p.formatted,' ' status ".
           "from phone_associations pa ".
           "left join phones p on p.phone_id=pa.phone_id ".
           "left join phone_types pt on pt.phone_type_id=p.phone_type_id ".
@@ -56,7 +64,7 @@ class ContactData {
          $msi->error);
     }
     if($stmt=$msi->prepare("select et.email_type,".
-          "e.email_id,e.email ".
+          "e.email_id,e.email,' ' status ".
           "from email_associations ea ".
           "inner join emails e on e.email_id=ea.email_id ".
           "left join email_types et on et.email_type_id=e.email_type_id ".
@@ -80,8 +88,13 @@ class ContactData {
 }
 
 class UserData {
+  /* $ud is live data
+     if $is_change, $ud_change fields have changes or null
+  */
   public $contact_id;
   public $ud = array();
+  public $is_change;
+  public $ud_change = array();
 
   function __construct($msi,$smarty,$cid) {
     // retrieve info for a person

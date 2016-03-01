@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "683e51672c94fb381fc3592f371f2563",
-    "content-hash": "caace18bc91f9cb461c6dc19633393fb",
+    "hash": "c0db5fd36db7e76a2a5044db2612e215",
+    "content-hash": "938bde0e124f8e4fe1c891aa40d5a9b7",
     "packages": [
         {
             "name": "components/jquery",
-            "version": "2.2.0",
+            "version": "2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/components/jquery.git",
-                "reference": "d8b2ac0c1978e9ed8602789123976b1c7161ef96"
+                "reference": "7894addbce3c4de6f82449610e6f8e168b49e9b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/components/jquery/zipball/d8b2ac0c1978e9ed8602789123976b1c7161ef96",
-                "reference": "d8b2ac0c1978e9ed8602789123976b1c7161ef96",
+                "url": "https://api.github.com/repos/components/jquery/zipball/7894addbce3c4de6f82449610e6f8e168b49e9b0",
+                "reference": "7894addbce3c4de6f82449610e6f8e168b49e9b0",
                 "shasum": ""
             },
             "type": "component",
@@ -47,7 +47,92 @@
             ],
             "description": "jQuery JavaScript Library",
             "homepage": "http://jquery.com",
-            "time": "2016-01-08 23:29:41"
+            "time": "2016-02-24 08:16:25"
+        },
+        {
+            "name": "components/jqueryui",
+            "version": "1.11.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/components/jqueryui.git",
+                "reference": "c34f8dbf3ba57b3784b93f26119f436c0e8288e1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/components/jqueryui/zipball/c34f8dbf3ba57b3784b93f26119f436c0e8288e1",
+                "reference": "c34f8dbf3ba57b3784b93f26119f436c0e8288e1",
+                "shasum": ""
+            },
+            "require": {
+                "components/jquery": ">=1.6"
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "name": "jquery-ui",
+                    "scripts": [
+                        "jquery-ui.js"
+                    ],
+                    "files": [
+                        "ui/**",
+                        "themes/**",
+                        "jquery-ui.min.js"
+                    ],
+                    "shim": {
+                        "deps": [
+                            "jquery"
+                        ],
+                        "exports": "jQuery"
+                    }
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "jQuery UI Team",
+                    "homepage": "http://jqueryui.com/about"
+                },
+                {
+                    "name": "Joern Zaefferer",
+                    "email": "joern.zaefferer@gmail.com",
+                    "homepage": "http://bassistance.de"
+                },
+                {
+                    "name": "Scott Gonzalez",
+                    "email": "scott.gonzalez@gmail.com",
+                    "homepage": "http://scottgonzalez.com"
+                },
+                {
+                    "name": "Kris Borchers",
+                    "email": "kris.borchers@gmail.com",
+                    "homepage": "http://krisborchers.com"
+                },
+                {
+                    "name": "Mike Sherov",
+                    "email": "mike.sherov@gmail.com",
+                    "homepage": "http://mike.sherov.com"
+                },
+                {
+                    "name": "TJ VanToll",
+                    "email": "tj.vantoll@gmail.com",
+                    "homepage": "http://tjvantoll.com"
+                },
+                {
+                    "name": "Corey Frang",
+                    "email": "gnarf37@gmail.com",
+                    "homepage": "http://gnarf.net"
+                },
+                {
+                    "name": "Felix Nagel",
+                    "email": "info@felixnagel.com",
+                    "homepage": "http://www.felixnagel.com"
+                }
+            ],
+            "description": "jQuery UI is a curated set of user interface interactions, effects, widgets, and themes built on top of the jQuery JavaScript Library. Whether you're building highly interactive web applications or you just need to add a date picker to a form control, jQuery UI is the perfect choice.",
+            "time": "2015-03-13 14:48:12"
         },
         {
             "name": "openwall/phpass",
@@ -118,12 +203,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/smarty-php/smarty.git",
-                "reference": "0735ff9605fbe540f88c90a0b3fbc27a9b15d5ad"
+                "reference": "b39f561083e0ff7c50ecef05668c880ede279bd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/0735ff9605fbe540f88c90a0b3fbc27a9b15d5ad",
-                "reference": "0735ff9605fbe540f88c90a0b3fbc27a9b15d5ad",
+                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/b39f561083e0ff7c50ecef05668c880ede279bd3",
+                "reference": "b39f561083e0ff7c50ecef05668c880ede279bd3",
                 "shasum": ""
             },
             "require": {
@@ -165,7 +250,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-02-14 19:57:21"
+            "time": "2016-02-20 21:00:19"
         }
     ],
     "packages-dev": [],

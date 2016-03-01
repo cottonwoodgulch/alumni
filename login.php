@@ -25,8 +25,7 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
       exit;
     }
     else {
-      // invalid login
-      $smarty->assign('footer','Invalid login');
+      displayFooter($smarty,$message);
     }
   }
   else {

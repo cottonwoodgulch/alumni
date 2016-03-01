@@ -9,8 +9,6 @@ if(!$cid) {
   header("Location: login.php");
   exit;
 }
-
-$smarty->assign('menu',array('home','rosters'));
 $smarty->assign('HelloName',$_SESSION['HelloName']);
 
 $email_type=isset($_GET['email_type']) ? $_GET['email_type'] : 'invite';

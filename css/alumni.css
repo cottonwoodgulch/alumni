@@ -17,6 +17,7 @@ body {
   /*background-color: #fCCFA6;*/
   background-image: url("../images/Header.jpg");
   background-repeat: no-repeat;
+  z-index: 1;
 }
 
 img.Logo {
@@ -96,7 +97,7 @@ li {
 }
 
 .drop-down li {
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 .drop-down li ul.fallback {
@@ -131,6 +132,12 @@ td.label {
   padding: 0 5px;
 }
 
+td.footermsg {
+  padding: 0 5px;
+  color: red;
+  background-color: #fCCFA6;
+}
+
 .filelist_normal {
   color: blue;
   text-decoration: none;
@@ -153,7 +160,7 @@ ul.link {
   font-size: .9em;
 }
 
-input, select {
+input, button {
   background-color: #F0BE8B;
   box-sizing: border-box;
   height: 20px;
@@ -161,17 +168,18 @@ input, select {
   box-shadow: 2px 2px 2px #87654A;
   border: 0;
   padding-left: 5px;
+  font-family: Palatino, "Times New Roman", "Times Roman", Serif;
 }
 
-input[type="submit"] {
+input:hover, button:hover {
+  background-color: #fCCFA6;
+}
+
+button {
   box-shadow: 2px 2px 2px #87654A,
   inset -2px -2px 2px #c49f75,
   inset -1px -1px 1px black;
   padding: 0 5px 3px 3px;
-}
-
-input[type="submit"]:hover {
-  background-color: #fCCFA6;
 }
 
 input[readonly] {

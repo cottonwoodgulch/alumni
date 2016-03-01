@@ -8,8 +8,6 @@ if(!$cid) {
   header("Location: login.php");
   exit;
 }
-
-$smarty->assign('menu',array('home','rosters'));
 $smarty->assign('HelloName',$_SESSION['HelloName']);
 
 $page_request = isset($_GET['page_request']) ? $_GET['page_request'] : 'home';

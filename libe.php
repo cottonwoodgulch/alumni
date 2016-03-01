@@ -22,4 +22,13 @@ function o_session() {
   }
 }
 require 'objects.php';
+
+function displayFooter($smarty,$message) {
+  /* footer will display if the smarty variable footer is set */
+  $msg='<table><tr>
+    <td class="footermsg">'.$message.
+    '</td><td class="footermsg"><button type="button" '.
+    'onClick="hideFooter();">Close</button></td></tr></table>';
+  $smarty->assign('footer',$msg);
+}
 ?>
