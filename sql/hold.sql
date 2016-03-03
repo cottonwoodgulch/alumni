@@ -9,20 +9,20 @@ alter table contacts
 /* hold_contacts will only have changed fields */
 create table hold_contacts (
   tstamp datetime,
-  contact_id int (11)
-    foreign key references contacts(contact_id),
-  title_id int(11)
-    foreign key references titles(title_id),,
+  contact_id int (11),
+  title_id int(11),
   primary_name varchar(250),
   first_name varchar(50),
   middle_name varchar(50),
-  degree_id int(11)
-    foreign key references degrees(degree_id),
+  degree_id int(11),
   nickname varchar(50),
   birth_date date,
   gender enum('Male','Female'),
   username varchar(255),
-  password varchar(255)
+  password varchar(255) /*,
+    foreign key references contacts(contact_id),
+    foreign key references titles(title_id),
+    foreign key references degrees(degree_id) */
 ) engine innodb;  
 
 /* Hold_address, phone, and email tables will have
@@ -32,8 +32,10 @@ create table hold_contacts (
      -- contact_id and, phone_, or email_ id for delete
    Address_id will have the existing address_id only for
      delete and change - not yet defined for add
+   New_id is necessary to allow undoing add
    */
 create table hold_address (
+  new_id int(11) primary key auto_increment,
   action enum('D','C','A'),
   tstamp datetime,
   contact_id int (11),
@@ -53,6 +55,7 @@ create table hold_address (
 )engine=innodb;
 
 create table hold_phone (
+  new_id int(11) primary key auto_increment,
   action enum('D','C','A'),
   tstamp datetime,
   contact_id int(11),
@@ -65,6 +68,7 @@ create table hold_phone (
 ) engine innodb;
 
 create table hold_email (
+  new_id int(11) primary key auto_increment,
   action enum('D','C','A'), -- delete, change, add
   tstamp datetime,
   contact_id int (11),

@@ -11,7 +11,7 @@
       switch ($ButtonAction) {
       case "AddAddress":
         $stmt=$msi->prepare("insert into hold_address values".
-          "('A',sysdate(),?,null,?,?,?,?,?,?,?)");
+          "(null,'A',sysdate(),?,null,?,?,?,?,?,?,?)");
         $stmt->bind_param('iissssss',$contact_id,
           $_POST['add_address_type'],
           $_POST['add_street_address_1'],
@@ -23,14 +23,14 @@
         break;
       case "AddPhone":
         $stmt=$msi->prepare("insert into hold_phone values ".
-          "('A',sysdate(),?,null,?,?)");
+          "(null,'A',sysdate(),?,null,?,?)");
         $stmt->bind_param('iis',$contact_id,
           $_POST['add_phone_type'],
           $_POST['add_phone']);
         break;
       case "AddEmail":
         $stmt=$msi->prepare("insert into hold_email values ".
-          "('A',sysdate(),?,null,?,?)");
+          "(null,'A',sysdate(),?,null,?,?)");
         $stmt->bind_param('iis',$contact_id,
           $_POST['add_email_type'],
           $_POST['add_email']);

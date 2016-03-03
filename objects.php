@@ -31,29 +31,31 @@ class ContactData {
       $stmt->bind_param('i',$cid);
       $stmt->execute();
       $result=$stmt->get_result();
-      while($add = $result->fetch_assoc()) {
-        $this->address[$this->address_count] = $add;
+      while($tx = $result->fetch_assoc()) {
+        $this->address[$this->address_count] = $tx;
         $this->address_count++;
       }
       $stmt->close();
       $result->free();
     }
     else {
-      $smarty->assign('footer',"Address: unable to create mysql statement object: ".
-          $msi->error);
+      $smarty->assign('footer',
+        "Address: unable to create mysql statement object: ".
+        $msi->error);
     }
     if($stmt=$msi->prepare("select p.phone_id,pt.phone_type,".
           "p.number,p.formatted,' ' status ".
           "from phone_associations pa ".
           "left join phones p on p.phone_id=pa.phone_id ".
-          "left join phone_types pt on pt.phone_type_id=p.phone_type_id ".
+          "left join phone_types pt ".
+          "on pt.phone_type_id=p.phone_type_id ".
           "where pa.contact_id=? ".
           "order by pt.rank")) {
       $stmt->bind_param('i',$cid);
       $stmt->execute();
       $result=$stmt->get_result();
-      while($ph = $result->fetch_assoc()) {
-        $this->phone[$this->phone_count] = $ph;
+      while($tx = $result->fetch_assoc()) {
+        $this->phone[$this->phone_count] = $tx;
         $this->phone_count++;
       }
       $stmt->close();
@@ -73,8 +75,8 @@ class ContactData {
       $stmt->bind_param('i',$cid);
       $stmt->execute();
       $result=$stmt->get_result();
-      while($em = $result->fetch_assoc()) {
-        $this->email[$this->email_count] = $em;
+      while($tx = $result->fetch_assoc()) {
+        $this->email[$this->email_count] = $tx;
         $this->email_count++;
       }
       $stmt->close();
@@ -84,7 +86,34 @@ class ContactData {
       $smarty->assign('footer',"EMail: unable to create mysql statement object: ".
          $msi->error);
     }
-  }  
+  }
+  function scanHold() {
+    /* mark adds, deletes, and changes to addresses */
+    $stmt=$msi->prepare("select new_id, action,address_id,".
+      "address_type_id,".
+      "street_address_1,street_address_2,city,state,country,".
+      "postal_code from hold_address ".
+      "where contact_id=? order by tstamp");
+    $stmt->bind_param('i',this->contact_id);
+    $stmt->execute();
+    $result=$stmt->get_result();
+    while($tx = $result->fetch_assoc()) {
+      switch($tx['status'] {
+        case 'D':
+        break;
+        case 'A':
+        break;
+        case 'C':
+        break;
+      }
+    }
+    $stmt->close();
+    $result->free();
+    
+  }
+  /* phones */
+  
+  /* e-mails */
 }
 
 class UserData {
@@ -99,8 +128,10 @@ class UserData {
   function __construct($msi,$smarty,$cid) {
     // retrieve info for a person
     $this->contact_id = $cid;
-    if($stmt=$msi->prepare("select c.contact_id,ifnull(c.title_id,0) title_id,".
-          "t.title,c.first_name,c.middle_name,c.primary_name,c.nickname,".
+    if($stmt=$msi->prepare("select c.contact_id,".
+          "ifnull(c.title_id,0) title_id,t.title,".
+          "c.first_name,c.middle_name,".
+          "c.primary_name,c.nickname,".
           "ifnull(c.degree_id,0) degree_id,".
           "d.degree,c.birth_date,ifnull(c.gender,'') gender ".
           "from contacts c ".
@@ -119,6 +150,8 @@ class UserData {
     else {
       $smarty->assign('footer',"UserData: unable to create mysql statement object: ".$msi->error);
     }
+  }
+  function scanHold() {
   }
 }
 

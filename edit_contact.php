@@ -15,6 +15,12 @@ $smarty->assign('HelloName',$_SESSION['HelloName']);
      because this page may not always be used for Edit My Data */
 if(isset($_POST['contact_id'])) {
   $contact_id=$_POST['contact_id'];
+
+  /* retrieve user's data */
+  $user_data=new UserData($msi,$smarty,$contact_id);
+  $smarty->assign('user',$user_data);
+  $contact_data=new ContactData($msi,$smarty,$contact_id);
+  $smarty->assign('contact',$contact_data);
   /* If ButtonAction is supplied, this is a page reset,
        which calls for data update, which is done by
        ContactData.php
@@ -23,10 +29,11 @@ if(isset($_POST['contact_id'])) {
   if(isset($_POST['buttonAction'])) {
     ContactData($smarty,$msi,$contact_id);
   }
+  /* if there may be changes in the hold tables from this or previous
+     runs, record them in the User and Contact data objects */
+  $user_data->scanHold();
+  $contact_data->scanHold();
 
-  $smarty->assign('user',new UserData($msi,$smarty,$contact_id));
-  $smarty->assign('contact',
-       new ContactData($msi,$smarty,$contact_id));
   if($stmt=$msi->prepare("select title_id, title from titles ".
           "where deprecated=0")) {
     $stmt->execute();
