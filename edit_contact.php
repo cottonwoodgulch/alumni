@@ -31,8 +31,8 @@ if(isset($_POST['contact_id'])) {
   }
   /* if there may be changes in the hold tables from this or previous
      runs, record them in the User and Contact data objects */
-  $user_data->scanHold();
-  $contact_data->scanHold();
+  //$user_data->scanHold();
+  //$contact_data->scanHold();
 
   if($stmt=$msi->prepare("select title_id, title from titles ".
           "where deprecated=0")) {

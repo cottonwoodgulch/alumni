@@ -89,12 +89,12 @@ class ContactData {
   }
   function scanHold() {
     /* mark adds, deletes, and changes to addresses */
-    $stmt=$msi->prepare("select new_id, action,address_id,".
+/*    $stmt=$msi->prepare("select new_id, action,address_id,".
       "address_type_id,".
       "street_address_1,street_address_2,city,state,country,".
       "postal_code from hold_address ".
       "where contact_id=? order by tstamp");
-    $stmt->bind_param('i',this->contact_id);
+    $stmt->bind_param('i',$this->contact_id);
     $stmt->execute();
     $result=$stmt->get_result();
     while($tx = $result->fetch_assoc()) {
@@ -109,6 +109,7 @@ class ContactData {
     }
     $stmt->close();
     $result->free();
+*/  
     
   }
   /* phones */

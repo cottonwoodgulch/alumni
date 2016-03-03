@@ -58,12 +58,12 @@
       <form method="post" action="roster_members.php">
         <table class="edit">
           <thead>
-          <tr><td colspan="2">Roster Lookup</td></tr>
+          <tr><td colspan="2"><b>Roster Lookup</b></td></tr>
           </thead>
           <tr>
             <td class="label"><label for="roster_year">Year</label></td>
             <td>
-            <select id="roster_year" name="roster_year" 
+            <select id="roster_year" name="roster_year" class="content"
                  onChange="getRosters(this.value)" />
               <option value="0">Select Year</option>
               {foreach $roster_years as $y}
