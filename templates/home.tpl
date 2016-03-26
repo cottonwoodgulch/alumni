@@ -6,16 +6,16 @@
       <td>
         <table class="edit">
           <tr>
-            <td>{if $user->ud.title != ''}{$user->ud.title} {/if}
-                {$user->ud.first_name} {if $user->ud.nickname != ''}"{$user->ud.nickname}" {/if}
-                {$user->ud.middle_name} {$user->ud.primary_name}
-                {if $user->ud.degree != ''}{$user->ud.degree}{/if}</td>
+            <td>{if $user->ud.title.v != ''}{$user->ud.title.v} {/if}
+                {$user->ud.first_name.v} {if $user->ud.nickname.v != ''}"{$user->ud.nickname.v}" {/if}
+                {$user->ud.middle_name.v} {$user->ud.primary_name.v}
+                {if $user->ud.degree.v != ''}{$user->ud.degree.v}{/if}</td>
           </tr>
           <tr>
-            <td>Date of Birth: {$user->ud.birth_date}</td>
+            <td>Date of Birth: {$user->ud.birth_date.v}</td>
           </tr>
           <tr>
-            <td>Gender: {$user->ud.gender}</td>
+            <td>Gender: {$user->ud.gender.v}</td>
           </tr>
           <tr><td>&nbsp;</td></tr>
           <tr><td><form action="edit_contact.php" method="post">
@@ -26,18 +26,21 @@
       </td>
       <td>
         <table class="edit">
-          {foreach $contact->address as $add}
+          {foreach $contact->ad as $add}
             <tr>
-              <td>{$add.address_type}:</td><td>{$add.street_address_1}</td>
+              <td>{$add.address_type.v}:</td><td>{$add.street_address_1.v}</td>
             </tr>
-            {if $add->street_address_2 != ''}
+            {if $add->street_address_2.v != ''}
               <tr>
-                <td></td><td>{$add.street_address_2}</td>
+                <td></td><td>{$add.street_address_2.v}</td>
               </tr>
             {/if}
             <tr>
-              <td></td><td>{$add.city}, {$add.state} {$add.postal_code}
-                 {if $add.country != '' && $add.country != 'United States'} {$add.country}{/if}</td>
+              <td></td><td>{$add.city.v}, {$add.state.v} {$add.postal_code.v}
+                 {if $add.country.v != '' &&
+                     $add.country.v != 'United States'}
+                   {$add.country.v}
+                 {/if}</td>
             </tr>
           {foreachelse}
             <tr><td>No addresses in database</td></tr>
@@ -46,9 +49,10 @@
       </td>
       <td>
         <table class="edit">
-          {foreach $contact->phone as $ph}
+          {foreach $contact->ph as $ph}
             <tr>
-              <td>{$ph.phone_type}:</td><td>{$ph.number|formatPhone:$formatted}</td>
+              <td>{$ph.phone_type.v}:</td>
+              <td>{$ph.number.v|formatPhone:$formatted}</td>
             </tr>
           {foreachelse}
             <tr><td>No phones in database</td></tr>
@@ -57,9 +61,9 @@
       </td>
       <td>
         <table class="edit">
-          {foreach $contact->email as $em}
+          {foreach $contact->em as $em}
             <tr>
-              <td>{$em.email_type}:</td><td>{$em.email}</td>
+              <td>{$em.email_type.v}:</td><td>{$em.email.v}</td>
             </tr>
           {foreachelse}
             <tr><td>No E-Mail addresses in database</td></tr>

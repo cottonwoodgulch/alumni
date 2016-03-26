@@ -10,9 +10,16 @@ $(".drop-down li").hover(
     $(this).find("ul").stop().slideUp(400);
   }
 );
+/* the date picker on edit_contacts page */
+$("input.dob").datepicker({
+  dateFormat: "mm/dd/yy"
+});
 /* the select dropdown that gets year, then list of groups,
      then members of that group */
-$("select.content").selectmenu();
+$("select.content").selectmenu({
+  width: 100
+});
+$(".del").attr("disabled","disabled");
 $("#roster_year").on("selectmenuchange",function(event, ui) {
   if(this.value >= 1926) {
     // year is passed as 0 for Select Year option

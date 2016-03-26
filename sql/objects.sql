@@ -1,5 +1,5 @@
 /* address */
-select a.address_id,at.address_type,
+select a.address_id,a.address_type_id,at.address_type,
        a.street_address_1,a.street_address_2,
        a.city,a.state,a.country,a.postal_code,' ' status
   from address_associations aa
@@ -11,7 +11,7 @@ select a.address_id,at.address_type,
  order by at.rank
 
 /* phone */
-select p.phone_id,pt.phone_type,
+select p.phone_id,pt.p.phone_type_id,phone_type,
        p.number,p.formatted,' ' status
   from phone_associations pa
   left join phones p
@@ -22,8 +22,8 @@ select p.phone_id,pt.phone_type,
  order by pt.rank
 
 /* email */
-select et.email_type,
-       e.email_id,e.email,' ' status
+select e.email_id,e.email_type_id,et.email_type,
+       e.email,' ' status
   from email_associations ea
  inner join emails e
    on e.email_id=ea.email_id

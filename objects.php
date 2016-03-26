@@ -1,158 +1,216 @@
 <?php
 
 class ContactData {
-  /* contact info - addresses, phones, e-mails
-   Initially blank status field will be:
-     D - this record has been marked for deletion
-     A - this record was added
-     C - this record contains changes to the row with the same data_id
-         data_id {address_id, phone_id, email_id}
-     blank - live data
-   */
-
+  /* contact info - addresses, phones, e-mails */
   public $contact_id;
-  public $address_count=0;
-  public $address = array();
-  public $phone_count=0;
-  public $phone = array();
-  public $email_count=0;
-  public $email = array();
+  public $ad = array();
+  public $ph = array();
+  public $em = array();
+  private $fields=array(
+    "address" =>
+      "t.address_id,t.address_type_id,tt.address_type,t.street_address_1,t.street_address_2,t.city,t.state,t.country,t.postal_code",
+    "phone" =>
+      "t.phone_id,t.phone_type_id,tt.phone_type,t.number,t.formatted",
+    "email" =>
+      "t.email_id,t.email_type_id,tt.email_type,t.email");
   
   function __construct($msi, $smarty, $cid) {
     $this->contact_id = $cid;
-    if($stmt=$msi->prepare("select a.address_id,at.address_type,".
-          "a.street_address_1,a.street_address_2,".
-          "a.city,a.state,a.country,a.postal_code,' ' status ".
-          "from address_associations aa ".
-          "left join addresses a on a.address_id=aa.address_id ".
-          "left join address_types at on at.address_type_id=a.address_type_id ".
-          "where aa.contact_id=? ".
-          "order by at.rank")) {
-      $stmt->bind_param('i',$cid);
+    
+    $this->getLive($this->ad,$msi,$smarty,"address");
+    /* updates from hold_address */
+    $ud_hold = array();
+    $this->getHold($ud_hold,$msi,$smarty,"address");
+    /* combine and note changes */
+    $this->getChange($this->ad,$ud_hold,"address");
+    //echo '<pre>'.print_r($this->ad,true).'</pre><br />';
+ 
+    $this->getLive($this->ph,$msi,$smarty,"phone");
+    $ud_hold = array();
+    $this->getHold($ud_hold,$msi,$smarty,"phone");
+    $this->getChange($this->ph,$ud_hold,"phone");
+
+    $this->getLive($this->em,$msi,$smarty,"email");
+    $ud_hold = array();
+    $this->getHold($ud_hold,$msi,$smarty,"email");
+    $this->getChange($this->em,$ud_hold,"email");
+  }
+  
+  function getChange(&$ud,$hold,$table) {
+    foreach($hold as $hx) {
+      switch($hx["action"]) {
+        case "A":
+          $ud_count=count($ud);
+          foreach($hx as $key => $lx) {
+            if($key == "hold_id") {
+              /* set address_id to negative of hold id
+                 to indicate this is an add */
+              $ud[$ud_count]["address_id"]=
+                array("o" => null,
+                      "v" => -$hx[$key],
+                      "c" => "add"
+                     );
+            }
+            else if($key != "action" && $key !="address_id") {
+              $ud[$ud_count][$key]=
+                array("o" => null,
+                      "v" => $lx,
+                      "c" => "add"
+                     );
+            }
+          }
+          $ud_count++;
+        break;
+        case "D":
+          $ua=$this->findID($hx[$table."_id"],
+               $ud,$table."_id");
+          foreach($ud[$ua] as $key => $lx) {
+            $ud[$ua][$key]["c"]="del";
+          }
+        break;
+        case "C":
+          $ua=$this->findID($hx[$table."_id"],
+               $ud,$table."_id");
+          foreach($ud[$ua] as $key => $lx) {
+            if($ud[$ua][$key]["v"] != $hx[$key]) {
+              $ud[$ua][$key]["v"] = $hx[$key];
+              $ud[$ua][$key]["c"] = 'change';
+            }
+          }
+        break;
+      }
+    }
+  }
+  
+  function getHold(&$ud_hold,$msi,$smarty,$table) {
+    $query="select t.hold_id,t.action,".$this->fields[$table].
+      " from hold_".$table." t ".
+      "left join ".$table."_types tt on ".
+      "tt.".$table."_type_id=t.".$table."_type_id ".
+      "where t.contact_id=? order by t.action";
+    //echo "table: ".$table."<br />";
+    //echo "is_hold: ".$is_hold."<br />";
+    //echo "query: ".$query."<br />";
+
+    if($stmt=$msi->prepare($query)) {
+      $stmt->bind_param('i',$this->contact_id);
       $stmt->execute();
       $result=$stmt->get_result();
       while($tx = $result->fetch_assoc()) {
-        $this->address[$this->address_count] = $tx;
-        $this->address_count++;
+        $ud_hold[] = $tx;
       }
       $stmt->close();
       $result->free();
     }
     else {
-      $smarty->assign('footer',
-        "Address: unable to create mysql statement object: ".
+      $smarty->assign('footer',$table.": hold".
+        ": unable to create mysql statement object: ".
         $msi->error);
     }
-    if($stmt=$msi->prepare("select p.phone_id,pt.phone_type,".
-          "p.number,p.formatted,' ' status ".
-          "from phone_associations pa ".
-          "left join phones p on p.phone_id=pa.phone_id ".
-          "left join phone_types pt ".
-          "on pt.phone_type_id=p.phone_type_id ".
-          "where pa.contact_id=? ".
-          "order by pt.rank")) {
-      $stmt->bind_param('i',$cid);
+  }
+  function getLive(&$ud,$msi,$smarty,$table) {
+    // because addresses plural has an extra e
+    $db_table=$table=="address" ? "addresse" : $table;
+    $query="select ".$this->fields[$table].
+      " from ".$table."_associations ta ".
+      "left join ".$db_table."s t on t.".$table."_id=ta.".$table."_id ".
+      "left join ".$table."_types tt on ".
+      "tt.".$table."_type_id=t.".$table."_type_id ".
+      "where ta.contact_id=? order by tt.rank";
+    //echo "table: ".$table."<br />";
+    //echo "is_hold: ".$is_hold."<br />";
+    //echo "query: ".$query."<br />";
+
+    if($stmt=$msi->prepare($query)) {
+      $stmt->bind_param('i',$this->contact_id);
       $stmt->execute();
       $result=$stmt->get_result();
+      $ud_count=0;
       while($tx = $result->fetch_assoc()) {
-        $this->phone[$this->phone_count] = $tx;
-        $this->phone_count++;
+        foreach($tx as $key => $lx) {
+          $ud[$ud_count][$key]=
+            array("o" => $lx,
+                  "v" => $lx,
+                  "c" => null
+                 );
+        }
+        $ud_count++;
       }
       $stmt->close();
       $result->free();
     }
     else {
-      $smarty->assign('footer',"Phone: unable to create mysql statement object: ".
-         $msi->error);
-    }
-    if($stmt=$msi->prepare("select et.email_type,".
-          "e.email_id,e.email,' ' status ".
-          "from email_associations ea ".
-          "inner join emails e on e.email_id=ea.email_id ".
-          "left join email_types et on et.email_type_id=e.email_type_id ".
-          "where ea.contact_id=? ".
-          "order by et.rank")) {
-      $stmt->bind_param('i',$cid);
-      $stmt->execute();
-      $result=$stmt->get_result();
-      while($tx = $result->fetch_assoc()) {
-        $this->email[$this->email_count] = $tx;
-        $this->email_count++;
-      }
-      $stmt->close();
-      $result->free();
-    }
-    else {
-      $smarty->assign('footer',"EMail: unable to create mysql statement object: ".
-         $msi->error);
+      $smarty->assign('footer',$table.
+        ": unable to create mysql statement object: ".
+        $msi->error);
     }
   }
-  function scanHold() {
-    /* mark adds, deletes, and changes to addresses */
-/*    $stmt=$msi->prepare("select new_id, action,address_id,".
-      "address_type_id,".
-      "street_address_1,street_address_2,city,state,country,".
-      "postal_code from hold_address ".
-      "where contact_id=? order by tstamp");
-    $stmt->bind_param('i',$this->contact_id);
-    $stmt->execute();
-    $result=$stmt->get_result();
-    while($tx = $result->fetch_assoc()) {
-      switch($tx['status'] {
-        case 'D':
-        break;
-        case 'A':
-        break;
-        case 'C':
-        break;
+  function findID($key,$arr,$key_field) {
+    /* find which row of $arr has $key_field = $key */
+    foreach($arr as $k => $v) {
+      if($arr[$k][$key_field] == $key) {
+        return $k;
       }
     }
-    $stmt->close();
-    $result->free();
-*/  
-    
+    return false;
   }
-  /* phones */
-  
-  /* e-mails */
 }
 
 class UserData {
-  /* $ud is live data
-     if $is_change, $ud_change fields have changes or null
-  */
   public $contact_id;
   public $ud = array();
-  public $is_change;
-  public $ud_change = array();
 
   function __construct($msi,$smarty,$cid) {
     // retrieve info for a person
     $this->contact_id = $cid;
-    if($stmt=$msi->prepare("select c.contact_id,".
-          "ifnull(c.title_id,0) title_id,t.title,".
-          "c.first_name,c.middle_name,".
+    /* data from live data tables */
+    $ud_live = array();
+    $this->getDB($ud_live,$msi,$smarty,"contacts");
+    /* updates from hold_contact */
+    $ud_hold = array();
+    $this->getDB($ud_hold,$msi,$smarty,"hold_contact");
+    /* combine and note changes */
+    if(is_null($ud_hold)) {
+      // there are no changes
+      foreach($ud_live as $key => $lx) {
+        $this->ud[$key]=
+           array("o" => $lx,
+                 "v" => $lx,
+                 "c" => ''
+                );
+      }
+    }
+    else {
+      foreach($ud_live as $key => $lx) {
+        $this->ud[$key]=
+           array("o" => $lx,
+                 "v" => $ud_hold[$key],
+                 "c" => $ud_hold[$key] == $lx ? '' : 'change'
+                );
+      }
+    }
+    //echo print_r($this->ud).'<br /><br />';
+  }
+  function getDB(&$ud,$msi,$smarty,$table) {
+    if($stmt=$msi->prepare("select ifnull(c.title_id,0) title_id,".
+          "t.title,c.first_name,c.middle_name,".
           "c.primary_name,c.nickname,".
           "ifnull(c.degree_id,0) degree_id,".
           "d.degree,c.birth_date,ifnull(c.gender,'') gender ".
-          "from contacts c ".
+          "from $table c ".
           "left join titles t on t.title_id=c.title_id ".
           "left join degrees d on d.degree_id=c.degree_id ".
           "where contact_id=?")) {
-      $stmt->bind_param('i',$cid);
+      $stmt->bind_param('i',$this->contact_id);
       $stmt->execute();
-      /*$stmt->bind_result($contact_id, $title, $first_name, $middle_name, $primary_name,
-          $nickname, $degree, $birth_date, $gender);*/
       $result=$stmt->get_result();
-      $this->ud = $result->fetch_assoc();
+      $ud = $result->fetch_assoc();
       $stmt->close();
       $result->free();
     }
     else {
       $smarty->assign('footer',"UserData: unable to create mysql statement object: ".$msi->error);
     }
-  }
-  function scanHold() {
   }
 }
 

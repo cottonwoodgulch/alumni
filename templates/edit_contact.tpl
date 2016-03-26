@@ -119,9 +119,10 @@
           <label for="title">Title</label>
         </td>
         <td>
-          <select class="content" name="title">
+          <select class="content {$user->ud.title_id.c}"
+            name="title_id" id="title_id">
             {foreach $titles as $tx}
-            {if $user->ud.title_id == $tx['title_id']}
+            {if $user->ud.title_id.v == $tx['title_id']}
               <option value="{$tx.title_id}" selected="selected">
                  {$tx.title}</option>
             {else}
@@ -131,7 +132,7 @@
           </select>
         </td>
         <td></td><td><button type="submit" name="buttonAction"
-          value="SaveAll" disabled="disabled">Save Changes</button>
+          value="Save">Save Changes</button>
           </td>
       </tr>
       <tr>
@@ -139,15 +140,22 @@
           <label for="first_name">First Name</label>
         </td>
         <td>
-          <input name="first_name" value="{$user->ud.first_name}"/>
+          <input name="first_name"
+             class="{$user->ud.first_name.c}"
+             value="{$user->ud.first_name.v}"/>
         </td>
+        <td></td><td><button type="reset" name="buttonAction"
+          value="Reset">Reset</button>
+          </td>
       </tr>
       <tr>
         <td class="label">
           <label for="nickname">Nickname</label>
         </td>
         <td>
-          <input ="nickname" value="{$user->ud.nickname}"/>
+          <input name="nickname"
+             value="{$user->ud.nickname.v}"
+             class="{$user->ud.nickname.c}"/>
         </td>
       </tr>
       <tr>
@@ -155,7 +163,9 @@
           <label for="middle_name">Middle/Maiden Name</label>
         </td>
         <td>
-          <input name="middle_name" value="{$user->ud.middle_name}"/>
+          <input name="middle_name"
+             class="{$user->ud.middle_name.c}"
+             value="{$user->ud.middle_name.v}"/>
         </td>
       </tr>
       <tr>
@@ -164,7 +174,8 @@
         </td>
         <td>
           <input name="primary_name"
-            value="{$user->ud.primary_name}" />
+             class="{$user->ud.primary_name.c}"
+             value="{$user->ud.primary_name.v}" />
         </td>
       </tr>
       <tr>
@@ -172,9 +183,10 @@
           <label for="degree">Degree</label>
         </td>
         <td>
-          <select class="content" name="degree">
+          <select class="content {$user->ud.degree_id.c}"
+             name="degree_id">
             {foreach $degrees as $tx}
-            {if $user->ud.degree_id == $tx.degree_id}
+            {if $user->ud.degree_id.v == $tx.degree_id}
               <option value="{$tx.degree_id}" selected="selected">
                  {$tx.degree}</option>
             {else}
@@ -186,11 +198,12 @@
       </tr>
     <tr><td>&nbsp;</td></tr>
     <tr><td class="label">
-          <label for="DOB">Date of Birth</label>
+          <label for="birth_date">Date of Birth</label>
         </td>
         <td>
-          <input type="date" name="DOB"
-            value="{$user->ud.birth_date|date_format:'%D'}" />
+          <input name="birth_date"
+            class="dob {$user->ud.birth_date.c}"
+            value="{$user->ud.birth_date.v|date_format: "%m/%d/%Y"}"/>
         </td>
       </tr>
       <tr>
@@ -198,9 +211,10 @@
           <label for="gender">Gender</label>
         </td>
         <td>
-          <select class="content" name="gender">
+          <select class="content {$user->ud.gender.c}"
+             name="gender">
             {foreach array('Female','Male','') as $tx}
-              {if $user->ud.gender == $tx}
+              {if $user->ud.gender.v == $tx}
                 <option value="{$tx}" selected="selected">{$tx}</option>
               {else}
                 <option value="{$tx}">{$tx}</option>
@@ -210,32 +224,58 @@
         </td>
       </tr>
       <tr><td>&nbsp;</td></tr>
-      {foreach $contact->address as $tx}
-        <tr><td class="label">{$tx.address_type}</td>
-          <td><input name="{$tx.address_id}_street_address_1" value="{$tx.street_address_1}" /></td>
-          <td><button type="submit" name="buttonAction"
-                 value="DeleteAddress_{$tx.address_id}">
-                 Delete this Address</button></td>
+      {foreach $contact->ad as $tx}
+        <tr><td class="label">
+          <select class="content" name="address_type">
+            {foreach $address_types as $ty}
+              {if $ty.address_type_id == $tx.address_type_id.v}
+                <option value="{$ty.address_type_id}"
+                   class="{$tx.address_type_id.c}"
+                   selected="selected">{$ty.address_type}</option>
+              {else}
+                <option value="{$ty.address_type_id}">
+                   {$ty.address_type}</option>
+              {/if}
+            {/foreach}
+            </select></td>
+          <td><input name="{$tx.address_id.v}_street_address_1"
+              class="{$tx.street_address_1.c}"
+              value="{$tx.street_address_1.v}" /></td>
+          <td>{if $tx.address_id.c == 'del'}
+                <button type="submit" name="buttonAction"
+                   value="UnDeleteAddress_{$tx.address_id.v}">
+                   Undelete</button>
+              {else}
+                <button type="submit" name="buttonAction"
+                   value="DeleteAddress_{$tx.address_id.v}">
+                 Delete this Address</button>
+              {/if}
+          </td>
           {if $tx@first}
             <td><button type="button" onClick="getAddress();">
                Add Address</button></td>
           {/if}
         </tr>
         <tr><td></td><td><input
-          name="{$tx.address_id}_street_address_2"
-          value="{$tx.street_address_2}" /></td></tr>
+          name="{$tx.address_id.v}_street_address_2"
+          class="{$tx.street_address_2.c}"
+          value="{$tx.street_address_2.v}" /></td></tr>
         <tr><td></td><td><input
-          name="{$tx.address_id}_city"
-          value="{$tx.city}" /></td></tr>
+          name="{$tx.address_id.v}_city"
+          class="{$tx.city.c}"
+          value="{$tx.city.v}" /></td></tr>
         <tr><td></td><td><input
-          name="{$tx.address_id}_state"
-          value="{$tx.state}" /></td></tr>
+          name="{$tx.address_id.v}_state"
+          class="{$tx.state.c}"
+          value="{$tx.state.v}" /></td></tr>
         <tr><td></td><td><input
-          name="{$tx.address_id}_postal_code"
-          value="{$tx.postal_code}" /></td></tr>
+          name="{$tx.address_id.v}_postal_code"
+          class="{$tx.postal_code.c}"
+          value="{$tx.postal_code.v}" /></td></tr>
         <tr><td></td><td><input
-          name="{$tx.address_id}_country"
-          value="{$tx.country}" /></td></tr>
+          name="{$tx.address_id.v}_country"
+          class="{$tx.country.c}"
+          value="{$tx.country.v}" /></td></tr>
       {foreachelse}
         <tr><td></td><td></td>
           <td><button type="button" onClick="getAddress();">
@@ -243,14 +283,33 @@
         </tr>
       {/foreach}
       <tr><td>&nbsp;</td></tr>
-      {foreach $contact->phone as $tx}
-        <tr><td class="label">{$tx.phone_type}</td>
+      {foreach $contact->ph as $tx}
+        <tr><td class="label">
+           <select class="content" name="phone_type">
+           {foreach $phone_types as $ty}
+             {if $ty.phone_type_id == $tx.phone_type_id.v}
+               <option value="{$ty.phone_type_id}"
+                  selected="selected">{$ty.phone_type}</option>
+             {else}
+               <option value="{$ty.phone_type_id}">
+                  {$ty.phone_type}</option>
+             {/if}
+           {/foreach}
+           </select></td>
           <td><input
-            name="{$tx.phone_id}_number"
-            value="{$tx.number|formatPhone:$tx.formatted}" /></td>
-          <td><button type="submit" name="buttonAction"
-             value="DeletePhone_{$tx.phone_id}">
-             Delete this Phone</button></td>
+            name="{$tx.phone_id.v}_number"
+            class="{$tx.number.c}"
+            value="{$tx.number.v|formatPhone:$tx.formatted.v}" /></td>
+          <td>{if $tx.number.c == 'del'}
+                <button type="submit" name="buttonAction"
+                   value="UnDeletePhone_{$tx.phone_id.v}">
+                   Undelete</button>
+              {else}
+                <button type="submit" name="buttonAction"
+                   value="DeletePhone_{$tx.phone_id.v}">
+                 Delete this Phone</button>
+              {/if}
+          </td>
           {if $tx@first}
             <td><button type="button" onClick="getPhone();">
                Add Phone</button></td>
@@ -262,15 +321,33 @@
                Add Phone</button></td></tr>
       {/foreach}
       <tr><td>&nbsp;</td></tr>
-      {foreach $contact->email as $tx}
-        <tr>
-          <td class="label">{$tx.email_type}</td>
+      {foreach $contact->em as $tx}
+        <tr><td class="label">
+              <select class="content" name="email_type">
+           {foreach $email_types as $ty}
+             {if $ty.email_type_id == $tx.email_type_id.v}
+               <option value="{$ty.email_type_id}"
+                  selected="selected">{$ty.email_type}</option>
+             {else}
+               <option value="{$ty.email_type_id}">
+                  {$ty.email_type}</option>
+             {/if}
+           {/foreach}
+           </select></td>
           <td><input
-            name="{$tx.email_id}_email"
-            value="{$tx.email}" /></td>
-          <td><button type="submit" name="buttonAction"
-             value="DeleteEmail_{$tx.email_id}">
-             Delete this E-mail</button></td>
+            name="{$tx.email_id.v}_email"
+            class="{$tx.email.c}"
+            value="{$tx.email.v}" /></td>
+          <td>{if $tx.email_id.c == 'del'}
+                <button type="submit" name="buttonAction"
+                   value="UnDeleteEmail_{$tx.email_id.v}">
+                   Undelete</button>
+              {else}
+                <button type="submit" name="buttonAction"
+                   value="DeleteEmail_{$tx.email_id.v}">
+                 Delete this E-mail</button>
+              {/if}
+          </td>
           {if $tx@first}
             <td><button type="button" onClick="getEmail();">
               Add E-mail</button></td>
@@ -281,6 +358,7 @@
         <td><button type="button" onClick="getEmail();">
              Add E-mail</button></td></tr>
       {/foreach}
+      <tr><td>&nbsp;</td></tr>
     </table>
     <input type="hidden" name="contact_id"
            value="{$user->contact_id}"/>

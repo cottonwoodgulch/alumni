@@ -6,9 +6,10 @@ alter table contacts
 /* holding tables for changes made by general users
      waiting to be checked by sheriff */
 
-/* hold_contacts will only have changed fields */
-create table hold_contacts (
-  tstamp datetime,
+/* hold_contacts will only have one record for each
+     contact_id. Additional changes overwrite the previous
+     record */
+create table hold_contact (
   contact_id int (11),
   title_id int(11),
   primary_name varchar(250),
@@ -19,10 +20,7 @@ create table hold_contacts (
   birth_date date,
   gender enum('Male','Female'),
   username varchar(255),
-  password varchar(255) /*,
-    foreign key references contacts(contact_id),
-    foreign key references titles(title_id),
-    foreign key references degrees(degree_id) */
+  password varchar(255)
 ) engine innodb;  
 
 /* Hold_address, phone, and email tables will have
@@ -35,9 +33,8 @@ create table hold_contacts (
    New_id is necessary to allow undoing add
    */
 create table hold_address (
-  new_id int(11) primary key auto_increment,
+  hold_id int(11) primary key auto_increment,
   action enum('D','C','A'),
-  tstamp datetime,
   contact_id int (11),
   address_id int(11),
   address_type_id int (11),
@@ -46,38 +43,26 @@ create table hold_address (
   city varchar(250),
   state varchar(250),
   country varchar(250),
-  postal_code varchar(20),
-  index (contact_id) /*,
-  foreign key (contact_id) references contacts(contact_id)
-  foreign key (address_id) references addresses(address_id),
-  foreign key (address_type_id) references
-    address_types(address_type_id)*/
+  postal_code varchar(20)
 )engine=innodb;
 
 create table hold_phone (
-  new_id int(11) primary key auto_increment,
+  hold_id int(11) primary key auto_increment,
   action enum('D','C','A'),
-  tstamp datetime,
   contact_id int(11),
   phone_id int(11),
   phone_type_id int(11),
-  phone_number char(50) /*,
-    foreign key references contacts(contact_id),
-    foreign key references phones(phone_id),
-    foreign key references phone_types(phone_type_id) */
+  number char(50),
+  formatted tinyint(4)
 ) engine innodb;
 
 create table hold_email (
-  new_id int(11) primary key auto_increment,
+  hold_id int(11) primary key auto_increment,
   action enum('D','C','A'), -- delete, change, add
-  tstamp datetime,
   contact_id int (11),
   email_id int(11),
   email_type_id int(11),
-  email varchar(250) /*,
-    foreign key references contacts(contact_id),
-    foreign key references emails(email_id),
-    foreign key references emails(email_type_id) */
+  email varchar(250)
 ) engine innodb;
 
 /* hold_invite and hold_send tables will hold e-mails
@@ -95,7 +80,6 @@ create table hold_email (
 */
 create table hold_invite (
   message_type enum('I','S'),
-  tstamp datetime,
   sender_id int(11)
     foreign key references contacts(contact_id),
   target_id int(11)
@@ -106,3 +90,16 @@ create table hold_invite (
   message blob,
   send_date date default null
 ) engine innodb;
+
+/* scanhold queries */
+/* For the add recs (action=A), where there isn't an address_id
+   yet, the address_id is set to the negative of the
+   auto-increment hold_id */
+select h.action,-h.hold_id,
+       h.address_type_id,at.address_type,
+       h.street_address_1,h.street_address_2,
+       h.city,h.state,h.country,h.postal_code
+      from hold_address h
+      left join address_types at
+      on at.address_type_id=h.address_type_id
+      where contact_id=?

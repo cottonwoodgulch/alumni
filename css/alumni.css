@@ -175,6 +175,18 @@ input:hover, button:hover {
   background-color: #fCCFA6;
 }
 
+.del  {
+  background-color: #F0AD9C;
+}
+
+.add {
+  background-color: #E9E485;
+}
+
+.change {
+  background-color: #DCEAFC;
+}
+
 button {
   box-shadow: 2px 2px 2px #87654A,
   inset -2px -2px 2px #c49f75,

@@ -4,3 +4,7 @@ templates_c/
 
 # secret files
 config.php
+
+# junk
+old/
+test.php

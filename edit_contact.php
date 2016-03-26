@@ -1,7 +1,7 @@
 <?php
 
 require_once 'libe.php';
-include 'ContactData.php';
+include 'updateHold.php';
 
 $cid=o_session();
 /* if there is a contact_id stored in $_SESSION, we assume user has successfully logged in */
@@ -16,23 +16,18 @@ $smarty->assign('HelloName',$_SESSION['HelloName']);
 if(isset($_POST['contact_id'])) {
   $contact_id=$_POST['contact_id'];
 
+  /* If ButtonAction is supplied, this is a page reset,
+       which calls for data update.
+       updateHold.php places changes in hold_xxx table
+       for review before posting to live database. */
+  if(isset($_POST['buttonAction'])) {
+    updateHold($smarty,$msi,$contact_id);
+  }
   /* retrieve user's data */
   $user_data=new UserData($msi,$smarty,$contact_id);
   $smarty->assign('user',$user_data);
   $contact_data=new ContactData($msi,$smarty,$contact_id);
   $smarty->assign('contact',$contact_data);
-  /* If ButtonAction is supplied, this is a page reset,
-       which calls for data update, which is done by
-       ContactData.php
-     Changes are placed in hold_xxx file for review
-       before posting to live database. */
-  if(isset($_POST['buttonAction'])) {
-    ContactData($smarty,$msi,$contact_id);
-  }
-  /* if there may be changes in the hold tables from this or previous
-     runs, record them in the User and Contact data objects */
-  //$user_data->scanHold();
-  //$contact_data->scanHold();
 
   if($stmt=$msi->prepare("select title_id, title from titles ".
           "where deprecated=0")) {
