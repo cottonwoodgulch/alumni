@@ -21,7 +21,6 @@ function o_session() {
     return 0;
   }
 }
-require 'objects.php';
 
 function displayFooter($smarty,$message) {
   /* footer will display if the smarty variable footer is set */

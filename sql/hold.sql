@@ -18,9 +18,7 @@ create table hold_contact (
   degree_id int(11),
   nickname varchar(50),
   birth_date date,
-  gender enum('Male','Female'),
-  username varchar(255),
-  password varchar(255)
+  gender enum('Male','Female')
 ) engine innodb;  
 
 /* Hold_address, phone, and email tables will have

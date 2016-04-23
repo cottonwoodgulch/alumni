@@ -1,6 +1,7 @@
 <?php
 
 require_once 'libe.php';
+require_once 'objects.php';
 
 $cid=o_session();
 /* if there is a contact_id stored in $_SESSION, we assume user has successfully logged in */

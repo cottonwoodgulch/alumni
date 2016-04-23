@@ -16,8 +16,14 @@ $("input.dob").datepicker({
 });
 /* the select dropdown that gets year, then list of groups,
      then members of that group */
+console.log($('select.content').length);
 $("select.content").selectmenu({
-  width: 100
+  width: 100,
+  create: function (ev, ui) {
+    var $el = $(this);
+    var classAttr = $el.attr('class');
+    $el.selectmenu('instance').menu.addClass(classAttr);
+  }
 });
 $(".del").attr("disabled","disabled");
 $("#roster_year").on("selectmenuchange",function(event, ui) {

@@ -10,30 +10,13 @@
     if($transtype=='Add') {
       switch ($ButtonAction) {
       case "AddAddress":
-        $stmt=$msi->prepare("insert into hold_address values".
-          "(null,'A',?,null,?,?,?,?,?,?,?)");
-        $stmt->bind_param('iissssss',$contact_id,
-          $_POST['add_address_type'],
-          $_POST['add_street_address_1'],
-          $_POST['add_street_address_2'],
-          $_POST['add_city'],
-          $_POST['add_state'],
-          $_POST['add_country'],
-          $_POST['add_postal_code']);
+        insertPostAddress($msi,'A','add',$contact_id);
         break;
       case "AddPhone":
-        $stmt=$msi->prepare("insert into hold_phone values ".
-          "(null,'A',?,null,?,?)");
-        $stmt->bind_param('iis',$contact_id,
-          $_POST['add_phone_type'],
-          $_POST['add_phone']);
+        insertPostPhone($msi,'A','add',$contact_id);
         break;
       case "AddEmail":
-        $stmt=$msi->prepare("insert into hold_email values ".
-          "(null,'A',?,null,?,?)");
-        $stmt->bind_param('iis',$contact_id,
-          $_POST['add_email_type'],
-          $_POST['add_email']);
+        insertPostEmail($msi,'A','add',$contact_id);
         break;
       }
     }
@@ -45,7 +28,6 @@
       $uloc=strrpos($ButtonAction,"_");
       $data_id=substr($ButtonAction,$uloc+1);
       $ButtonAction=substr($ButtonAction,0,$uloc);
-      //echo " data_id, ButtonAction: ".$data_id.", ".$ButtonAction;
       if($data_id < 0) {
         /* there is a hold_ table A=add rec for this
            address/phone/email */
@@ -86,6 +68,8 @@
         }
         $stmt->bind_param('ii', $contact_id, $data_id);
       }
+      $stmt->execute();
+      $stmt->close();
     }
     else if($transtype=='UnD') {
       /* undelete - delete D rec from hold table */
@@ -108,19 +92,24 @@
         break;
       }
       $stmt->bind_param('i',$data_id);
+      $stmt->execute();
+      $stmt->close();
     }
     else if($transtype=='Sav') {
       // first, UserData
-      /* delete hold_contact record for this contact_id
-         if there is one */
+      /* Delete hold_contact record for this contact_id
+         if there is one. If there are changes in the
+         $_POST data, a new one will be created */
       $stmt=$msi->prepare("delete from hold_contact ".
         "where contact_id=?");
       $stmt->bind_param("i",$contact_id);
       $stmt->execute();
       $stmt->close();
+      $user_data=new UserData($msi,$smarty,$contact_id);
+      if(isChange($user_data->ud,0,"o")) {
         $stmt=$msi->prepare("insert into hold_contact values ".
-          "(?,?,?,?,?,?,?,str_to_date(?,'%m/%d/%Y'),?,?,?)");
-        $stmt->bind_param("iisssisssss",
+          "(?,?,?,?,?,?,?,str_to_date(?,'%m/%d/%Y'),?,null,null)");
+        $stmt->bind_param("iisssisss",
           $contact_id,
           $_POST["title_id"],
           $_POST["primary_name"],
@@ -129,14 +118,143 @@
           $_POST["degree_id"],
           $_POST["nickname"],
           $_POST["birth_date"],
-          $_POST["gender"],
-          $_POST["username"],
-          $_POST["password"]);
+          $_POST["gender"]);
+        $stmt->execute();
+        $stmt->close();
+      }
+      unset($user_data);
+      $contact_data=new ContactData($msi,$smarty,$contact_id);
+      saveContact($msi,$smarty,'address',$contact_data->ad,
+        $contact_id,insertPostAddress);
+      saveContact($msi,$smarty,'phone',$contact_data->ph,
+        $contact_id,insertPostPhone);
+      saveContact($msi,$smarty,'email',$contact_data->em,
+        $contact_id,insertPostEmail);
+      unset($contact_data);
     }
+  }
+  
+  function saveContact($msi,$smarty,$table,$clist,
+        $contact_id,$insertPost) {
+    /*if($table=="phone") {
+      echo '<pre>post: '.print_r($_POST,true).'</pre><br />';
+    }*/
+    foreach($clist as $hx) {
+      //echo '<pre>hx: '.print_r($hx).'</pre><br />';
+      $data_id=$hx[$table."_id"]["v"];
+      //echo 'data id: '.$data_id.'<br />';
+      if($hx[$table."_id"]["c"] == "add") {
+        if(isChange($hx,$data_id,"v")) {
+          // delete existing A hold rec
+          deleteHold($msi,$table,'A',-$data_id,$contact_id);
+          // insert new one
+          $insertPost($msi,'A',$data_id,$contact_id);
+        }
+      }
+      else {
+        /* Delete any existing C hold rec, replace if necessary.
+           Need to delete whether there are changes or not, in case
+             the user changed back to the orig value. */
+        deleteHold($msi,$table,'C',$data_id,$contact_id);
+        if(isChange($hx,$data_id,"o")) {
+          //echo '<pre>'.print_r($hx).'</pre>';
+          //if($hx[$table."_id"]["c"] == 'change') {      }
+          // insert new one
+          $insertPost($msi,'C',$data_id,$contact_id);
+        }
+      }
+    }
+  }
+  
+  function isChange($ud,$data_id,$val) {
+    // compare $ud values to $_POST
+    //echo ' in isChange: '.$data_id.', '.$val.'<br />';
+    foreach($ud as $key => $lx) {
+      $post_key = ($data_id == 0 ? "" : $data_id."_").$key;
+      //echo ' '.$post_key.': '.$_POST[$post_key].'<br />';
+      if(isset($_POST[$post_key])) {
+        if($key == "number") {
+          /* bad kluge - convert phone number back to only digits */
+          $_POST[$post_key]=preg_replace("/[^0-9]/","",
+            $_POST[$post_key]);
+        }
+        if($_POST[$post_key] != $ud[$key][$val]) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  
+  function insertPostAddress($msi,$action,$data_id,$contact_id) {
+    // insert a hold_address rec from $_POST
+    $stmt=$msi->prepare("insert into hold_address values ".
+        "(null,?,?,?,?,?,?,?,?,?,?)");
+    if($stmt->bind_param('siiissssss',
+      $action,
+      $contact_id,
+      $data_id,  // address_id
+      $_POST[$data_id.'_address_type_id'],
+      $_POST[$data_id.'_street_address_1'],
+      $_POST[$data_id.'_street_address_2'],
+      $_POST[$data_id.'_city'],
+      $_POST[$data_id.'_state'],
+      $_POST[$data_id.'_country'],
+      $_POST[$data_id.'_postal_code'])) {
     $stmt->execute();
     $stmt->close();
-    /* address */
-    /* phone */
-    /* e-mail */
+    }
+    else
+      echo 'insertPostAddress prep error: '.$msi->error;
+  }
+  
+  function insertPostPhone($msi,$action,$data_id,$contact_id) {
+    // insert a hold_phone rec from $_POST
+    $stmt=$msi->prepare("insert into hold_phone values ".
+        "(null,?,?,?,?,?,?)");
+    if($stmt->bind_param('siiiss',
+      $action,
+      $contact_id,
+      $data_id,  // phone_id
+      $_POST[$data_id.'_phone_type_id'],
+      preg_replace('/[^0-9]/','',$_POST[$data_id.'_number']),
+      $_POST[$data_id.'_formatted'])) {
+    $stmt->execute();
+    $stmt->close();
+    }
+    else
+      echo 'insertPostPhone prep error: '.$msi->error;
+  }
+  
+  function insertPostEmail($msi,$action,$data_id,$contact_id) {
+    // insert a hold_email rec from $_POST
+    $stmt=$msi->prepare("insert into hold_email values ".
+        "(null,?,?,?,?,?)");
+    if($stmt->bind_param('siiis',
+      $action,
+      $contact_id,
+      $data_id,  // email_id
+      $_POST[$data_id.'_email_type_id'],
+      $_POST[$data_id.'_email'])) {
+    $stmt->execute();
+    $stmt->close();
+    }
+    else
+      echo 'insertPostEmail prep error: '.$msi->error;
+  }
+  
+  function deleteHold($msi,$table,$action,$data_id,$contact_id) {
+    /*echo 'in deleteHold, table, data_id, contact_id: '.$table.', '.
+       $data_id.', '.$contact_id.'<br />';*/
+    /* If it's an Add record to be deleted, $data_id is hold_id,
+       If a Change rec to be deleted, $data_id is address_, phone_,
+         or email_id, that is $table.'_id' */
+    $id_field=$action == 'A' ? 'hold_id' : $table.'_id';
+    //echo 'action, id_field: '.$action.', '.$id_field.'<br />';
+    $stmt=$msi->prepare("delete from hold_".$table.
+      " where action=? and ".$id_field."=? and contact_id=?");
+    $stmt->bind_param("sii",$action,$data_id,$contact_id);
+    $stmt->execute();
+    $stmt->close();
   }
 ?>

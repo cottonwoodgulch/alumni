@@ -1,6 +1,7 @@
 <?php
 
 require_once 'libe.php';
+require_once 'objects.php';
 
 $cid=o_session();
 /* if there is a contact_id stored in $_SESSION, we assume user has successfully logged in */
@@ -8,6 +9,7 @@ if(!$cid) {
   header("Location: login.php");
   exit;
 }
+
 $smarty->assign('HelloName',$_SESSION['HelloName']);
 
 $page_request = isset($_GET['page_request']) ? $_GET['page_request'] : 'home';
@@ -36,7 +38,6 @@ switch($page_request) {
        new ContactData($msi,$smarty,$_SESSION['contact_id']));
     $tr=new RosterData($msi,$smarty,$_SESSION['contact_id']);
     $smarty->assign('roster',$tr);
-       //new RosterData($msi,$smarty,$_SESSION['contact_id']));
     $smarty->assign('rostercount',$tr->roster_count);
     $smarty->display('home.tpl');
     break;

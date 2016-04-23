@@ -29,7 +29,8 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
     }
   }
   else {
-    exit("Login: unable to create mysql statement object: ".$msi->error);
+    displayFooter($smarty,
+     "Login: unable to create mysql statement object: ".$msi->error);
   }
 }
 

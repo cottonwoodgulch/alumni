@@ -1,6 +1,7 @@
 <?php
 
 require_once 'libe.php';
+require_once 'objects.php';
 include 'updateHold.php';
 
 $cid=o_session();

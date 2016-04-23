@@ -17,18 +17,19 @@ class ContactData {
   function __construct($msi, $smarty, $cid) {
     $this->contact_id = $cid;
     
-    $this->getLive($this->ad,$msi,$smarty,"address");
+    $this->getLive($this->ad,$msi,$smarty,"address"); //'<pre>'.print_r($this->ad,true).'</pre><br />';
     /* updates from hold_address */
     $ud_hold = array();
     $this->getHold($ud_hold,$msi,$smarty,"address");
     /* combine and note changes */
     $this->getChange($this->ad,$ud_hold,"address");
-    //echo '<pre>'.print_r($this->ad,true).'</pre><br />';
  
     $this->getLive($this->ph,$msi,$smarty,"phone");
     $ud_hold = array();
     $this->getHold($ud_hold,$msi,$smarty,"phone");
+    //echo '<pre>'.print_r($ud_hold,true).'</pre><br />';
     $this->getChange($this->ph,$ud_hold,"phone");
+    //echo '<pre>'.print_r($this->ph,true).'</pre><br />';
 
     $this->getLive($this->em,$msi,$smarty,"email");
     $ud_hold = array();
@@ -45,13 +46,13 @@ class ContactData {
             if($key == "hold_id") {
               /* set address_id to negative of hold id
                  to indicate this is an add */
-              $ud[$ud_count]["address_id"]=
+              $ud[$ud_count][$table."_id"]=
                 array("o" => null,
-                      "v" => -$hx[$key],
+                      "v" => -$lx,
                       "c" => "add"
                      );
             }
-            else if($key != "action" && $key !="address_id") {
+            else if($key != "action" && $key !=$table."_id") {
               $ud[$ud_count][$key]=
                 array("o" => null,
                       "v" => $lx,
@@ -62,19 +63,23 @@ class ContactData {
           $ud_count++;
         break;
         case "D":
-          $ua=$this->findID($hx[$table."_id"],
-               $ud,$table."_id");
-          foreach($ud[$ua] as $key => $lx) {
-            $ud[$ua][$key]["c"]="del";
+          if(($ua=$this->findID($hx[$table."_id"],
+               $ud,$table."_id")) >= 0) {
+            foreach($ud[$ua] as $key => $lx) {
+              $ud[$ua][$key]["c"]="del";
+            }
           }
         break;
         case "C":
-          $ua=$this->findID($hx[$table."_id"],
-               $ud,$table."_id");
-          foreach($ud[$ua] as $key => $lx) {
-            if($ud[$ua][$key]["v"] != $hx[$key]) {
-              $ud[$ua][$key]["v"] = $hx[$key];
-              $ud[$ua][$key]["c"] = 'change';
+          if(($ua=$this->findID($hx[$table."_id"],
+               $ud,$table."_id")) >= 0) {
+            foreach($ud[$ua] as $key => $lx) {
+              /*echo 'key, v: '.$key.', '.$ud[$ua][$key]["v"].', '.
+                $hx[$key].'<br />';*/
+              if($ud[$ua][$key]["v"] != $hx[$key]) {
+                $ud[$ua][$key]["v"] = $hx[$key];
+                $ud[$ua][$key]["c"] = 'change';
+              }
             }
           }
         break;
@@ -108,12 +113,13 @@ class ContactData {
         $msi->error);
     }
   }
+
   function getLive(&$ud,$msi,$smarty,$table) {
     // because addresses plural has an extra e
     $db_table=$table=="address" ? "addresse" : $table;
     $query="select ".$this->fields[$table].
       " from ".$table."_associations ta ".
-      "left join ".$db_table."s t on t.".$table."_id=ta.".$table."_id ".
+      "inner join ".$db_table."s t on t.".$table."_id=ta.".$table."_id ".
       "left join ".$table."_types tt on ".
       "tt.".$table."_type_id=t.".$table."_type_id ".
       "where ta.contact_id=? order by tt.rank";
@@ -131,7 +137,7 @@ class ContactData {
           $ud[$ud_count][$key]=
             array("o" => $lx,
                   "v" => $lx,
-                  "c" => null
+                  "c" => ''
                  );
         }
         $ud_count++;
@@ -148,11 +154,14 @@ class ContactData {
   function findID($key,$arr,$key_field) {
     /* find which row of $arr has $key_field = $key */
     foreach($arr as $k => $v) {
-      if($arr[$k][$key_field] == $key) {
+      /*echo 'findID: $v[$key_field], $key: '.
+         $v[$key_field]["o"].', '.$key.'<br />';*/
+      if($v[$key_field]["o"] == $key) {
+        //echo '<br />returning: '.$k.'<br />';
         return $k;
       }
     }
-    return false;
+    return -1;
   }
 }
 
@@ -196,7 +205,8 @@ class UserData {
           "t.title,c.first_name,c.middle_name,".
           "c.primary_name,c.nickname,".
           "ifnull(c.degree_id,0) degree_id,".
-          "d.degree,c.birth_date,ifnull(c.gender,'') gender ".
+          "d.degree,date_format(c.birth_date,'%m/%d/%Y') birth_date,".
+          "ifnull(c.gender,'') gender ".
           "from $table c ".
           "left join titles t on t.title_id=c.title_id ".
           "left join degrees d on d.degree_id=c.degree_id ".
@@ -330,5 +340,4 @@ function get_roster_years($msi) {
   }
   return $roster_years;
 }
-
 ?>
