@@ -16,7 +16,7 @@
   </tr>
   <tr><td class="label"><label for="to">To:</label></td>
     <td><input id="to" name="to" type="email" size="30"
-      placeholder="&lt;{$target_user_data->ud.first_name} {$target_user_data->ud.primary_name}'s e-mail&gt;" /> you provide the e-mail address
+      placeholder="&lt;{$target_user_data->ud.first_name["v"]} {$target_user_data->ud.primary_name["v"]}'s e-mail&gt;" />&nbsp;&nbsp;you provide the e-mail address
     </td>
   </tr>
 {/block}

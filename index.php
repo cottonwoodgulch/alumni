@@ -31,8 +31,14 @@ switch($page_request) {
     $smarty->assign('roster_years', get_roster_years($msi));
     $smarty->display('roster_members.tpl');
     break;
+  case 'people':
+    header("location: people.php");
+  break;
   case 'home':
   default:
+    // users may see and edit their own data
+    $smarty->assign('is_contact_viewer',true);
+    $smarty->assign('is_contact_editor',true);
     $smarty->assign('user',new UserData($msi,$smarty,$_SESSION['contact_id']));
     $smarty->assign('contact',
        new ContactData($msi,$smarty,$_SESSION['contact_id']));

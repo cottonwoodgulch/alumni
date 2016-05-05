@@ -2,6 +2,7 @@
 
 {block name="js"}
   <script src="js/ContactData.js"></script>
+  <script src="js/edit_contact.js"></script>
 {/block}
 
 {block name="dialog"}
@@ -14,7 +15,7 @@
       <td class="label">
         <label for="add_address_type">Address Type</td>
       <td><select id="add-address-type" name="add_address_type_id"
-        form="AddressDialogForm">
+        form="AddressDialogForm" class="content">
         {foreach $address_types as $tx}
           <option value="{$tx.address_type_id}">              
              {$tx.address_type}</option>
@@ -59,7 +60,7 @@
       <td class="label">
         <label for="add_phone_type">Phone Type</td>
       <td><select id="add-phone-type" name="add_phone_type_id"
-        form="PhoneDialogForm">
+        form="PhoneDialogForm" class="content">
         {foreach $phone_types as $tx}
           <option value="{$tx.phone_type_id}">              
              {$tx.phone_type}</option>
@@ -119,7 +120,7 @@
           <label for="title_id">Title</label>
         </td>
         <td>
-          <select class="content {$user->ud.title_id.c}"
+          <select class="{$user->ud.title_id.c}"
             name="title_id" id="title_id">
             {foreach $titles as $tx}
             {if $user->ud.title_id.v == $tx['title_id']}
@@ -183,7 +184,7 @@
           <label for="degree">Degree</label>
         </td>
         <td>
-          <select class="content {$user->ud.degree_id.c}"
+          <select class="{$user->ud.degree_id.c}"
              name="degree_id">
             {foreach $degrees as $tx}
             {if $user->ud.degree_id.v == $tx.degree_id}
@@ -211,7 +212,7 @@
           <label for="gender">Gender</label>
         </td>
         <td>
-          <select class="content {$user->ud.gender.c}"
+          <select class="{$user->ud.gender.c}"
              name="gender">
             {foreach array('Female','Male','') as $tx}
               {if $user->ud.gender.v == $tx}
@@ -226,7 +227,8 @@
       <tr><td>&nbsp;</td></tr>
       {foreach $contact->ad as $tx}
         <tr><td class="label">
-          <select class="content" name="{$tx.address_id.v}_address_type_id">
+          <select class="{$tx.address_type_id.c}"
+             name="{$tx.address_id.v}_address_type_id">
             {foreach $address_types as $ty}
               {if $ty.address_type_id == $tx.address_type_id.v}
                 <option value="{$ty.address_type_id}"
@@ -285,7 +287,8 @@
       <tr><td>&nbsp;</td></tr>
       {foreach $contact->ph as $tx}
         <tr><td class="label">
-           <select class="content" name="{$tx.phone_id.v}_phone_type_id">
+           <select class="{$tx.phone_type_id.c}"
+              name="{$tx.phone_id.v}_phone_type_id">
            {foreach $phone_types as $ty}
              {if $ty.phone_type_id == $tx.phone_type_id.v}
                <option value="{$ty.phone_type_id}"
@@ -323,7 +326,8 @@
       <tr><td>&nbsp;</td></tr>
       {foreach $contact->em as $tx}
         <tr><td class="label">
-              <select class="content" name="{$tx.email_id.v}_email_type_id">
+              <select class="{$tx.email_type_id.c}"
+                name="{$tx.email_id.v}_email_type_id">
            {foreach $email_types as $ty}
              {if $ty.email_type_id == $tx.email_type_id.v}
                <option value="{$ty.email_type_id}"

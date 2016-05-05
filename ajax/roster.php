@@ -7,7 +7,7 @@
   
   /* the label and initial <td> for the select element
       that this query populates */
-  $result = '<td class="label"><label for="roster_group">Group</label></td><td><select id="roster_group_selectmenu"  onchange="selectOptionLink(this.value)">'.
+  $result = '<td class="label"><label for="roster_group">Group</label></td><td><select id="roster_group"  onchange="selectOptionLink(this.value)">'.
   '<option value="0">Select Group</option>';
   
   if(isset($_GET['year'])) {

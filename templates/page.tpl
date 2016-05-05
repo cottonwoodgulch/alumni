@@ -5,8 +5,7 @@
   <link rel="stylesheet" href="css/jquery-ui.css" />
   <link rel="icon" href="images/skull.ico" />
   <script src="vendor/components/jquery/jquery.min.js"></script>
-  <script src="vendor/components/jqueryui/jquery-ui.js">
-  </script>
+  <script src="vendor/components/jqueryui/jquery-ui.js"></script>
   <script src="js/alumni.js"></script>
   {block name="js"}
   {/block}
@@ -24,7 +23,7 @@
       {block name="nav"}
       <div id="nav-wrapper">
         <div id="nav1"><ul class="navbar">
-          {foreach array("home","rosters") as $menuitem}
+          {foreach array("home","rosters","people") as $menuitem}
             {if $menuitem == $page_request}
               <li>{$menuitem|capitalize}</li>
             {else}

@@ -108,7 +108,7 @@
       $user_data=new UserData($msi,$smarty,$contact_id);
       if(isChange($user_data->ud,0,"o")) {
         $stmt=$msi->prepare("insert into hold_contact values ".
-          "(?,?,?,?,?,?,?,str_to_date(?,'%m/%d/%Y'),?,null,null)");
+          "(?,?,?,?,?,?,?,str_to_date(?,'%m/%d/%Y'),?)");
         $stmt->bind_param("iisssisss",
           $contact_id,
           $_POST["title_id"],

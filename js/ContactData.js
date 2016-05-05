@@ -23,7 +23,7 @@ function getAddress() {
       }
     ]
   });
-  $("#add-address-type").selectmenu().appendTo("#AddressDialog");
+  //$("#add-address-type").selectmenu().appendTo("#AddressDialog");
   
 };
 
@@ -48,7 +48,7 @@ function getPhone() {
       }
     ]
   });
-  $("#add-phone-type").selectmenu().appendTo("#PhoneDialog");
+  //$("#add-phone-type").selectmenu().appendTo("#PhoneDialog");
 };
 
 function getEmail() {
@@ -72,5 +72,5 @@ function getEmail() {
       }
     ]
   });
-  $("#add-email-type").selectmenu().appendTo("#EmailDialog");
+  //$("#add-email-type").selectmenu().appendTo("#EmailDialog");
 };

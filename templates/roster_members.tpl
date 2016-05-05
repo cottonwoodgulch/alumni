@@ -1,5 +1,10 @@
 {extends file="page.tpl"}
 
+{block name="js"}
+  /* js for roster lookup */
+  <script src="js/rosters.js"></script>
+{/block}
+
 {block name="content"}
   <table class="edit">
   <tr>
@@ -63,18 +68,11 @@
           <tr>
             <td class="label"><label for="roster_year">Year</label></td>
             <td>
-            <select id="roster_year" name="roster_year" class="content"
-                 onChange="getRosters(this.value)" />
-              <option value="0">Select Year</option>
-              {foreach $roster_years as $y}
-                {if $y == $roster_members->roster_year}
-                  <option value="{$y}" selected="selected">{$y}
-                     </option>
-                {else}
-                  <option value="{$y}">{$y}</option>
-                {/if}
-              {/foreach}
-            </select>
+            <input id="roster_year" name="roster_year"
+               value="{$roster_members->roster_year}"
+               onKeyup="getRosters(this.value)"
+               onClick="selectAll('#roster_year')"
+               autocomplete="off" size="5"/>
             </td>
           </tr>
           <tr id="roster_group_select">
