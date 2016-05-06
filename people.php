@@ -14,11 +14,14 @@ if(!$cid) {
   exit;
 }
 $smarty->assign('HelloName',$_SESSION['HelloName']);
+/* rbac on www.cottonwoodgulch.org can't look up a role_id by name
 $smarty->assign('is_contact_viewer',
   $rbac->Users->hasRole('Contact Information Viewer',$cid));
 $smarty->assign('is_contact_editor',
-  $rbac->Users->hasRole('Contact Information Editor',$cid));
-  
+  $rbac->Users->hasRole('Contact Information Editor',$cid));*/
+$smarty->assign('is_contact_viewer',$rbac->Users->hasRole(5,$cid));
+$smarty->assign('is_contact_editor',$rbac->Users->hasRole(4,$cid));
+
 if(isset($_GET["alum_id"])) {
   $alum_id=$_GET["alum_id"];
   $smarty->assign('user',new UserData($msi,$smarty,$alum_id));
