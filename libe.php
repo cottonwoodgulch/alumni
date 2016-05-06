@@ -7,6 +7,10 @@ $smarty->addTemplateDir(__DIR__ . '/templates');
 $smarty->addPluginsDir(__DIR__ . '/plugins');
 $rbac = new PhpRbac\Rbac();
 
+/* PHP requires setting a timezone. This will be fine,
+   since the app doesn't require a time */
+date_default_timezone_set('America/New_York');
+
 // database connection
 include 'config.php';
 $msi = new mysqli($db_host, $db_user, $db_pw, $db_db);

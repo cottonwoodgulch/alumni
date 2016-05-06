@@ -19,10 +19,6 @@ $smarty->assign('is_contact_viewer',
   $rbac->Users->hasRole('Contact Information Viewer',$cid));
 $smarty->assign('is_contact_editor',
   $rbac->Users->hasRole('Contact Information Editor',$cid));
-/*$smarty->assign('is_contact_viewer',
-    $rbac->check('view_contact_information',$cid));
-$smarty->assign('is_contact_editor',
-    $rbac->check('edit_contact_information',$cid));*/
 
 if(isset($_GET["alum_id"])) {
   $alum_id=$_GET["alum_id"];

@@ -26,14 +26,8 @@ if(isset($_GET['roster_id'])) {
   /* get next year expeditions */
   $smarty->assign('next_year',
      get_expeditions($msi,$rmd->roster_year+1));
-  /* get all available roster years for roster lookup dropdown */
-  $smarty->assign('roster_years',
-     get_roster_years($msi));
 }
 /* else just show roster lookup form (template handles this) */
-// get all available roster years for roster lookup dropdown
-$smarty->assign('roster_years',
-   get_roster_years($msi));
 $smarty->display('roster_members.tpl');
 
 

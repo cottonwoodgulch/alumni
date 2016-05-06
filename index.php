@@ -9,7 +9,6 @@ if(!$cid) {
   header("Location: login.php");
   exit;
 }
-
 $smarty->assign('HelloName',$_SESSION['HelloName']);
 
 $page_request = isset($_GET['page_request']) ? $_GET['page_request'] : 'home';
@@ -28,7 +27,6 @@ switch($page_request) {
     break;
   case 'rosters':
     /* get all available roster years for roster lookup dropdown */
-    $smarty->assign('roster_years', get_roster_years($msi));
     $smarty->display('roster_members.tpl');
     break;
   case 'people':
@@ -39,10 +37,9 @@ switch($page_request) {
     // users may see and edit their own data
     $smarty->assign('is_contact_viewer',true);
     $smarty->assign('is_contact_editor',true);
-    $smarty->assign('user',new UserData($msi,$smarty,$_SESSION['contact_id']));
-    $smarty->assign('contact',
-       new ContactData($msi,$smarty,$_SESSION['contact_id']));
-    $tr=new RosterData($msi,$smarty,$_SESSION['contact_id']);
+    $smarty->assign('user',new UserData($msi,$smarty,$cid));
+    $smarty->assign('contact',new ContactData($msi,$smarty,$cid));
+    $tr=new RosterData($msi,$smarty,$cid);
     $smarty->assign('roster',$tr);
     $smarty->assign('rostercount',$tr->roster_count);
     $smarty->display('home.tpl');

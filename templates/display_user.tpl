@@ -19,6 +19,9 @@
           <tr>
             <td>Gender: {$user->ud.gender.v}</td>
           </tr>
+          <tr>
+            <td>Contact ID: {$user->contact_id}</td>
+          </tr>
           {if $is_contact_editor}
           <tr><td>&nbsp;</td></tr>
           <tr><td><form action="edit_contact.php" method="post">

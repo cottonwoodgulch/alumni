@@ -319,25 +319,4 @@ class RosterMemberData {
     }
   }
 }
-
-function get_roster_years($msi) {
-  // get all the roster years in the db for the dropdown
-  $roster_years = array();
-  if($stmt=$msi->prepare("select distinct r.year ".
-     "from rosters r ".
-     "where r.year>=1926 ".
-     "order by r.year")) {
-    $stmt->execute();
-    $stmt->bind_result($year);
-    while($stmt->fetch()) {
-      $roster_years[] = $year;
-    }
-    $stmt->close();
-  }
-  else {
-    echo 'roster_years: unable to create sql statement: '.
-    $msi->error;
-  }
-  return $roster_years;
-}
 ?>
