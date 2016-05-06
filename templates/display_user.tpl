@@ -34,7 +34,7 @@
             <tr>
               <td>{$add.address_type.v}:</td><td>{$add.street_address_1.v}</td>
             </tr>
-            {if $add->street_address_2.v != ''}
+            {if $add.street_address_2.v != ''}
               <tr>
                 <td></td><td>{$add.street_address_2.v}</td>
               </tr>
@@ -56,7 +56,7 @@
           {foreach $contact->ph as $ph}
             <tr>
               <td>{$ph.phone_type.v}:</td>
-              <td>{$ph.number.v|formatPhone:$formatted}</td>
+              <td>{$ph.number.v|formatPhone:$ph.formatted.v}</td>
             </tr>
           {foreachelse}
             <tr><td>No phones in database</td></tr>

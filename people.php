@@ -14,15 +14,15 @@ if(!$cid) {
   exit;
 }
 $smarty->assign('HelloName',$_SESSION['HelloName']);
-/* rbac on www.cottonwoodgulch.org can't look up a role_id by name
+
 $smarty->assign('is_contact_viewer',
   $rbac->Users->hasRole('Contact Information Viewer',$cid));
 $smarty->assign('is_contact_editor',
-  $rbac->Users->hasRole('Contact Information Editor',$cid));*/
-$smarty->assign('is_contact_viewer',
+  $rbac->Users->hasRole('Contact Information Editor',$cid));
+/*$smarty->assign('is_contact_viewer',
     $rbac->check('view_contact_information',$cid));
 $smarty->assign('is_contact_editor',
-    $rbac->check('edit_contact_information',$cid));
+    $rbac->check('edit_contact_information',$cid));*/
 
 if(isset($_GET["alum_id"])) {
   $alum_id=$_GET["alum_id"];
@@ -32,6 +32,7 @@ if(isset($_GET["alum_id"])) {
   $smarty->assign('roster',$tr);
   $smarty->assign('rostercount',$tr->roster_count);
 }
+$smarty->assign('page_request','people');
 $smarty->display('people.tpl');
 
 ?>
