@@ -286,7 +286,7 @@ class RosterMemberData {
             "from roster_memberships rm ".
             "inner join contacts c on c.contact_id=rm.contact_id ".
             "left join roles ro on ro.role_id=ifnull(rm.role_id,3) ".
-            "left join (select c.contact_id ".
+            "left join (select distinct c.contact_id ".
                "from email_associations ea ".
                "inner join contacts c on c.contact_id=ea.contact_id ".
                "inner join emails e on e.email_id=ea.email_id ) dex ".

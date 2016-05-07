@@ -88,16 +88,3 @@ create table hold_invite (
   message blob,
   send_date date default null
 ) engine innodb;
-
-/* scanhold queries */
-/* For the add recs (action=A), where there isn't an address_id
-   yet, the address_id is set to the negative of the
-   auto-increment hold_id */
-select h.action,-h.hold_id,
-       h.address_type_id,at.address_type,
-       h.street_address_1,h.street_address_2,
-       h.city,h.state,h.country,h.postal_code
-      from hold_address h
-      left join address_types at
-      on at.address_type_id=h.address_type_id
-      where contact_id=?

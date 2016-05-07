@@ -2,18 +2,8 @@
 
 require_once 'libe.php';
 require_once 'objects.php';
-include 'updateHold.php';
+require_once 'updateHold.php';
 
-$cid=o_session();
-/* if there is a contact_id stored in $_SESSION, we assume user has successfully logged in */
-if(!$cid) {
-  header("Location: login.php");
-  exit;
-}
-$smarty->assign('HelloName',$_SESSION['HelloName']);
-
-/* contact_id has to come in via post (instead of just using $cid),
-     because this page may not always be used for Edit My Data */
 if(isset($_POST['contact_id'])) {
   $contact_id=$_POST['contact_id'];
 
@@ -22,10 +12,10 @@ if(isset($_POST['contact_id'])) {
        updateHold.php places changes in hold_xxx table
        for review before posting to live database. */
   if(isset($_POST['buttonAction'])) {
-    updateHold($smarty,$msi,$contact_id);
+    updateHold($smarty,$msi,$user_id,$contact_id);
   }
   /* retrieve user's data */
-  $user_data=new UserData($msi,$smarty,$contact_id);
+  $user_data=new UserData($msi,$smarty,$user_id,$contact_id);
   $smarty->assign('user',$user_data);
   $contact_data=new ContactData($msi,$smarty,$contact_id);
   $smarty->assign('contact',$contact_data);

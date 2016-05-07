@@ -2,7 +2,7 @@
 
 {block name="addresses"}
 <tr><td colspan="2">
-  <h3>Inviting {$target_user_data->ud.first_name} {$target_user_data->ud.primary_name}</h3>
+  <h3>Inviting {$target_user_data->ud.first_name["v"]} {$target_user_data->ud.primary_name["v"]}</h3>
 </td></tr>
 <tr><td class="label"><label for="replyto">Reply-to:</label></td>
     <td><input id="replyto" name="replyto" type="email" size="30" autofocus

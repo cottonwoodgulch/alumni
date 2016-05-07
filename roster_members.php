@@ -3,14 +3,6 @@
 require_once 'libe.php';
 require_once 'objects.php';
 
-$cid=o_session();
-/* if there is a contact_id stored in $_SESSION, we assume user has successfully logged in */
-if(!$cid) {
-  header("Location: login.php");
-  exit;
-}
-$smarty->assign('HelloName',$_SESSION['HelloName']);
-
 if(isset($_GET['roster_id'])) {
   $roster_id = $_GET['roster_id'];
   //$smarty->assign('roster_id',$roster_id);

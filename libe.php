@@ -15,14 +15,15 @@ date_default_timezone_set('America/New_York');
 include 'config.php';
 $msi = new mysqli($db_host, $db_user, $db_pw, $db_db);
 
-function o_session() {
-  // if there is a session, return user code, else 0 to indicate no session
-  session_start();
-  if(isset($_SESSION['contact_id'])) {
-    return $_SESSION['contact_id'];
-  }
-  else {
-    return 0;
+session_start();
+if(isset($_SESSION['user_id'])) {
+  $user_id=$_SESSION['user_id'];
+  $smarty->assign('HelloName',$_SESSION['HelloName']);
+}
+else {
+  $user_id=0;
+  if(!isset($login)) {
+    header("Location: login.php");
   }
 }
 

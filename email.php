@@ -4,14 +4,10 @@
 require_once 'libe.php';
 require_once 'objects.php';
 
-$cid=o_session();
-/* if there is a contact_id stored in $_SESSION, we assume user has successfully logged in */
-if(!$cid) {
-  header("Location: login.php");
-  exit;
-}
-$smarty->assign('HelloName',$_SESSION['HelloName']);
-
+/* This file does both "Invite" and "Send Mail" from Rosters page.
+   send.tpl and invite.tpl both extend email.tpl. They contain the
+   reply-to and address sections of the message, and email.tpl
+   handles the subject & message body */
 $email_type=isset($_GET['email_type']) ? $_GET['email_type'] : 'invite';
 $smarty->assign('email_type',$email_type);
 
@@ -33,7 +29,7 @@ if(isset($_GET['target_id'])) {
     "where contact_id=?) cx on cx.roster_id=tx.roster_id ".
     "left join rosters r on r.roster_id=tx.roster_id ".
     "left join groups g on g.group_id=r.group_id")) {
-    $stmt->bind_param('ii',$target_id,$cid);
+    $stmt->bind_param('ii',$target_id,$user_id);
     $stmt->execute();
     $result=$stmt->get_result();
     while($r = $result->fetch_assoc()) {
@@ -45,7 +41,7 @@ if(isset($_GET['target_id'])) {
     $smarty->assign('rosters_in_common',$ric);
     $smarty->assign('rosters_in_common_count',$ric_count);
     /* get user's name */
-    $smarty->assign('user', new UserData($msi,$smarty,$cid));
+    $smarty->assign('user', new UserData($msi,$smarty,$user_id));
     /* get user's (=sender's) e-mail address for reply-to
         if more than one, just get the first - user can change it
         ?? should use ContactData object for this? */
@@ -53,7 +49,7 @@ if(isset($_GET['target_id'])) {
       "from email_associations ea ".
       "left join emails e on e.email_id=ea.email_id ".
       "where ea.contact_id=? limit 1")) {
-      $stmt->bind_param('i',$cid);
+      $stmt->bind_param('i',$user_id);
       $stmt->execute();
       $stmt->bind_result($user_email);
       if($stmt->fetch()) {

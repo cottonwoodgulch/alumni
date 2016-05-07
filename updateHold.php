@@ -4,7 +4,7 @@
    Changes are placed in hold_xxx file for review
      before posting to live database. */
   
-  function updateHold ($smarty,$msi,$contact_id) {
+  function updateHold ($smarty,$msi,$user_id,$contact_id) {
     $ButtonAction=$_POST['buttonAction'];
     $transtype=substr($ButtonAction,0,3);
     if($transtype=='Add') {

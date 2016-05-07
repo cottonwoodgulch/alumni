@@ -3,14 +3,6 @@
 require_once 'libe.php';
 require_once 'objects.php';
 
-$cid=o_session();
-/* if there is a contact_id stored in $_SESSION, we assume user has successfully logged in */
-if(!$cid) {
-  header("Location: login.php");
-  exit;
-}
-$smarty->assign('HelloName',$_SESSION['HelloName']);
-
 $page_request = isset($_GET['page_request']) ? $_GET['page_request'] : 'home';
 $smarty->assign('page_request',$page_request);
 
@@ -37,9 +29,9 @@ switch($page_request) {
     // users may see and edit their own data
     $smarty->assign('is_contact_viewer',true);
     $smarty->assign('is_contact_editor',true);
-    $smarty->assign('user',new UserData($msi,$smarty,$cid));
-    $smarty->assign('contact',new ContactData($msi,$smarty,$cid));
-    $tr=new RosterData($msi,$smarty,$cid);
+    $smarty->assign('user',new UserData($msi,$smarty,$user_id));
+    $smarty->assign('contact',new ContactData($msi,$smarty,$user_id));
+    $tr=new RosterData($msi,$smarty,$user_id);
     $smarty->assign('roster',$tr);
     $smarty->assign('rostercount',$tr->roster_count);
     $smarty->display('home.tpl');

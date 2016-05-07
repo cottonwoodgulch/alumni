@@ -7,18 +7,10 @@
 require_once 'libe.php';
 require_once 'objects.php';
 
-$cid=o_session();
-/* if there is a contact_id stored in $_SESSION, we assume user has successfully logged in */
-if(!$cid) {
-  header("Location: login.php");
-  exit;
-}
-$smarty->assign('HelloName',$_SESSION['HelloName']);
-
 $smarty->assign('is_contact_viewer',
-  $rbac->Users->hasRole('Contact Information Viewer',$cid));
+  $rbac->Users->hasRole('Contact Information Viewer',$user_id));
 $smarty->assign('is_contact_editor',
-  $rbac->Users->hasRole('Contact Information Editor',$cid));
+  $rbac->Users->hasRole('Contact Information Editor',$user_id));
 
 if(isset($_GET["alum_id"])) {
   $alum_id=$_GET["alum_id"];
