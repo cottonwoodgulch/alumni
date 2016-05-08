@@ -13,9 +13,10 @@ $smarty->assign('email_type',$email_type);
 
 if(isset($_GET['target_id'])) {
   $target_id=$_GET['target_id'];
-  $smarty->assign('target_user_data',new UserData($msi,$smarty,$target_id));
+  $smarty->assign('target_user_data',new UserData($msi,$smarty,
+     $user_id,$target_id));
   $smarty->assign('target_contact_data',
-     new ContactData($msi,$smarty,$target_id));
+     new ContactData($msi,$smarty,$user_id,$target_id));
   /* get rosters-in-common */
   $ric = array();
   $ric_count=0;

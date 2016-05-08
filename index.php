@@ -29,8 +29,10 @@ switch($page_request) {
     // users may see and edit their own data
     $smarty->assign('is_contact_viewer',true);
     $smarty->assign('is_contact_editor',true);
-    $smarty->assign('user',new UserData($msi,$smarty,$user_id));
-    $smarty->assign('contact',new ContactData($msi,$smarty,$user_id));
+    $smarty->assign('user',new UserData($msi,$smarty,
+       $user_id,$user_id));
+    $smarty->assign('contact',new ContactData($msi,$smarty,
+       $user_id,$user_id));
     $tr=new RosterData($msi,$smarty,$user_id);
     $smarty->assign('roster',$tr);
     $smarty->assign('rostercount',$tr->roster_count);

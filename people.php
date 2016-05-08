@@ -14,8 +14,10 @@ $smarty->assign('is_contact_editor',
 
 if(isset($_GET["alum_id"])) {
   $alum_id=$_GET["alum_id"];
-  $smarty->assign('user',new UserData($msi,$smarty,$alum_id));
-  $smarty->assign('contact',new ContactData($msi,$smarty,$alum_id));
+  $smarty->assign('user',new UserData($msi,$smarty,
+     $user_id,$alum_id));
+  $smarty->assign('contact',new ContactData($msi,$smarty,
+     $user_id,$alum_id));
   $tr=new RosterData($msi,$smarty,$alum_id);
   $smarty->assign('roster',$tr);
   $smarty->assign('rostercount',$tr->roster_count);

@@ -14,24 +14,24 @@ class ContactData {
     "email" =>
       "t.email_id,t.email_type_id,tt.email_type,t.email");
   
-  function __construct($msi, $smarty, $cid) {
+  function __construct($msi, $smarty, $user_id, $cid) {
     $this->contact_id = $cid;
     
-    $this->getLive($this->ad,$msi,$smarty,"address"); //'<pre>'.print_r($this->ad,true).'</pre><br />';
+    $this->getLive($this->ad,$msi,$smarty,"address",$user_id); //'<pre>'.print_r($this->ad,true).'</pre><br />';
     /* updates from hold_address */
     $ud_hold = array();
     $this->getHold($ud_hold,$msi,$smarty,"address");
     /* combine and note changes */
     $this->getChange($this->ad,$ud_hold,"address");
  
-    $this->getLive($this->ph,$msi,$smarty,"phone");
+    $this->getLive($this->ph,$msi,$smarty,"phone",$user_id);
     $ud_hold = array();
     $this->getHold($ud_hold,$msi,$smarty,"phone");
     //echo '<pre>'.print_r($ud_hold,true).'</pre><br />';
     $this->getChange($this->ph,$ud_hold,"phone");
     //echo '<pre>'.print_r($this->ph,true).'</pre><br />';
 
-    $this->getLive($this->em,$msi,$smarty,"email");
+    $this->getLive($this->em,$msi,$smarty,"email",$user_id);
     $ud_hold = array();
     $this->getHold($ud_hold,$msi,$smarty,"email");
     $this->getChange($this->em,$ud_hold,"email");
@@ -88,7 +88,8 @@ class ContactData {
   }
   
   function getHold(&$ud_hold,$msi,$smarty,$table) {
-    $query="select t.hold_id,t.action,".$this->fields[$table].
+    $query="select t.hold_id,t.action,t.user_id,".
+      $this->fields[$table].
       " from hold_".$table." t ".
       "left join ".$table."_types tt on ".
       "tt.".$table."_type_id=t.".$table."_type_id ".
@@ -114,10 +115,10 @@ class ContactData {
     }
   }
 
-  function getLive(&$ud,$msi,$smarty,$table) {
+  function getLive(&$ud,$msi,$smarty,$table,$user_id) {
     // because addresses plural has an extra e
     $db_table=$table=="address" ? "addresse" : $table;
-    $query="select ".$this->fields[$table].
+    $query="select '".$user_id."',".$this->fields[$table].
       " from ".$table."_associations ta ".
       "inner join ".$db_table."s t on t.".$table."_id=ta.".$table."_id ".
       "left join ".$table."_types tt on ".
@@ -169,15 +170,15 @@ class UserData {
   public $contact_id;
   public $ud = array();
 
-  function __construct($msi,$smarty,$cid) {
+  function __construct($msi,$smarty,$user_id,$cid) {
     // retrieve info for a person
     $this->contact_id = $cid;
     /* data from live data tables */
     $ud_live = array();
-    $this->getDB($ud_live,$msi,$smarty,"contacts");
+    $this->getDB($ud_live,$msi,$smarty,"contacts","'".$user_id."'");
     /* updates from hold_contact */
     $ud_hold = array();
-    $this->getDB($ud_hold,$msi,$smarty,"hold_contact");
+    $this->getDB($ud_hold,$msi,$smarty,"hold_contact",'user_id');
     /* combine and note changes */
     if(is_null($ud_hold)) {
       // there are no changes
@@ -200,8 +201,9 @@ class UserData {
     }
     //echo print_r($this->ud).'<br /><br />';
   }
-  function getDB(&$ud,$msi,$smarty,$table) {
-    if($stmt=$msi->prepare("select ifnull(c.title_id,0) title_id,".
+  function getDB(&$ud,$msi,$smarty,$table,$user) {
+    if($stmt=$msi->prepare("select ".$user." user_id,".
+          "ifnull(c.title_id,0) title_id,".
           "t.title,c.first_name,c.middle_name,".
           "c.primary_name,c.nickname,".
           "ifnull(c.degree_id,0) degree_id,".

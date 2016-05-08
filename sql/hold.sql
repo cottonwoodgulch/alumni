@@ -11,6 +11,7 @@ alter table contacts
      record */
 create table hold_contact (
   contact_id int (11),
+  user_id int(11),
   title_id int(11),
   primary_name varchar(250),
   first_name varchar(50),
@@ -21,18 +22,10 @@ create table hold_contact (
   gender enum('Male','Female')
 ) engine innodb;  
 
-/* Hold_address, phone, and email tables will have
-     -- action, plus
-     -- all fields for add
-     -- changed fields for change
-     -- contact_id and, phone_, or email_ id for delete
-   Address_id will have the existing address_id only for
-     delete and change - not yet defined for add
-   New_id is necessary to allow undoing add
-   */
 create table hold_address (
   hold_id int(11) primary key auto_increment,
-  action enum('D','C','A'),
+  user_id int(11),  -- who proposed the change
+  action enum('D','C','A'), -- delete, change, add
   contact_id int (11),
   address_id int(11),
   address_type_id int (11),
@@ -46,6 +39,7 @@ create table hold_address (
 
 create table hold_phone (
   hold_id int(11) primary key auto_increment,
+  user_id int(11),
   action enum('D','C','A'),
   contact_id int(11),
   phone_id int(11),
@@ -56,7 +50,8 @@ create table hold_phone (
 
 create table hold_email (
   hold_id int(11) primary key auto_increment,
-  action enum('D','C','A'), -- delete, change, add
+  user_id int(11),
+  action enum('D','C','A'),
   contact_id int (11),
   email_id int(11),
   email_type_id int(11),
@@ -78,7 +73,7 @@ create table hold_email (
 */
 create table hold_invite (
   message_type enum('I','S'),
-  sender_id int(11)
+  user_id int(11)
     foreign key references contacts(contact_id),
   target_id int(11)
     foreign key references contacts(contact_id),

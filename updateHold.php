@@ -10,13 +10,13 @@
     if($transtype=='Add') {
       switch ($ButtonAction) {
       case "AddAddress":
-        insertPostAddress($msi,'A','add',$contact_id);
+        insertPostAddress($msi,'A','add',$user_id,$contact_id);
         break;
       case "AddPhone":
-        insertPostPhone($msi,'A','add',$contact_id);
+        insertPostPhone($msi,'A','add',$user_id,$contact_id);
         break;
       case "AddEmail":
-        insertPostEmail($msi,'A','add',$contact_id);
+        insertPostEmail($msi,'A','add',$user_id,$contact_id);
         break;
       }
     }
@@ -105,12 +105,13 @@
       $stmt->bind_param("i",$contact_id);
       $stmt->execute();
       $stmt->close();
-      $user_data=new UserData($msi,$smarty,$contact_id);
+      $user_data=new UserData($msi,$smarty,$user_id,$contact_id);
       if(isChange($user_data->ud,0,"o")) {
         $stmt=$msi->prepare("insert into hold_contact values ".
-          "(?,?,?,?,?,?,?,str_to_date(?,'%m/%d/%Y'),?)");
-        $stmt->bind_param("iisssisss",
+          "(?,?,?,?,?,?,?,?,str_to_date(?,'%m/%d/%Y'),?)");
+        $stmt->bind_param("iiisssisss",
           $contact_id,
+          $user_id,
           $_POST["title_id"],
           $_POST["primary_name"],
           $_POST["first_name"],
@@ -123,19 +124,20 @@
         $stmt->close();
       }
       unset($user_data);
-      $contact_data=new ContactData($msi,$smarty,$contact_id);
+      $contact_data=new ContactData($msi,$smarty,
+         $user_id,$contact_id);
       saveContact($msi,$smarty,'address',$contact_data->ad,
-        $contact_id,insertPostAddress);
+        $user_id,$contact_id,insertPostAddress);
       saveContact($msi,$smarty,'phone',$contact_data->ph,
-        $contact_id,insertPostPhone);
+        $user_id,$contact_id,insertPostPhone);
       saveContact($msi,$smarty,'email',$contact_data->em,
-        $contact_id,insertPostEmail);
+        $user_id,$contact_id,insertPostEmail);
       unset($contact_data);
     }
   }
   
   function saveContact($msi,$smarty,$table,$clist,
-        $contact_id,$insertPost) {
+        $user_id,$contact_id,$insertPost) {
     /*if($table=="phone") {
       echo '<pre>post: '.print_r($_POST,true).'</pre><br />';
     }*/
@@ -148,7 +150,7 @@
           // delete existing A hold rec
           deleteHold($msi,$table,'A',-$data_id,$contact_id);
           // insert new one
-          $insertPost($msi,'A',$data_id,$contact_id);
+          $insertPost($msi,'A',$data_id,$user_id,$contact_id);
         }
       }
       else {
@@ -160,7 +162,7 @@
           //echo '<pre>'.print_r($hx).'</pre>';
           //if($hx[$table."_id"]["c"] == 'change') {      }
           // insert new one
-          $insertPost($msi,'C',$data_id,$contact_id);
+          $insertPost($msi,'C',$data_id,$user_id,$contact_id);
         }
       }
     }
@@ -186,11 +188,13 @@
     return false;
   }
   
-  function insertPostAddress($msi,$action,$data_id,$contact_id) {
+  function insertPostAddress($msi,$action,$data_id,$user_id,$contact_id)
+  {
     // insert a hold_address rec from $_POST
     $stmt=$msi->prepare("insert into hold_address values ".
-        "(null,?,?,?,?,?,?,?,?,?,?)");
-    if($stmt->bind_param('siiissssss',
+        "(null,?,?,?,?,?,?,?,?,?,?,?)");
+    if($stmt->bind_param('isiiissssss',
+      $user_id,
       $action,
       $contact_id,
       $data_id,  // address_id
@@ -208,11 +212,12 @@
       echo 'insertPostAddress prep error: '.$msi->error;
   }
   
-  function insertPostPhone($msi,$action,$data_id,$contact_id) {
+  function insertPostPhone($msi,$action,$data_id,$user_id,$contact_id) {
     // insert a hold_phone rec from $_POST
     $stmt=$msi->prepare("insert into hold_phone values ".
-        "(null,?,?,?,?,?,?)");
-    if($stmt->bind_param('siiiss',
+        "(null,?,?,?,?,?,?,?)");
+    if($stmt->bind_param('isiiiss',
+      $user_id,
       $action,
       $contact_id,
       $data_id,  // phone_id
@@ -226,11 +231,12 @@
       echo 'insertPostPhone prep error: '.$msi->error;
   }
   
-  function insertPostEmail($msi,$action,$data_id,$contact_id) {
+  function insertPostEmail($msi,$action,$data_id,$user_id,$contact_id) {
     // insert a hold_email rec from $_POST
     $stmt=$msi->prepare("insert into hold_email values ".
-        "(null,?,?,?,?,?)");
-    if($stmt->bind_param('siiis',
+        "(null,?,?,?,?,?,?)");
+    if($stmt->bind_param('isiiis',
+      $user_id,
       $action,
       $contact_id,
       $data_id,  // email_id

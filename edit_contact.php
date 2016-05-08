@@ -17,7 +17,7 @@ if(isset($_POST['contact_id'])) {
   /* retrieve user's data */
   $user_data=new UserData($msi,$smarty,$user_id,$contact_id);
   $smarty->assign('user',$user_data);
-  $contact_data=new ContactData($msi,$smarty,$contact_id);
+  $contact_data=new ContactData($msi,$smarty,$user_id,$contact_id);
   $smarty->assign('contact',$contact_data);
 
   if($stmt=$msi->prepare("select title_id, title from titles ".
