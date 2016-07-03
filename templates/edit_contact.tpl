@@ -13,7 +13,7 @@
         style="margin: 1em; border: 10px solid #C49F75;">
     <tr>
       <td class="label">
-        <label for="add_address_type">Address Type</td>
+        <label for="add_address_type">Address Type</label></td>
       <td><select id="add-address-type" name="add_address_type_id"
         form="AddressDialogForm" class="content">
         {foreach $address_types as $tx}
@@ -24,23 +24,24 @@
       </td>
     </tr><tr>
       <td class="label">
-        <label for="add_street_address_1">Address</td>
+        <label for="add_street_address_1">Address</label></td>
       <td><input name="add_street_address_1"/></td>
     </tr><tr>
       <td></td>
       <td><input name="add_street_address_2"/></td>
     </tr><tr>
-      <td class="label"><label for="add_city">City</td>
+      <td class="label"><label for="add_city">City</label></td>
       <td><input name="add_city" /></td>
     </tr><tr>
-      <td class="label"><label for="add_state">State</td>
+      <td class="label"><label for="add_state">State</label></td>
       <td><input name="add_state" /></td>
     </tr><tr>
       <td class="label">
-        <label for="add_postal_code">Postal Code</td>
+        <label for="add_postal_code">Postal Code</label></td>
       <td><input name="add_postal_code" /></td>
     </tr><tr>
-      <td class="label"><label for="add_country">Country</td>
+      <td class="label"><label for="add_country">Country
+        </label></td>
       <td><input name="add_country" /></td>
     </tr>
   </table>
@@ -58,7 +59,7 @@
         style="margin: 1em; border: 10px solid #C49F75;">
     <tr>
       <td class="label">
-        <label for="add_phone_type">Phone Type</td>
+        <label for="add_phone_type">Phone Type</label></td>
       <td><select id="add-phone-type" name="add_phone_type_id"
         form="PhoneDialogForm" class="content">
         {foreach $phone_types as $tx}
@@ -69,7 +70,7 @@
       </td>
     </tr><tr>
       <td class="label">
-        <label for="add_phone">Number</td>
+        <label for="add_phone">Number</label></td>
       <td><input name="add_phone"></td>
     </tr>
   </table>
@@ -88,7 +89,7 @@
         style="margin: 1em; border: 10px solid #C49F75;">
     <tr>
       <td class="label">
-        <label for="add_email_type">Email Type</td>
+        <label for="add_email_type">Email Type</label></td>
       <td><select id="add-email-type" name="add_email_type_id"
         form="EmailDialogForm">
         {foreach $email_types as $tx}
@@ -99,7 +100,7 @@
       </td>
     </tr><tr>
       <td class="label">
-        <label for="add_email">E-mail Address</td>
+        <label for="add_email">E-mail Address</label></td>
       <td><input name="add_email"></td>
     </tr>
   </table>
@@ -113,7 +114,7 @@
 {/block}
 
 {block name="content"}
-  <form action="edit_contact.php" method="post">
+  <form id="edit_contact_form" action="edit_contact.php" method="post">
     <table class="edit">
       <tr>
         <td class="label">
@@ -132,9 +133,6 @@
             {/foreach}
           </select>
         </td>
-        <td></td><td><button type="submit" name="buttonAction"
-          value="Save">Save Changes</button>
-          </td>
       </tr>
       <tr>
         <td class="label">
@@ -145,9 +143,6 @@
              class="{$user->ud.first_name.c}"
              value="{$user->ud.first_name.v}"/>
         </td>
-        <td></td><td><button type="reset" name="buttonAction"
-          value="Reset">Reset</button>
-          </td>
       </tr>
       <tr>
         <td class="label">
@@ -367,4 +362,25 @@
     <input type="hidden" name="contact_id"
            value="{$user->contact_id}"/>
   </form>
+
 {/block}
+
+  {block name="localmenu"}
+  <button form="edit_contact_form" type="submit"
+          name="buttonAction" class="menu"
+          value="Save">Save Changes</button>
+  <br />
+  <button form="edit_contact_form" type="reset"
+          name="buttonAction" class="menu"
+          value="Reset">Reset</button>
+  {if isset($referrer)}
+    <form id="release_form" action="release.php" method="post">
+      Save Changes First!<br />
+      <button type="submit"
+          name="buttonAction" class="menu"
+          value="edit">Back to Release Screen</button>
+      <input type="hidden" name="contact_id"
+             value="{$user->contact_id}"/>
+    </form>
+  {/if}
+  {/block}

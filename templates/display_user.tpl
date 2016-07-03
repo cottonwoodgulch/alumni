@@ -1,9 +1,7 @@
 {* this template section needs to be {include}d in 
    a template that extends page.tpl *}
 
-
-{if $is_contact_viewer}
-  <table class="edit">
+<table class="edit">
     <tr>
       <td>
         <table class="edit">
@@ -22,13 +20,11 @@
           <tr>
             <td>Contact ID: {$user->contact_id}</td>
           </tr>
-          {if $is_contact_editor}
           <tr><td>&nbsp;</td></tr>
           <tr><td><form action="edit_contact.php" method="post">
             <input type="submit" value="Edit Data" /></td>
             <input name="contact_id" type="hidden" value="{$user->contact_id}">
           </form></td></tr>
-          {/if}  {* is_contact_editor *}
         </table>
       </td>
       <td>
@@ -78,22 +74,4 @@
         </table>
       </td>
     </tr>
-  </table>
-{/if}  {* is_contact_viewer *}
-
-  <br />
-  {if isset($roster)}
-    <tr><td>&nbsp;</td></tr>
-    <tr><td>Rosters:</td></tr>
-  <ul class="link">
-  {foreach $roster->rd as $rd}
-    <li><a class="filelist_normal" 
-           href="roster_members.php?roster_id={$rd.roster_id}">
-           {if $rd.role != ''}{$rd.role}, {/if}
-        {if $rd.year > 0}{$rd.year} {/if}
-        {$rd.group}</a></li>
-  {foreachelse}
-    <p>No rosters in database: {$rostercount}</p>
-  {/foreach}
-  </ul>
-  {/if}
+</table>

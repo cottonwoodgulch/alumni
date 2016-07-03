@@ -15,6 +15,9 @@
   </table>
   <br />
   {if isset($user)}
-    {include file='templates/display_user.tpl'}
-  {/if}  {* isset user *}
+    {if $is_contact_viewer || ($user->contact_id == $user_id)}
+      {include file='templates/display_user.tpl'}
+    {/if}  {* user allowed to view this contact's data *}
+    {include file='templates/display_rosters.tpl'}
+  {/if}    {* isset user *}
 {/block}

@@ -83,3 +83,4 @@ create table hold_invite (
   message blob,
   send_date date default null
 ) engine innodb;
+

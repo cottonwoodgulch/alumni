@@ -22,3 +22,15 @@ function slideDropDown() {
 function hideFooter() {
   $("#footer").hide(200);  
 }
+
+function changeCheck(id,change_class) {
+  $(change_class).prop("checked",$(id).prop("checked"));
+  /*
+  if($(id).prop("checked")) {
+    $(change_class).prop("checked",true);
+  }
+  else {
+    $(change_class).prop("checked",false);
+  }
+  */
+}

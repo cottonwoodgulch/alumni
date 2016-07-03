@@ -1,7 +1,6 @@
 {extends file="page.tpl"}
 
 {block name="js"}
-  /* js for roster lookup */
   <script src="js/rosters.js"></script>
 {/block}
 

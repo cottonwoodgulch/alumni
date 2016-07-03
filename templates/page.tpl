@@ -15,7 +15,7 @@
 {block name="header"}
   <div id="header-wrapper">
     <div id="header">
-      <img src="images/transparent_logo.gif" class="Logo" />
+      <img src="images/transparent_logo.png" class="Logo" />
     </div>
     <div id="header2">
       <h2>Cottonwood Gulch Alumni Connections<br /><br /></h2>
@@ -23,12 +23,8 @@
       {block name="nav"}
       <div id="nav-wrapper">
         <div id="nav1"><ul class="navbar">
-          {foreach array("home","rosters","people") as $menuitem}
-            {if $menuitem == $page_request}
-              <li>{$menuitem|capitalize}</li>
-            {else}
-              <li><a class="filelist_normal" href="index.php?page_request={$menuitem}">{$menuitem|capitalize}</a></li>
-            {/if}
+          {foreach $sitemenu as $menuitem}
+              <li><a class="filelist_normal" href="{$menuitem}.php">{$menuitem|capitalize}</a></li>
           {/foreach}
           </ul>
         </div>
@@ -38,7 +34,7 @@
               <img src="images/dropdownarrow.png" />
             <ul class="fallback">
               <li class="filelist_normal">Change Password</li>
-              <li><a class="filelist_normal" href="index.php?page_request=logout" >Logout</a></li>
+              <li><a class="filelist_normal" href="logout.php" >Logout</a></li>
             </ul>
           </li>
           </ul>
@@ -59,6 +55,20 @@
     {/block}
   </div>
 </div>
+
+{if isset($localmenu)}
+  <div id="localmenu">
+  {block name="localmenu"}
+  {/block}
+  <br /><br />
+  <span class="change" style="padding: 3px;">Value Changed</span>
+  <br /><br />
+  <span class="add" style="padding: 3px;">To Be Added</span>
+  <br /><br />
+  <span class="del" style="padding: 3px;">To Be Deleted</span>
+  <br /><br />
+  </div>
+{/if}
 
 {if isset($footer)}
   {block name="footer_wrapper"}

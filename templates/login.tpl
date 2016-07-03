@@ -8,7 +8,7 @@
         <table class="edit">
           <tr>
             <td class="label"><label for="username">User Name</label></td>
-            <td><input id="username" name="username" type="text" autofocus/></td>
+            <td><input id="username" name="username" autofocus/></td>
           </tr>
           <tr>
             <td class="label"><label for="password">Password</label></td>

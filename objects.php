@@ -16,24 +16,23 @@ class ContactData {
   
   function __construct($msi, $smarty, $user_id, $cid) {
     $this->contact_id = $cid;
-    
-    $this->getLive($this->ad,$msi,$smarty,"address",$user_id); //'<pre>'.print_r($this->ad,true).'</pre><br />';
+
+    $this->ad=$this->getLive($msi,$smarty,"address",$user_id);
+    //'<pre>'.print_r($this->ad,true).'</pre><br />';
     /* updates from hold_address */
-    $ud_hold = array();
-    $this->getHold($ud_hold,$msi,$smarty,"address");
+    $ud_hold=$this->getHold($msi,$smarty,"address");
     /* combine and note changes */
     $this->getChange($this->ad,$ud_hold,"address");
  
-    $this->getLive($this->ph,$msi,$smarty,"phone",$user_id);
-    $ud_hold = array();
-    $this->getHold($ud_hold,$msi,$smarty,"phone");
+
+    $this->ph=$this->getLive($msi,$smarty,"phone",$user_id);
+    $ud_hold=$this->getHold($msi,$smarty,"phone");
     //echo '<pre>'.print_r($ud_hold,true).'</pre><br />';
     $this->getChange($this->ph,$ud_hold,"phone");
     //echo '<pre>'.print_r($this->ph,true).'</pre><br />';
 
-    $this->getLive($this->em,$msi,$smarty,"email",$user_id);
-    $ud_hold = array();
-    $this->getHold($ud_hold,$msi,$smarty,"email");
+    $this->em=$this->getLive($msi,$smarty,"email",$user_id);
+    $ud_hold=$this->getHold($msi,$smarty,"email");
     $this->getChange($this->em,$ud_hold,"email");
   }
   
@@ -87,52 +86,59 @@ class ContactData {
     }
   }
   
-  function getHold(&$ud_hold,$msi,$smarty,$table) {
+  function getHold($msi,$smarty,$table) {
     $query="select t.hold_id,t.action,t.user_id,".
-      $this->fields[$table].
+      "if(c.contact_type_id=1,concat(c.first_name,' ',".
+      "if(c.middle_name is null || c.middle_name='','',".
+      "concat(c.middle_name,' ')),c.primary_name),c.primary_name) ".
+      "user_name,".$this->fields[$table].
       " from hold_".$table." t ".
+      "left join contacts c on c.contact_id=t.user_id ".
       "left join ".$table."_types tt on ".
       "tt.".$table."_type_id=t.".$table."_type_id ".
       "where t.contact_id=? order by t.action";
     //echo "table: ".$table."<br />";
-    //echo "is_hold: ".$is_hold."<br />";
-    //echo "query: ".$query."<br />";
+    //echo $table." hold query: ".$query."<br />";
 
     if($stmt=$msi->prepare($query)) {
       $stmt->bind_param('i',$this->contact_id);
       $stmt->execute();
       $result=$stmt->get_result();
+      $ud_hold=array();
       while($tx = $result->fetch_assoc()) {
         $ud_hold[] = $tx;
       }
       $stmt->close();
       $result->free();
+      return $ud_hold;
     }
     else {
       $smarty->assign('footer',$table.": hold".
         ": unable to create mysql statement object: ".
         $msi->error);
     }
+    return null;
   }
 
-  function getLive(&$ud,$msi,$smarty,$table,$user_id) {
+  function getLive($msi,$smarty,$table,$user_id) {
     // because addresses plural has an extra e
     $db_table=$table=="address" ? "addresse" : $table;
-    $query="select '".$user_id."',".$this->fields[$table].
+    $query="select '".$user_id."' user_id,'' user_name,".
+      $this->fields[$table].
       " from ".$table."_associations ta ".
       "inner join ".$db_table."s t on t.".$table."_id=ta.".$table."_id ".
       "left join ".$table."_types tt on ".
       "tt.".$table."_type_id=t.".$table."_type_id ".
       "where ta.contact_id=? order by tt.rank";
     //echo "table: ".$table."<br />";
-    //echo "is_hold: ".$is_hold."<br />";
-    //echo "query: ".$query."<br />";
+    //echo $table." live query: ".$query."<br />";
 
     if($stmt=$msi->prepare($query)) {
       $stmt->bind_param('i',$this->contact_id);
       $stmt->execute();
       $result=$stmt->get_result();
       $ud_count=0;
+      $ud=array();
       while($tx = $result->fetch_assoc()) {
         foreach($tx as $key => $lx) {
           $ud[$ud_count][$key]=
@@ -145,12 +151,14 @@ class ContactData {
       }
       $stmt->close();
       $result->free();
+      return $ud;
     }
     else {
-      $smarty->assign('footer',$table.
+      $smarty->assign('footer','live: '.$table.
         ": unable to create mysql statement object: ".
         $msi->error);
     }
+    return null;
   }
   function findID($key,$arr,$key_field) {
     /* find which row of $arr has $key_field = $key */
@@ -174,11 +182,9 @@ class UserData {
     // retrieve info for a person
     $this->contact_id = $cid;
     /* data from live data tables */
-    $ud_live = array();
-    $this->getDB($ud_live,$msi,$smarty,"contacts","'".$user_id."'");
+    $ud_live=$this->getLive($msi,$smarty);
     /* updates from hold_contact */
-    $ud_hold = array();
-    $this->getDB($ud_hold,$msi,$smarty,"hold_contact",'user_id');
+    $ud_hold=$this->getHold($msi,$smarty,false);
     /* combine and note changes */
     if(is_null($ud_hold)) {
       // there are no changes
@@ -201,15 +207,46 @@ class UserData {
     }
     //echo print_r($this->ud).'<br /><br />';
   }
-  function getDB(&$ud,$msi,$smarty,$table,$user) {
-    if($stmt=$msi->prepare("select ".$user." user_id,".
+  
+  function getHold($msi,$smarty) {
+    if($stmt=$msi->prepare("select user_id,concat(c.first_name,' ',".
+          "if(c.middle_name is null || c.middle_name='','',".
+          "concat(c.middle_name,' ')),c.primary_name) user_name,".
+          "ifnull(h.title_id,0) title_id,".
+          "t.title,h.first_name,h.middle_name,".
+          "h.primary_name,h.nickname,".
+          "ifnull(h.degree_id,0) degree_id,".
+          "d.degree,date_format(h.birth_date,'%m/%d/%Y') birth_date,".
+          "ifnull(h.gender,'') gender ".
+          "from hold_contact h ".
+          "left join contacts c on c.contact_id=h.user_id ".
+          "left join titles t on t.title_id=c.title_id ".
+          "left join degrees d on d.degree_id=c.degree_id ".
+          "where h.contact_id=?")) {
+      $stmt->bind_param('i',$this->contact_id);
+      $stmt->execute();
+      $result=$stmt->get_result();
+      $ud = $result->fetch_assoc();
+      $stmt->close();
+      $result->free();
+      return $ud;
+    }
+    else {
+      $smarty->assign('footer',
+        "UserData getHold: unable to create mysql statement object: ".
+        $msi->error);
+    }
+  }
+  
+  function getLive($msi,$smarty) {
+    if($stmt=$msi->prepare("select '' user_id,'' user_name,".
           "ifnull(c.title_id,0) title_id,".
           "t.title,c.first_name,c.middle_name,".
           "c.primary_name,c.nickname,".
           "ifnull(c.degree_id,0) degree_id,".
           "d.degree,date_format(c.birth_date,'%m/%d/%Y') birth_date,".
           "ifnull(c.gender,'') gender ".
-          "from $table c ".
+          "from contacts c ".
           "left join titles t on t.title_id=c.title_id ".
           "left join degrees d on d.degree_id=c.degree_id ".
           "where contact_id=?")) {
@@ -219,9 +256,12 @@ class UserData {
       $ud = $result->fetch_assoc();
       $stmt->close();
       $result->free();
+      return $ud;
     }
     else {
-      $smarty->assign('footer',"UserData: unable to create mysql statement object: ".$msi->error);
+      $smarty->assign('footer',
+        "UserData getLive: unable to create mysql statement object: ".
+        $msi->error);
     }
   }
 }

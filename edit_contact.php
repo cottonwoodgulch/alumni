@@ -20,74 +20,20 @@ if(isset($_POST['contact_id'])) {
   $contact_data=new ContactData($msi,$smarty,$user_id,$contact_id);
   $smarty->assign('contact',$contact_data);
 
-  if($stmt=$msi->prepare("select title_id, title from titles ".
-          "where deprecated=0")) {
-    $stmt->execute();
-    $result=$stmt->get_result();
-    $titles=array();
-    while($tx = $result->fetch_assoc()) {
-      $titles[] = $tx;
-    }
-    $stmt->close();
-    $result->free();
-    /* create a blank for no title */
-    $titles[]=array(title_id => 0, title => '');
-    $smarty->assign('titles',$titles);
-  }
-  if($stmt=$msi->prepare("select degree_id, degree from degrees")) {
-    $stmt->execute();
-    $result=$stmt->get_result();
-    $degrees=array();
-    while($tx = $result->fetch_assoc()) {
-      $degrees[] = $tx;
-    }
-    $stmt->close();
-    $result->free();
-    /* create a blank for no degree */
-    $degrees[]=array(degree_id => 0, degree => '');
-    $smarty->assign('degrees',$degrees);
-  }
-  if($stmt=$msi->prepare("select address_type_id,".
-      "address_type from address_types")) {
-    $stmt->execute();
-    $result=$stmt->get_result();
-    $address_types=array();
-    while($tx = $result->fetch_assoc()) {
-      $address_types[] = $tx;
-    }
-    $stmt->close();
-    $result->free();
-    $smarty->assign('address_types',$address_types);
-  }
-  if($stmt=$msi->prepare("select phone_type_id,".
-      "phone_type from phone_types")) {
-    $stmt->execute();
-    $result=$stmt->get_result();
-    $phone_types=array();
-    while($tx = $result->fetch_assoc()) {
-      $phone_types[] = $tx;
-    }
-    $stmt->close();
-    $result->free();
-    $smarty->assign('phone_types',$phone_types);
-  }
-  if($stmt=$msi->prepare("select email_type_id,".
-      "email_type from email_types")) {
-    $stmt->execute();
-    $result=$stmt->get_result();
-    $email_types=array();
-    while($tx = $result->fetch_assoc()) {
-      $email_types[] = $tx;
-    }
-    $stmt->close();
-    $result->free();
-    $smarty->assign('email_types',$email_types);
+  /* retrieve titles, degrees, address-, phone-,
+     and e-mail types for drop-downs */
+  getTypes($msi,$smarty);
+  
+  if(isset($_POST['referrer'])) {
+    /* Referred by release screen - display button to return. */
+    $smarty->assign('referrer','edit_contact');
   }
 }
 else {
   $smarty->assign('footer','No contact specified');
 }
 
+$smarty->assign("localmenu",1);
 $smarty->display('edit_contact.tpl');
 
 ?>

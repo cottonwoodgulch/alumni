@@ -60,6 +60,15 @@ img.Logo {
   padding: 0 0 10px 0;
 }
 
+#localmenu {
+  float: left;
+  position: fixed;
+  top: 160px;
+  right: 100px;
+  border: 1px solid black;
+  padding: 10px 12px 0;
+}
+
 #footer {
   width: 100%;
   position: fixed;
@@ -138,6 +147,12 @@ td.footermsg {
   background-color: #fCCFA6;
 }
 
+td.release {
+  border-width: 0 1px;
+  border-style: solid;
+  border-color: black;
+}
+
 .filelist_normal {
   color: blue;
   text-decoration: none;
@@ -187,13 +202,15 @@ input:hover, button:hover {
   background-color: #DCEAFC;
 }
 
-
-
 button {
   box-shadow: 2px 2px 2px #87654A,
   inset -2px -2px 2px #c49f75,
   inset -1px -1px 1px black;
   padding: 0 5px 3px 3px;
+}
+
+button.menu {
+  margin-bottom: 5px;
 }
 
 input[readonly] {
