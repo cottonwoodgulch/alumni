@@ -24,8 +24,11 @@ if(isset($_POST['contact_id'])) {
      and e-mail types for drop-downs */
   getTypes($msi,$smarty);
   
-  if(isset($_POST['referrer'])) {
+  if(isset($_POST['referrer']) && $_POST['referrer'] == 'release') {
     /* Referred by release screen - display button to return. */
+    $smarty->assign('referrer','release');
+  }
+  else {
     $smarty->assign('referrer','edit_contact');
   }
 }

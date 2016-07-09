@@ -36,6 +36,40 @@ class ContactData {
     $this->getChange($this->em,$ud_hold,"email");
   }
   
+  function getTransType($data_type,$data_id,$field_name) {
+    switch($data_type) {
+      case 'a':
+        return
+          $this->ad[$this->findID($data_id,$this->ad,'address_id')][$field_name]['c'];
+      break;
+      case 'p':
+        return
+          $this->ph[$this->findID($data_id,$this->ph,'phone_id')][$field_name]['c'];
+      break;
+      case 'e':
+          $this->em[$this->findID($data_id,$this->em,'email_id')][$field_name]['c'];
+      break;
+    }
+    return '';
+  }
+  
+  function getVal($data_type,$data_id,$field_name) {
+    switch($data_type) {
+      case 'a':
+        return
+        $this->ad[$this->findID($data_id,$this->ad,'address_id')][$field_name]['v'];
+      break;
+      case 'p':
+        return
+        $this->ph[$this->findID($data_id,$this->ph,'phone_id')][$field_name]['v'];
+      break;
+      case 'e':
+        return
+        $this->em[$this->findID($data_id,$this->em,'email_id')][$field_name]['v'];
+      break;
+    }
+    return '';
+  }
   function getChange(&$ud,$hold,$table) {
     foreach($hold as $hx) {
       switch($hx["action"]) {
@@ -46,7 +80,7 @@ class ContactData {
               /* set address_id to negative of hold id
                  to indicate this is an add */
               $ud[$ud_count][$table."_id"]=
-                array("o" => null,
+                array("o" => -$lx,
                       "v" => -$lx,
                       "c" => "add"
                      );
@@ -182,7 +216,7 @@ class UserData {
     // retrieve info for a person
     $this->contact_id = $cid;
     /* data from live data tables */
-    $ud_live=$this->getLive($msi,$smarty);
+    $ud_live=$this->getLive($msi,$smarty,$user_id);
     /* updates from hold_contact */
     $ud_hold=$this->getHold($msi,$smarty,false);
     /* combine and note changes */
@@ -206,6 +240,14 @@ class UserData {
       }
     }
     //echo print_r($this->ud).'<br /><br />';
+  }
+  
+  function getTransType($field_name) {
+    return $this->ud[$field_name]['c'];
+  }
+  
+  function getVal($field_name) {
+    return $this->ud[$field_name]['v'];
   }
   
   function getHold($msi,$smarty) {
@@ -238,8 +280,11 @@ class UserData {
     }
   }
   
-  function getLive($msi,$smarty) {
-    if($stmt=$msi->prepare("select '' user_id,'' user_name,".
+  function getLive($msi,$smarty,$user_id) {
+    if($stmt=$msi->prepare("select $user_id user_id,".
+          "concat(c.first_name,' ',".
+          "if(c.middle_name is null || c.middle_name='','',".
+          "concat(c.middle_name,' ')),c.primary_name) user_name,".
           "ifnull(c.title_id,0) title_id,".
           "t.title,c.first_name,c.middle_name,".
           "c.primary_name,c.nickname,".

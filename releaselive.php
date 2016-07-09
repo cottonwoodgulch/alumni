@@ -3,38 +3,67 @@
    update live database with changes marked on release.tpl
 */
 
-function releaseLive ($smarty,$msi) {
+function releaseLive ($smarty,$msi,$user_id) {
   //echo '<pre>'.print_r($_POST,true)."</pre>";
 
-  /* First, get all the data keys. For user fields
-      (contacts table), this = the column name. For contact
-      fields (address, phone, email), this is the hold_id, 
-      address_id, phone_id, or email_id + the column name. */
+  /* First, get the data for the fields selected for release.
+     Only consider fields that have been changed.
+     User fields have data_id = 'u'
+     Contact fields have data_id=address_id, phone_id, or e-mail_id
+       for existing items, and -hold_id for adds. */
+  $contact_id=$_POST['contact_id'];
+  $user_data=new UserData($msi,$smarty,$user_id,$contact_id);
+  $contact_data=new ContactData($msi,$smarty,$user_id,$contact_id);
+  //echo '<pre>'.print_r($contact_data,true).'</pre>';
+  //echo '<pre>'.print_r($user_data,true).'</pre>';
   $data_keys=array();
   foreach($_POST as $key => $px) {
-    if(substr($key,0,2)=='s_') {
-      $data_keys[]=substr($key,2);
+    if(substr($key,0,1)=='s') {
+      $data_type=substr($key,1,1); // a, p, e, u
+      $field_name=substr($key,strpos($key,'_',3)+1);
+      if($data_type == 'u') {
+        $data_id='u';
+        $trans_type=$user_data->getTransType($field_name);
+        if($trans_type != '') {
+          $val=$user_data->getVal($field_name);
+          $data_keys[]=array('data_type' => $data_type,
+             'data_id' => $data_id,
+             'trans_type' => $trans_type,
+             'field_name' => $field_name,
+             'val' => $val);
+        }
+      }
+      else {
+        $data_id=substr($key,3,strpos($key,'_',3)-3);
+        $trans_type=$contact_data->getTransType($data_type,$data_id,
+           $field_name);
+        if($trans_type != '') {
+          $val=$contact_data->getVal($data_type,$data_id,$field_name);
+          $data_keys[]=array('data_type' => $data_type,
+             'data_id' => $data_id,
+             'trans_type' => $trans_type,
+             'field_name' => $field_name,
+             'val' => $val);
+        }
+      }
     }
   }
-  /* sorts on the whole key (data_id + field name) although
-     we only care about the data_ids */
-  sort($data_keys,SORT_STRING);
-  echo '<pre>data keys: '.print_r($data_keys,true).'</pre>';
-
-  $contact_id=$_POST['contact_id'];
+  //echo '<pre>'.print_r($data_keys,true).'</pre>';
+  sort($data_keys);
+  //echo '<pre>'.print_r($data_keys,true).'</pre>';
   
   $data_id='';
+  $data_type='';
   foreach($data_keys as $px) {
-    if($data_id != substr($px,0,strpos($px,'_',1))) {
+    if($data_id != $px['data_id'] || $data_type != $px['data_type']) {
       if($data_id != '') {
         // update db
-        setQuery($msi,$data_type,$data_id,$contact_id,$trans_type,
-          $userq,$addfields,$addvals,$changeq,$changew);
+        setQuery($msi,$user_id,$data_type,$data_id,$contact_id,
+          $trans_type,$userq,$addfields,$addvals,$changeq,$changew);
       }
       // (re-) set variables
-      $data_type=$_POST['dt_'.$px];
-      $trans_type=$_POST['ct_'.$px];
-      $data_id=substr($px,0,strpos($px,'_',1));
+      $data_id=$px['data_id'];
+      $data_type=$px['data_type'];
       $c_count=false;
       $userq='';
       $addfields='';
@@ -42,11 +71,11 @@ function releaseLive ($smarty,$msi) {
       $changeq='';
       $changew=''; // where clause
     }
-    $field_name=substr($px,strpos($px,'_',1)+1);
-    $val=$_POST[$px];
-    echo '<br />data_id, data_type, trans_type: '.$data_id.', '.
-         $data_type.', '.$trans_type;
-    echo '<br />field name, val: '.$field_name.', '.$val;
+    $trans_type=$px['trans_type'];
+    $field_name=$px['field_name'];
+    $val=$px['val'];
+    /*echo "<br />data_id, data_type, trans_type, field_name, val: ".
+        "$data_id, $data_type, $trans_type, $field_name, $val";*/
     if($data_type=='u') {
       // user data
       if($c_count) {
@@ -55,10 +84,10 @@ function releaseLive ($smarty,$msi) {
       }
       if($field_name == 'birth_date') {
         $userq.=$field_name.
-          "=str_to_date('".$_POST[$px]."','%m/%d/%Y')";
+          "=str_to_date('$val','%m/%d/%Y')";
       }
       else {
-        $userq.=$field_name."='".$_POST[$px]."'";
+        $userq.=$field_name."='".$val."'";
       }
     }
     else {
@@ -114,38 +143,34 @@ function releaseLive ($smarty,$msi) {
     $c_count=true;
   }
   
-  if(setQuery($msi,$data_type,$data_id,$contact_id,$trans_type,
-      $userq,$addfields,$addvals,$changeq,$changew)) {
-    /* delete all hold records for this contact - assumes that
-       ones that haven't been released are not to be released */
-    /*if(!$msi->real_query(
-       "delete from hold_contact where contact_id=$contact_id")) {
-      echo '<br />del hold_contact query failed: '.$msi->error;
-    }
-    if(!$msi->real_query(
-       "delete from hold_address where contact_id=$contact_id")) {
-      echo '<br />del hold_address query failed: '.$msi->error;
-    }
-    if(!$msi->real_query(
-       "delete from hold_phone where contact_id=$contact_id")) {
-      echo '<br />del hold_phone query failed: '.$msi->error;
-    }
-    if(!$msi->real_query(
-       "delete from hold_email where contact_id=$contact_id")) {
-      echo '<br />del hold_email query failed: '.$msi->error;
-    }*/
-  }
+  setQuery($msi,$user_id,$data_type,$data_id,$contact_id,$trans_type,
+      $userq,$addfields,$addvals,$changeq,$changew);
+  unset($user_data, $contact_data);
 }
 
-function setQuery($msi,$data_type,$data_id,$contact_id,$trans_type,
-      $userq,$addfields,$addvals,$changeq,$changew) {
+function setQuery($msi,$user_id,$data_type,$data_id,$contact_id,
+           $trans_type,$userq,$addfields,$addvals,$changeq,$changew) {
 
   if($data_type == 'u') {
+    //echo "<br />update contacts set $userq where contact_id=".$contact_id;
     if(!$msi->real_query(
        'update contacts set '.$userq.
        ' where contact_id='.$contact_id)) {
-      echo '<br />add query 2 failed: '.$msi->error;
-      return false;
+      echo '<br />update user query 1 failed: '.$msi->error;
+    }
+    else {
+      // re-load user data. If no changes left, delete hold_user rec
+      $u_d=new UserData($msi,$smarty,$user_id,$contact_id);
+      /* if all changes from this hold_user rec have been released,
+         delete the hold rec */
+      if(no_change($u_d->ud)) {
+        if(!$msi->real_query(
+           "delete from hold_contact where contact_id=$contact_id")) {
+          echo '<br />update user query 2 failed: '.$msi->error;
+        }
+      }
+      //echo '<pre>'.print_r($u_d,true).'</pre>';
+      unset($u_d);
     }
   }
   else {
@@ -155,18 +180,27 @@ function setQuery($msi,$data_type,$data_id,$contact_id,$trans_type,
         if($msi->real_query(
              'insert into '.tableName($data_type,'s').
              '('.$addfields.') values ('.$addvals.')')) {
-          if(!$msi->real_query(
+          if($msi->real_query(
              'insert into '.tableName($data_type,'a').
              ' (contact_id,'.tableName($data_type).'_id)'.'
              values('.$contact_id.','.$msi->insert_id.')')) {
+            //  
+            $l_data_id=-$data_id;
+            delHold($msi,$smarty,$user_id,$contact_id,
+                $data_type,$data_id);
+          }
+          else {
             echo '<br />add query 2 failed: '.$msi->error;
-            return false;
           }
         }
         else {
           echo '<br />add query 1 failed: '.$msi->error;
-          return false;
         }
+        /*echo "<br />insert into ".tableName($data_type,'s').
+             "($addfields) values ($addvals)";
+        echo "<br />insert into ".tableName($data_type,'a').
+             "(contact_id,".tableName($data_type).'_id)'.
+             "values($contact_id,".$msi->insert_id.")";*/
         break;
       case 'change':
         if(!$msi->real_query(
@@ -175,9 +209,15 @@ function setQuery($msi,$data_type,$data_id,$contact_id,$trans_type,
           echo '<br />change query failed: '.$msi->error;
           return false;
         }
+        else {
+          delHold($msi,$smarty,$user_id,$contact_id,
+              $data_type,$data_id);
+        }
+        echo "<br />update ".tableName($data_type,'s').
+           " set $changeq$changew";
         break;
       case 'del':
-        if(!$msi->real_query(
+        /*if(!$msi->real_query(
            'select count(*) from '.tableName($data_type,'a').
            ' where '.tableName($data_type).'_id='.$data_id)) {
           echo '<br />del count query failed: '.$msi->error;
@@ -188,8 +228,8 @@ function setQuery($msi,$data_type,$data_id,$contact_id,$trans_type,
             $row=$result->fetch_row();
             $result->free();
             if($row[0]<=1) {
-              /* only 1 contact_ids is associated with this item,
-                 ok to delete the item */
+              // only 1 contact_ids is associated with this item,
+              //   ok to delete the item
               if(!$msi->real_query(
                  'delete from '.tableName($data_type,'s').
                  ' where '.tableName($data_type).'_id='.$data_id)) {
@@ -197,7 +237,7 @@ function setQuery($msi,$data_type,$data_id,$contact_id,$trans_type,
                 return false;
               }
             }
-            /* in any case, delete the association rec */
+            // in any case, delete the association rec
             if(!$msi->real_query(
                'delete from '.tableName($data_type,'a').
                ' where contact_id='.$contact_id.
@@ -210,9 +250,18 @@ function setQuery($msi,$data_type,$data_id,$contact_id,$trans_type,
             echo '<br />del count result invalid';
             return false;
           }
-        }
+        }*/
+        echo "<br />select count(*) from ".tableName($data_type,'a').
+           " where ".tableName($data_type).'_id='.$data_id;
+        echo "<br />delete from ".tableName($data_type,'s').
+                 ' where '.tableName($data_type).'_id='.$data_id;
+        echo "<br />delete from ".tableName($data_type,'a').
+               ' where contact_id='.$contact_id.
+               ' and address_id='.$data_id;
         break;
     }  // switch
+    /* if all changes from this hold_x rec have been released,
+         delete it */
   }
   return true;
 }
@@ -251,5 +300,41 @@ function tableName($data_type,$table_type='') {
       return $t;
       break;
   }
+}
+
+function delHold($msi,$smarty,$user_id,$contact_id,
+     $data_type,$data_id) {
+  /* delete the hold_address, _phone, or _email rec */
+  $u_c=new ContactData($msi,$smarty,$user_id,$contact_id);
+  switch($data_type) {
+    case a:
+      $da = & $uc->ad;
+      break;
+    case p:
+      $da = & $uc->ph;
+      break;
+    case e:
+      $da = & $uc->em;
+      break;
+  }
+  $no_change=true;
+  foreach($da as $ux) {
+    if($ux['c'] != '') {
+      $no_change=false;
+    }
+  }
+  if($no_change) {
+    echo '<br />no changes left - deleting hold '.
+        'data_id: '.$data_id;
+    if(!$msi->real_query(
+      'delete from '.tableName($data_type,'h').
+      " where contact_id=$contact_id and ".
+      "hold_id=".$data_id)) {
+      echo "<br />add $data_type delete hold query failed: ".
+         $msi->error;
+    }
+  }
+  //echo '<pre>'.print_r($da,true).'</pre>';
+  unset($da, $u_c);
 }
 ?>

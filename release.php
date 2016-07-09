@@ -16,7 +16,7 @@ if(isset($_POST['buttonAction'])) {
     if($_POST['buttonAction'] == "release") {
       // Release Checked fields to live database
       //echo '<pre>'.print_r($_POST,true)."</pre>";
-      releaseLive($smarty,$msi);
+      releaseLive($smarty,$msi,$user_id);
       //echo '<pre>'.print_r($_POST,true)."</pre>";
     }
   }
@@ -47,9 +47,6 @@ if($msi->real_query(
     echo '<pre>'.print_r($x,true).'</pre>';*/
     $smarty->assign('contact',new ContactData($msi,$smarty,
        $user_id,$row[0]));
-    /* retrieve titles, degrees, address-, phone-,
-       and e-mail types for drop-downs */
-    getTypes($msi,$smarty);
     
   }
   else {

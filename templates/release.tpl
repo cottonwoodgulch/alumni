@@ -21,106 +21,66 @@
   <td></td><td>Current</td><td>Proposed</td><td>By</td></tr>
   <tr><td class="release">
       <input type="checkbox" class="user_data"
-             name="s_u_title_id"></td>
+             name="su_u_title_id"></td>
       <td>Title</td>
       <td>{$user->ud.title.o}</td>
-      <td>
-        <select class="{$user->ud.title_id.c}"
-          name="u_title_id" id="title_id">
-          {foreach $titles as $tx}
-          {if $user->ud.title_id.v == $tx['title_id']}
-            <option value="{$tx.title_id}" selected="selected">
-               {$tx.title}</option>
-          {else}
-            <option value="{$tx.title_id}">{$tx.title}</option>
-          {/if}
-          {/foreach}
-        </select>
-      </td>
+      <td>{$user->ud.title.v}</td>
       
       <td>{$user->ud.user_name.v}</td>
   </tr>
      
   <tr><td class="release">
       <input type="checkbox" class="user_data"
-             name="s_u_first_name"></td>
+             name="su_u_first_name"></td>
       <td>First Name</td>
       <td>{$user->ud.first_name.o}</td>
-      <td><input name="u_first_name"
-                 class="{$user->ud.first_name.c}"
-                 value="{$user->ud.first_name.v}"/></td>
+      <td class="{$user->ud.first_name.c}">{$user->ud.first_name.v}</td>
   </tr>
   <tr><td class="release">
       <input type="checkbox" class="user_data"
-             name="s_u_nickname"></td>
+             name="su_u_nickname"></td>
       <td>Nickname</td>
       <td>{$user->ud.nickname.o}</td>
-      <td><input name="u_nickname"
-                 class="{$user->ud.nickname.c}"
-                 value="{$user->ud.nickname.v}"/></td>
+      <td class="{$user->ud.nickname.c}">{$user->ud.nickname.v}</td>
   </tr>
   <tr><td class="release">
       <input type="checkbox" class="user_data"
-             name="s_u_middle_name"></td>
+             name="su_u_middle_name"></td>
       <td>Middle/Maiden Name</td>
       <td>{$user->ud.middle_name.o}</td>
-      <td><input name="u_middle_name"
-                 class="{$user->ud.middle_name.c}"
-                 value="{$user->ud.middle_name.v}"/></td>
+      <td class="{$user->ud.middle_name.c}">{$user->ud.middle_name.v}
+      </td>
   </tr>
   <tr><td class="release">
       <input type="checkbox" class="user_data"
-             name="s_u_primary_name"></td>
+             name="su_u_primary_name"></td>
       <td>Last Name</td>
       <td>{$user->ud.primary_name.o}</td>
-      <td><input name="u_primary_name"
-                 class="{$user->ud.primary_name.c}"
-                 value="{$user->ud.primary_name.v}"/></td>
+      <td class="{$user->ud.primary_name.c}">{$user->ud.primary_name.v}
+      </td>
   </tr>
   <tr><td class="release">
       <input type="checkbox" class="user_data"
-             name="s_u_degree_id"></td>
+             name="su_u_degree_id"></td>
       <td>Degree</td>
       <td>{$user->ud.degree.o}</td>
-      <td><select class="{$user->ud.degree_id.c}"
-             name="u_degree_id">
-            {foreach $degrees as $tx}
-            {if $user->ud.degree_id.v == $tx.degree_id}
-              <option value="{$tx.degree_id}" selected="selected">
-                 {$tx.degree}</option>
-            {else}
-              <option value="{$tx.degree_id}">{$tx.degree}</option>
-            {/if}
-            {/foreach}
-          </select>  
-      </td>                 
+      <td class="{$user->ud.degree_id.c}">{$user->ud.degree.v}</td>
   </tr>
   <tr><td class="release">
       <input type="checkbox" class="user_data"
-             name="s_u_birth_date"></td>
+             name="su_u_birth_date"></td>
       <td>Date of Birth</td>
       <td>{$user->ud.birth_date.o}</td>
-      <td><input name="u_birth_date"
-                 class="{$user->ud.birth_date.c}"
-                 value="{$user->ud.birth_date.v|date_format: "%m/%d/%Y"}"/></td>
+      <td class="{$user->ud.birth_date.c}">
+        {$user->ud.birth_date.v|date_format: "%m/%d/%Y"}</td>
   </tr>
   <tr>
   <td class="release" style="border-width: 0 1px 1px;">
       <input type="checkbox" class="user_data"
-             name="s_u_gender"/></td>
+             name="su_u_gender"/></td>
       <td>Gender</td>
       <td>{$user->ud.gender.o}</td>
-      <td><select class="{$user->ud.gender.c}"
-             name="u_gender">
-            {foreach array('Female','Male','') as $tx}
-              {if $user->ud.gender.v == $tx}
-                <option value="{$tx}" selected="selected">{$tx}</option>
-              {else}
-                <option value="{$tx}">{$tx}</option>
-              {/if}
-            {/foreach}
-          </select>
-      </td>
+      <td class="{$user->ud.gender.c}">{$user->ud.gender.v}</td>
   </tr>
 
   {*  ADDRESS  *}
@@ -135,92 +95,61 @@
     <tr><td class="release">
         <input type="checkbox"
              class="a_{$tx.address_id.v}"
-             name="s_{$tx.address_id.v}_address_type_id">
+             name="sa_{$tx.address_id.v}_address_type_id">
              </td>
         <td>Address Type</td>
         <td>{$tx.address_type.o}</td>
-        <td class="label">
-          <select class="{$tx.address_type_id.c}"
-             name="{$tx.address_id.v}_address_type_id">
-            {foreach $address_types as $ty}
-              {if $ty.address_type_id == $tx.address_type_id.v}
-                <option value="{$ty.address_type_id}"
-                   class="{$tx.address_type_id.c}"
-                   selected="selected">{$ty.address_type}</option>
-              {else}
-                <option value="{$ty.address_type_id}">
-                   {$ty.address_type}</option>
-              {/if}
-            {/foreach}
-          </select>
-        </td>
+        <td class="{$tx.address_type_id.c}">{$tx.address_type.v}</td>
         <td>{$tx.user_name.v}</td>
     </tr><tr>
       <td class="release">
       <input type="checkbox"
-             name="s_{$tx.address_id.v}_street_address_1"
+             name="sa_{$tx.address_id.v}_street_address_1"
              class="a_{$tx.address_id.v}"></td>
       <td>Address 1</td>
       <td>{$tx.street_address_1.o}</td>
-      <td><input name="{$tx.address_id.v}_street_address_1"
-            class="{$tx.street_address_1.c}"
-            value="{$tx.street_address_1.v}" /></td>
+      <td class="{$tx.street_address_1.c}">{$tx.street_address_1.v}</td>
     </tr><tr>
       <td class="release">
       <input type="checkbox"
-             name="s_{$tx.address_id.v}_street_address_2"
+             name="sa_{$tx.address_id.v}_street_address_2"
              class="a_{$tx.address_id.v}"></td>
       <td>Address 2</td>
       <td>{$tx.street_address_2.o}</td>
-      <td><input
-          name="{$tx.address_id.v}_street_address_2"
-          class="{$tx.street_address_2.c}"
-          value="{$tx.street_address_2.v}" /></td>
+      <td class="{$tx.street_address_2.c}">{$tx.street_address_2.v}</td>
     </tr><tr>
       <td class="release">
       <input type="checkbox"
-             name="s_{$tx.address_id.v}_city"
+             name="sa_{$tx.address_id.v}_city"
              class="a_{$tx.address_id.v}"></td>
       <td>City</td>
       <td>{$tx.city.o}</td>
-      <td><input
-          name="{$tx.address_id.v}_city"
-          class="{$tx.city.c}"
-          value="{$tx.city.v}" /></td>
+      <td class="{$tx.city.c}">{$tx.city.v}</td>
     </tr><tr>
       <td class="release">
       <input type="checkbox"
-             name="s_{$tx.address_id.v}_state"
+             name="sa_{$tx.address_id.v}_state"
              class="a_{$tx.address_id.v}"></td>
       <td>State</td>
       <td>{$tx.state.o}</td>
-      <td><input
-          name="{$tx.address_id.v}_state"
-          class="{$tx.state.c}"
-          value="{$tx.state.v}" /></td>
+      <td class="{$tx.state.c}">{$tx.state.v}</td>
     </tr><tr>
       <td class="release">
       <input type="checkbox"
-             name="s_{$tx.address_id.v}_postal_code"
+             name="sa_{$tx.address_id.v}_postal_code"
              class="a_{$tx.address_id.v}"></td>
       <td>Postal Code</td>
       <td>{$tx.postal_code.o}</td>
-        <td><input
-          name="{$tx.address_id.v}_postal_code"
-          class="{$tx.postal_code.c}"
-          value="{$tx.postal_code.v}" /></td>
+        <td class="{$tx.postal_code.c}">{$tx.postal_code.v}</td>
     </tr><tr>
       <td class="release"
           style="border-width: 0 1px 1px 1px;">
         <input type="checkbox"
-             name="s_{$tx.address_id.v}_country"
+             name="sa_{$tx.address_id.v}_country"
              class="a_{$tx.address_id.v}"></td>
       <td>Country</td>
       <td>{$tx.country.o}</td>
-      <td><input
-          name="{$tx.address_id.v}_country"
-          class="{$tx.country.c}"
-          value="{$tx.country.v}" /></td>
+      <td class="{$tx.country.c}">{$tx.country.v}</td>
     </tr>
   {/foreach}
 
@@ -235,36 +164,21 @@
          </td></tr>
     <tr><td class="release">
     <input type="checkbox"
-             name="s_{$tx.phone_id.v}_phone_type_id"
+             name="sp_{$tx.phone_id.v}_phone_type_id"
             class="p_{$tx.phone_id.v}"></td>
         <td>Phone Type</td>
         <td>{$tx.phone_type.o}</td>
-        <td class="label">
-           <select class="{$tx.phone_type_id.c}"
-              name="{$tx.phone_id.v}_phone_type_id">
-           {foreach $phone_types as $ty}
-             {if $ty.phone_type_id == $tx.phone_type_id.v}
-               <option value="{$ty.phone_type_id}"
-                  selected="selected">{$ty.phone_type}</option>
-             {else}
-               <option value="{$ty.phone_type_id}">
-                  {$ty.phone_type}</option>
-             {/if}
-           {/foreach}
-           </select>
-        </td>
+        <td class="{$tx.phone_type_id.c}">{$tx.phone_type.v}</td>
         <td>{$tx.user_name.v}</td></tr>
     <tr>
     <td class="release" style="border-width: 0 1px 1px;">
         <input type="checkbox"
-             name="s_{$tx.phone_id.v}_number"
+             name="sp_{$tx.phone_id.v}_number"
                class="p_{$tx.phone_id.v}"/></td>
         <td>Number</td>
         <td>{$tx.number.o|formatPhone:$tx.formatted.o}</td>
-        <td><input
-          name="{$tx.phone_id.v}_number"
-          class="{$tx.number.c}"
-          value="{$tx.number.v|formatPhone:$tx.formatted.v}" /></td></tr>
+        <td class="{$tx.number.c}">
+          {$tx.number.v|formatPhone:$tx.formatted.v}</td></tr>
   {/foreach}
   
   {*  E-MAIL  *}
@@ -278,36 +192,20 @@
        </td></tr>
     <tr><td class="release">
     <input type="checkbox"
-             name="s_{$tx.email_id.v}_email_type_id"
+             name="se_{$tx.email_id.v}_email_type_id"
             class="e_{$tx.email_id.v}" /></td>
         <td>E-Mail Type</td>
         <td>{$tx.email_type.o}</td>
-        <td class="label">
-           <select class="{$tx.email_type_id.c}"
-              name="{$tx.email_id.v}_email_type_id">
-           {foreach $email_types as $ty}
-             {if $ty.email_type_id == $tx.email_type_id.v}
-               <option value="{$ty.email_type_id}"
-                  selected="selected">{$ty.email_type}</option>
-             {else}
-               <option value="{$ty.email_type_id}">
-                  {$ty.email_type}</option>
-             {/if}
-           {/foreach}
-           </select>
-        </td>
+        <td class="{$tx.email_type_id.c}">{$tx.email_type.v}</td>
         <td>{$tx.user_name.v}</td></tr>
     <tr>
     <td class="release" style="border-width: 0 1px 1px;">
         <input type="checkbox"
-             name="s_{$tx.email_id.v}_email"
+             name="se_{$tx.email_id.v}_email"
             class="e_{$tx.email_id.v}"></td>
         <td>E-Mail</td>
         <td>{$tx.email.o}</td>
-        <td><input
-          name="{$tx.email_id.v}_email"
-          class="{$tx.email.c}"
-          value="{$tx.email.v}" /></td></tr>
+        <td class="{$tx.email.c}">{$tx.email.v}</td></tr>
   
   {/foreach}
   </table>
@@ -327,7 +225,8 @@
   <br />
      <button form="release_form"
         id="release_button"
-        onclick="releaseLive()"
+        {*onclick="releaseLive()"*}
+        type="submit"
         name="buttonAction" value="release"
         style="margin-bottom: 5px;"/>
      Release Checked</button>
@@ -337,7 +236,7 @@
      style="margin-bottom: 5px;"/>Next</button>
   <br />
   <form id="edit_form" action="edit_contact.php" method="post">
-    <button type="submit">Add or Delete</button>
+    <button type="submit">Edit</button>
     <input name="contact_id" type="hidden" value="{$user->contact_id}"/>
     <input name="referrer" type="hidden" value="release"/>
   </form>

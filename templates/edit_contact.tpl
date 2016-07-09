@@ -359,8 +359,13 @@
       {/foreach}
       <tr><td>&nbsp;</td></tr>
     </table>
+    {* Save contact id. Referrer can be edit_contact or release.
+       If release, this form was entered via the release form,
+       so show button to return to release *}
     <input type="hidden" name="contact_id"
            value="{$user->contact_id}"/>
+    <input type="hidden" name="referrer"
+           value="{$referrer}" />
   </form>
 
 {/block}
@@ -373,7 +378,7 @@
   <button form="edit_contact_form" type="reset"
           name="buttonAction" class="menu"
           value="Reset">Reset</button>
-  {if isset($referrer)}
+  {if ($referrer) == 'release'}
     <form id="release_form" action="release.php" method="post">
       Save Changes First!<br />
       <button type="submit"
