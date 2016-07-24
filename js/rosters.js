@@ -29,10 +29,10 @@ function selectAll(id) {
 }
 
 function selectOptionLink(roster_id) {
-  /* redirect to roster_members.php, which will retrieve
+  /* redirect to rosters.php, which will retrieve
      members for selected year & group */
   if (roster_id != 0) {
     // roster_id is passed as 0 for Select Group option
-    window.location.href='roster_members.php?roster_id='+roster_id;
+    window.location.href='rosters.php?roster_id='+roster_id;
   }
 }

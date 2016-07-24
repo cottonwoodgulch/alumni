@@ -7,16 +7,20 @@
   function updateHold ($smarty,$msi,$user_id,$contact_id) {
     $ButtonAction=$_POST['buttonAction'];
     $transtype=substr($ButtonAction,0,3);
+    $err_msg='';
     if($transtype=='Add') {
       switch ($ButtonAction) {
       case "AddAddress":
-        insertPostAddress($msi,'A','add',$user_id,$contact_id);
+        insertPostAddress($msi,'A','add',$user_id,$contact_id,
+           $err_msg);
         break;
       case "AddPhone":
-        insertPostPhone($msi,'A','add',$user_id,$contact_id);
+        insertPostPhone($msi,'A','add',$user_id,$contact_id,
+           $err_msg);
         break;
       case "AddEmail":
-        insertPostEmail($msi,'A','add',$user_id,$contact_id);
+        insertPostEmail($msi,'A','add',$user_id,$contact_id,
+           $err_msg);
         break;
       }
     }
@@ -134,13 +138,12 @@
         $user_id,$contact_id,insertPostEmail);
       unset($contact_data);
     }
+    displayFooter($smarty,$err_msg);
   }
   
   function saveContact($msi,$smarty,$table,$clist,
         $user_id,$contact_id,$insertPost) {
-    /*if($table=="phone") {
-      echo '<pre>post: '.print_r($_POST,true).'</pre><br />';
-    }*/
+    // echo '<pre>post: '.print_r($_POST,true).'</pre><br />';
     foreach($clist as $hx) {
       //echo '<pre>hx: '.print_r($hx).'</pre><br />';
       $data_id=$hx[$table."_id"]["v"];
@@ -188,7 +191,8 @@
     return false;
   }
   
-  function insertPostAddress($msi,$action,$data_id,$user_id,$contact_id)
+  function insertPostAddress($msi,$action,$data_id,$user_id,
+    $contact_id, &$err_msg)
   {
     // insert a hold_address rec from $_POST
     $stmt=$msi->prepare("insert into hold_address values ".
@@ -209,10 +213,11 @@
     $stmt->close();
     }
     else
-      echo 'insertPostAddress prep error: '.$msi->error;
+      $err_msg.='insertPostAddress prep error: '.$msi->error.' ';
   }
   
-  function insertPostPhone($msi,$action,$data_id,$user_id,$contact_id) {
+  function insertPostPhone($msi,$action,$data_id,$user_id,
+    $contact_id, &$err_msg) {
     // insert a hold_phone rec from $_POST
     $stmt=$msi->prepare("insert into hold_phone values ".
         "(null,?,?,?,?,?,?,?)");
@@ -228,10 +233,11 @@
     $stmt->close();
     }
     else
-      echo 'insertPostPhone prep error: '.$msi->error;
+      $err_msg.='insertPostPhone prep error: '.$msi->error.' ';
   }
   
-  function insertPostEmail($msi,$action,$data_id,$user_id,$contact_id) {
+  function insertPostEmail($msi,$action,$data_id,$user_id,
+    $contact_id, &$err_msg) {
     // insert a hold_email rec from $_POST
     $stmt=$msi->prepare("insert into hold_email values ".
         "(null,?,?,?,?,?,?)");
@@ -246,7 +252,7 @@
     $stmt->close();
     }
     else
-      echo 'insertPostEmail prep error: '.$msi->error;
+      $err_msg.='insertPostEmail prep error: '.$msi->error.' ';
   }
   
   function deleteHold($msi,$table,$action,$data_id,$contact_id) {

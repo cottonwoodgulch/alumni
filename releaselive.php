@@ -14,6 +14,7 @@ function releaseLive ($smarty,$msi,$user_id) {
   $contact_id=$_POST['contact_id'];
   $user_data=new UserData($msi,$smarty,$user_id,$contact_id);
   $contact_data=new ContactData($msi,$smarty,$user_id,$contact_id);
+  $err_msg='';
   //echo '<pre>'.print_r($contact_data,true).'</pre>';
   //echo '<pre>'.print_r($user_data,true).'</pre>';
   $data_keys=array();
@@ -21,6 +22,8 @@ function releaseLive ($smarty,$msi,$user_id) {
     if(substr($key,0,1)=='s') {
       $data_type=substr($key,1,1); // a, p, e, u
       $field_name=substr($key,strpos($key,'_',3)+1);
+      /*echo '<br />data type, field name: '.$data_type.'  '.
+         $field_name;*/
       if($data_type == 'u') {
         $data_id='u';
         $trans_type=$user_data->getTransType($field_name);
@@ -37,6 +40,7 @@ function releaseLive ($smarty,$msi,$user_id) {
         $data_id=substr($key,3,strpos($key,'_',3)-3);
         $trans_type=$contact_data->getTransType($data_type,$data_id,
            $field_name);
+        //echo '<br />data id, trans type: '.$data_id.'  '.$trans_type;
         if($trans_type != '') {
           $val=$contact_data->getVal($data_type,$data_id,$field_name);
           $data_keys[]=array('data_type' => $data_type,
@@ -50,7 +54,7 @@ function releaseLive ($smarty,$msi,$user_id) {
   }
   //echo '<pre>'.print_r($data_keys,true).'</pre>';
   sort($data_keys);
-  //echo '<pre>'.print_r($data_keys,true).'</pre>';
+  //echo '<pre>data keys: '.print_r($data_keys,true).'</pre>';
   
   $data_id='';
   $data_type='';
@@ -59,7 +63,8 @@ function releaseLive ($smarty,$msi,$user_id) {
       if($data_id != '') {
         // update db
         setQuery($msi,$user_id,$data_type,$data_id,$contact_id,
-          $trans_type,$userq,$addfields,$addvals,$changeq,$changew);
+          $trans_type,$userq,$addfields,$addvals,$changeq,$changew,
+          $err_msg);
       }
       // (re-) set variables
       $data_id=$px['data_id'];
@@ -144,19 +149,20 @@ function releaseLive ($smarty,$msi,$user_id) {
   }
   
   setQuery($msi,$user_id,$data_type,$data_id,$contact_id,$trans_type,
-      $userq,$addfields,$addvals,$changeq,$changew);
+      $userq,$addfields,$addvals,$changeq,$changew,$err_msg);
   unset($user_data, $contact_data);
 }
 
 function setQuery($msi,$user_id,$data_type,$data_id,$contact_id,
-           $trans_type,$userq,$addfields,$addvals,$changeq,$changew) {
+           $trans_type,$userq,$addfields,$addvals,$changeq,$changew,
+           &$err_msg) {
 
   if($data_type == 'u') {
     //echo "<br />update contacts set $userq where contact_id=".$contact_id;
     if(!$msi->real_query(
        'update contacts set '.$userq.
        ' where contact_id='.$contact_id)) {
-      echo '<br />update user query 1 failed: '.$msi->error;
+      $err_msg.='update user query 1 failed: '.$msi->error.' ';
     }
     else {
       // re-load user data. If no changes left, delete hold_user rec
@@ -166,7 +172,7 @@ function setQuery($msi,$user_id,$data_type,$data_id,$contact_id,
       if(no_change($u_d->ud)) {
         if(!$msi->real_query(
            "delete from hold_contact where contact_id=$contact_id")) {
-          echo '<br />update user query 2 failed: '.$msi->error;
+          $err_msg.='update user query 2 failed: '.$msi->error.' ';
         }
       }
       //echo '<pre>'.print_r($u_d,true).'</pre>';
@@ -177,6 +183,7 @@ function setQuery($msi,$user_id,$data_type,$data_id,$contact_id,
     // address, phone, or e-mail
     switch($trans_type) {
       case 'add':
+        $msi->autocommit(false);
         if($msi->real_query(
              'insert into '.tableName($data_type,'s').
              '('.$addfields.') values ('.$addvals.')')) {
@@ -184,84 +191,94 @@ function setQuery($msi,$user_id,$data_type,$data_id,$contact_id,
              'insert into '.tableName($data_type,'a').
              ' (contact_id,'.tableName($data_type).'_id)'.'
              values('.$contact_id.','.$msi->insert_id.')')) {
-            //  
-            $l_data_id=-$data_id;
-            delHold($msi,$smarty,$user_id,$contact_id,
-                $data_type,$data_id);
+            if(delHold($msi,$smarty,$user_id,$contact_id,
+                $data_type,'hold_id',-$data_id,$err_msg)) {
+              $msi->commit();
+            }
+            else {
+              $msi->rollback();
+            }
           }
           else {
-            echo '<br />add query 2 failed: '.$msi->error;
+            $err_msg.='add query 2 failed: '.$msi->error.' ';
           }
         }
         else {
-          echo '<br />add query 1 failed: '.$msi->error;
+          $err_msg.='add query 1 failed: '.$msi->error.' ';
         }
-        /*echo "<br />insert into ".tableName($data_type,'s').
-             "($addfields) values ($addvals)";
-        echo "<br />insert into ".tableName($data_type,'a').
-             "(contact_id,".tableName($data_type).'_id)'.
-             "values($contact_id,".$msi->insert_id.")";*/
         break;
       case 'change':
+        /*echo "<br />update ".tableName($data_type,'s').
+           " set $changeq$changew";*/
         if(!$msi->real_query(
            'update '.tableName($data_type,'s').
            ' set '.$changeq.$changew)) {
-          echo '<br />change query failed: '.$msi->error;
-          return false;
+          $err_msg.='change query failed: '.$msi->error.' ';
         }
         else {
           delHold($msi,$smarty,$user_id,$contact_id,
-              $data_type,$data_id);
+              $data_type,tableName($data_type,'i'),$data_id,$err_msg);
         }
-        echo "<br />update ".tableName($data_type,'s').
-           " set $changeq$changew";
         break;
       case 'del':
-        /*if(!$msi->real_query(
-           'select count(*) from '.tableName($data_type,'a').
-           ' where '.tableName($data_type).'_id='.$data_id)) {
-          echo '<br />del count query failed: '.$msi->error;
-          return false;
+        echo '<br />select count(*) from '.
+           tableName($data_type,'a').
+           ' where '.tableName($data_type,'i').'='.$data_id;
+        if(!$msi->real_query('select count(*) from '.
+           tableName($data_type,'a').
+           ' where '.tableName($data_type,'i').'='.$data_id)) {
+          $err_msg.='del count query failed: '.$msi->error.' ';
         }
         else {
-          if($result=$msi->use_result()) {
-            $row=$result->fetch_row();
-            $result->free();
-            if($row[0]<=1) {
-              // only 1 contact_ids is associated with this item,
-              //   ok to delete the item
-              if(!$msi->real_query(
-                 'delete from '.tableName($data_type,'s').
-                 ' where '.tableName($data_type).'_id='.$data_id)) {
-                echo '<br />del delete item failed: '.$msi->error;
-                return false;
-              }
-            }
-            // in any case, delete the association rec
-            if(!$msi->real_query(
-               'delete from '.tableName($data_type,'a').
-               ' where contact_id='.$contact_id.
-               ' and address_id='.$data_id)) {
-              echo '<br />del delete association failed: '.$msi->error;
-              return false;
-            }
+          if(!($result=$msi->use_result())) {
+            $err_msg.='del count result invalid ';
           }
           else {
-            echo '<br />del count result invalid';
-            return false;
+            $row=$result->fetch_row();
+            $result->free();
+            $msi_error=false;
+            $msi->autocommit(false);
+            if($row[0]<=1) {
+              // only 1 contact_id is associated with this item,
+              //   ok to delete the item
+              /*echo '<br />delete from '.tableName($data_type,'s').
+                 ' where '.tableName($data_type,'i').'='.$data_id; */
+              if(!$msi->real_query(
+                 'delete from '.tableName($data_type,'s').
+                 ' where '.tableName($data_type,'i').'='.$data_id)) {
+                $err_msg.='del delete item failed: '.$msi->error.' ';
+                $msi_error=true;
+              }
+            }
+            if(!$msi_error) {
+            // in any case, delete the association rec
+              /*echo "<br />delete from ".tableName($data_type,'a').
+                 ' where contact_id='.$contact_id.
+                 ' and address_id='.$data_id;*/
+              if(!$msi->real_query(
+                 'delete from '.tableName($data_type,'a').
+                 ' where contact_id='.$contact_id.
+                 ' and address_id='.$data_id)) {
+                $err_msg.='del delete association failed: '.
+                  $msi->error.' ';
+                $msi_error=true;
+              }
+            }
+            if(!$msi_error && delHold($msi,$smarty,$user_id,
+               $contact_id,$data_type,
+               tableName($data_type,'i'),$data_id,$err_msg)) {
+              //echo '<br />committing';
+              $msi->commit();
+            }
+            else {
+              //echo '<br />rolling back';
+              $msi->rollback();
+            }
+            $msi->autocommit(true);
           }
-        }*/
-        echo "<br />select count(*) from ".tableName($data_type,'a').
-           " where ".tableName($data_type).'_id='.$data_id;
-        echo "<br />delete from ".tableName($data_type,'s').
-                 ' where '.tableName($data_type).'_id='.$data_id;
-        echo "<br />delete from ".tableName($data_type,'a').
-               ' where contact_id='.$contact_id.
-               ' and address_id='.$data_id;
+        }
         break;
     }  // switch
-    /* if all changes from this hold_x rec have been released,
-         delete it */
   }
   return true;
 }
@@ -269,9 +286,10 @@ function setQuery($msi,$user_id,$data_type,$data_id,$contact_id,
 function tableName($data_type,$table_type='') {
   /* table_type:
       a -associations
-      blank - singular for xx_id
-      s - table itself
-      h - hold */
+      blank - field name {address, phone, email}
+      s - table name {addresses, phones, emails}
+      h - hold {hold_address...}
+      i - <table>_id {address_id... } */
   switch($data_type) {
     case 'a':
       $t='address';
@@ -296,6 +314,9 @@ function tableName($data_type,$table_type='') {
     case 'h':
       return 'hold_'.$t;
       break;
+    case 'i':
+      return $t.'_id';
+      break;
     default:
       return $t;
       break;
@@ -303,7 +324,7 @@ function tableName($data_type,$table_type='') {
 }
 
 function delHold($msi,$smarty,$user_id,$contact_id,
-     $data_type,$data_id) {
+     $data_type,$id_field,$data_id,&$err_msg) {
   /* delete the hold_address, _phone, or _email rec */
   $u_c=new ContactData($msi,$smarty,$user_id,$contact_id);
   switch($data_type) {
@@ -324,17 +345,22 @@ function delHold($msi,$smarty,$user_id,$contact_id,
     }
   }
   if($no_change) {
-    echo '<br />no changes left - deleting hold '.
-        'data_id: '.$data_id;
+    /*echo '<br />no changes left - deleting hold '.
+        'data_id: '.$data_id;*/
+    /*echo '<br />delete from '.tableName($data_type,'h').
+      " where contact_id=$contact_id and $id_field=$data_id";*/
+    $msi_error=false;
     if(!$msi->real_query(
       'delete from '.tableName($data_type,'h').
-      " where contact_id=$contact_id and ".
-      "hold_id=".$data_id)) {
-      echo "<br />add $data_type delete hold query failed: ".
-         $msi->error;
+      " where contact_id=$contact_id and $id_field=$data_id")) {
+      $err_msg="data type $data_type delete hold query failed: ".
+         $msi->error.' ';
+      $msi_error=true;
     }
   }
   //echo '<pre>'.print_r($da,true).'</pre>';
   unset($da, $u_c);
+  /* return NOT $msi_error, so delHold will return true on success */
+  return !$msi_error;
 }
 ?>

@@ -228,12 +228,12 @@
         {*onclick="releaseLive()"*}
         type="submit"
         name="buttonAction" value="release"
-        style="margin-bottom: 5px;"/>
+        style="margin-bottom: 5px;">
      Release Checked</button>
   <br />
   <button form="release_form" type="submit"
      name="buttonAction" value="next"
-     style="margin-bottom: 5px;"/>Next</button>
+     style="margin-bottom: 5px;">Next</button>
   <br />
   <form id="edit_form" action="edit_contact.php" method="post">
     <button type="submit">Edit</button>

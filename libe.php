@@ -6,6 +6,10 @@ require_once 'vendor/autoload.php';
    since the app doesn't require a time */
 date_default_timezone_set('America/New_York');
 
+/* If sendmail is available, send emails immediately.
+   If not, place in hold_email table for later release */
+$on_line=false;
+
 $smarty = new Smarty();
 $smarty->addTemplateDir(__DIR__ . '/templates');
 $smarty->addPluginsDir(__DIR__ . '/plugins');
@@ -46,13 +50,15 @@ if($is_contact_editor) {
 }
 $smarty->assign('sitemenu',$sitemenu);
 
-function displayFooter($smarty,$message) {
+function displayFooter($smarty,$err_msg) {
   /* footer will display if the smarty variable footer is set */
-  $msg='<table><tr>
-    <td class="footermsg">'.$message.
-    '</td><td class="footermsg"><button type="button" '.
-    'onClick="hideFooter();">Close</button></td></tr></table>';
-  $smarty->assign('footer',$msg);
+  if(strlen(trim($err_msg)) > 0) {
+    $msg='<table><tr>
+      <td class="footermsg">'.$err_msg.
+      '</td><td class="footermsg"><button type="button" '.
+      'onClick="hideFooter();">Close</button></td></tr></table>';
+    $smarty->assign('footer',$msg);
+  }
 }
 
 function getTypes($msi,$smarty) {

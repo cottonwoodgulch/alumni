@@ -202,12 +202,13 @@ input:hover, button:hover {
   background-color: #DCEAFC;
 }
 
+/* what was the point of this?
 button {
   box-shadow: 2px 2px 2px #87654A,
   inset -2px -2px 2px #c49f75,
   inset -1px -1px 1px black;
   padding: 0 5px 3px 3px;
-}
+}*/
 
 button.menu {
   margin-bottom: 5px;

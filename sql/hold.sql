@@ -69,18 +69,23 @@ create table hold_email (
         creates a hold_email rec if different
      -- system creates records for each target address
         in the database
-   non-null send_date indicates message has been sent
+   e-mail type 3, and user id 0 are for hold recs created when
+     a user provides an e-mail address for self or a target
 */
-create table hold_invite (
-  message_type enum('I','S'),
-  user_id int(11)
-    foreign key references contacts(contact_id),
-  target_id int(11)
-    foreign key references contacts(contact_id),
-  sender_email varchar(250),
-  target_email varchar(250),
+create table hold_msg (
+  hold_msg_id int(11) primary key auto_increment,
+  msg_type enum('invite','send'),
+  user_id int(11),
+  target_id int(11),
+  user_email varchar(250),
   subject varchar(250),
-  message blob,
-  send_date date default null
+  message text
 ) engine innodb;
 
+create table hold_target (
+  hold_target_id int(11) primary key auto_increment,
+  hold_msg_id int(11),
+  target_email varchar(250)
+) engine innodb;
+
+insert into email_types values (3,'Alumni',3);

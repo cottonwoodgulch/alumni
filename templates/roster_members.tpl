@@ -23,7 +23,7 @@
           <ul class="fallback">
           {foreach $this_year as $y}
             <li>
-              <a href="roster_members.php?roster_id={$y['roster_id']}">
+              <a href="rosters.php?roster_id={$y['roster_id']}">
                {$y['group']}</a>
             </li>
           {/foreach}
@@ -35,7 +35,7 @@
           <ul class="fallback">
             {foreach $last_year as $y}
             <li>
-              <a href="roster_members.php?roster_id={$y['roster_id']}">
+              <a href="rosters.php?roster_id={$y['roster_id']}">
                  {$y['group']}</a>
             </li>
             {/foreach}
@@ -47,7 +47,7 @@
           <ul class="fallback">
           {foreach $next_year as $y}
             <li>
-              <a href="roster_members.php?roster_id={$y['roster_id']}">
+              <a href="rosters.php?roster_id={$y['roster_id']}">
                  {$y['group']}</a>
             </li>
           {/foreach}
@@ -59,7 +59,7 @@
   {/if}
       
   <td>
-      <form method="post" action="roster_members.php">
+      <form method="post" action="rosters.php">
         <table class="edit">
           <thead>
           <tr><td colspan="2"><b>Roster Lookup</b></td></tr>
@@ -94,10 +94,10 @@
            {if $rd.nickname != ""}"{$rd.nickname}"{/if}</td>
         <td>{$rd.role}</td>
         {if $rd.deceased == 0}
-        <td><a href="email.php?target_id={$rd.contact_id}&email_type=invite">Invite</a>
+        <td><a href="email_send.php?target_id={$rd.contact_id}&roster_id={$roster_id}&email_type=invite&referrer=roster_members">Invite</a>
         </td>
         {if $rd.is_email != 0}
-        <td><a href="email.php?target_id={$rd.contact_id}&email_type=send" >Send E-Mail</a>
+        <td><a href="email_send.php?target_id={$rd.contact_id}&roster_id={$roster_id}&email_type=send&referrer=roster_members" >Send E-Mail</a>
         </td>
         {/if}
         {/if}

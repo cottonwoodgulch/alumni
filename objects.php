@@ -47,6 +47,7 @@ class ContactData {
           $this->ph[$this->findID($data_id,$this->ph,'phone_id')][$field_name]['c'];
       break;
       case 'e':
+        return
           $this->em[$this->findID($data_id,$this->em,'email_id')][$field_name]['c'];
       break;
     }

@@ -5,6 +5,7 @@ require_once 'libe.php';
 require_once 'objects.php';
 require_once 'releaselive.php';
 
+$err_msg='';
 if(isset($_POST['buttonAction'])) {
   // this page re-load was initiated by a button
   if($_POST['buttonAction'] == "edit") {
@@ -57,8 +58,9 @@ if($msi->real_query(
   }
 }
 else {
-  echo '<br />release query failed: '.$msi->error;
+  $err_msg.='release query failed: '.$msi->error.' ';
 }
+displayFooter($smarty,$err_msg);
 $smarty->assign("localmenu",1);
 $smarty->display('release.tpl');
 ?>

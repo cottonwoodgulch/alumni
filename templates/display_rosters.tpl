@@ -6,7 +6,7 @@
     <ul class="link">
     {foreach $roster->rd as $rd}
       <li><a class="filelist_normal" 
-           href="roster_members.php?roster_id={$rd.roster_id}">
+           href="rosters.php?roster_id={$rd.roster_id}">
            {if $rd.role != ''}{$rd.role}, {/if}
         {if $rd.year > 0}{$rd.year} {/if}
         {$rd.group}</a></li>

@@ -18,9 +18,6 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
       header("Location: index.php");
       exit;
     }
-    else {
-      displayFooter($smarty,$message);
-    }
   }
   else {
     displayFooter($smarty,
