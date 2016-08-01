@@ -47,6 +47,7 @@ $msi = new mysqli($db_host, $db_user, $db_pw, $db_db);
 $sitemenu=array("home","rosters","people");
 if($is_contact_editor) {
   $sitemenu[]="release";
+  $sitemenu[]="email_release";
 }
 $smarty->assign('sitemenu',$sitemenu);
 
@@ -66,7 +67,8 @@ function getTypes($msi,$smarty) {
   getTypeData($msi,$smarty,'degree',true);
   getTypeData($msi,$smarty,'address_type');
   getTypeData($msi,$smarty,'phone_type');
-  getTypeData($msi,$smarty,'email_type');
+  getTypeData($msi,$smarty,'email_type',false,
+      'where email_type_id<3');
 }
 
 function getTypeData($msi,$smarty,$item,$allow_blank=false,

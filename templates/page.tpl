@@ -33,7 +33,7 @@
           <li><b>{$HelloName}</b>
               <img src="images/dropdownarrow.png" />
             <ul class="fallback">
-              <li class="filelist_normal">Change Password</li>
+              <li><a class="filelist_normal" href="pwreset.php">Change Password</li>
               <li><a class="filelist_normal" href="logout.php" >Logout</a></li>
             </ul>
           </li>
@@ -60,12 +60,14 @@
   <div id="localmenu">
   {block name="localmenu"}
   {/block}
+  {if isset($changeclasses)}
   <br /><br />
   <span class="change" style="padding: 3px;">Value Changed</span>
   <br /><br />
   <span class="add" style="padding: 3px;">To Be Added</span>
   <br /><br />
   <span class="del" style="padding: 3px;">To Be Deleted</span>
+  {/if}
   <br /><br />
   </div>
 {/if}

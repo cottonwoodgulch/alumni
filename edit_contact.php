@@ -37,6 +37,7 @@ else {
 }
 
 $smarty->assign("localmenu",1);
+$smarty->assign("changeclasses",1);
 $smarty->display('edit_contact.tpl');
 
 ?>

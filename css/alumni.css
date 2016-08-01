@@ -63,8 +63,8 @@ img.Logo {
 #localmenu {
   float: left;
   position: fixed;
-  top: 160px;
-  right: 100px;
+  top: 190px;
+  right: 90px;
   border: 1px solid black;
   padding: 10px 12px 0;
 }
@@ -153,6 +153,12 @@ td.release {
   border-color: black;
 }
 
+.email {
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: black;
+}
+
 .filelist_normal {
   color: blue;
   text-decoration: none;
@@ -201,14 +207,6 @@ input:hover, button:hover {
 .change {
   background-color: #DCEAFC;
 }
-
-/* what was the point of this?
-button {
-  box-shadow: 2px 2px 2px #87654A,
-  inset -2px -2px 2px #c49f75,
-  inset -1px -1px 1px black;
-  padding: 0 5px 3px 3px;
-}*/
 
 button.menu {
   margin-bottom: 5px;

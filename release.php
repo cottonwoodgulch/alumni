@@ -1,5 +1,5 @@
 <?php
-/* home.php */
+/* release.php */
 
 require_once 'libe.php';
 require_once 'objects.php';
@@ -7,9 +7,11 @@ require_once 'releaselive.php';
 
 $err_msg='';
 if(isset($_POST['buttonAction'])) {
-  // this page re-load was initiated by a button
+  /* this page re-load was initiated by a button */
   if($_POST['buttonAction'] == "edit") {
-    // referred by edit contact screen - subtract 1 to get same contact
+    /* Referred by edit contact screen, which was used to 
+       do further edits to the contact data.
+       Subtract 1 to get same contact. */
     $previous_contact=$_POST['contact_id']-1;
   }
   else {
@@ -62,5 +64,6 @@ else {
 }
 displayFooter($smarty,$err_msg);
 $smarty->assign("localmenu",1);
+$smarty->assign("changeclasses",1);
 $smarty->display('release.tpl');
 ?>
