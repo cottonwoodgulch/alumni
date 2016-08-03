@@ -10,6 +10,7 @@ require_once 'objects.php';
 
 /* display messages in hold_msg, one user at a time */
 
+$err_msg='';
 $previous_sender = isset($_POST['sender_id']) ?
   $_POST['sender_id'] : 0;
 //echo '<pre>'.print_r($_POST,true).'</pre>';
@@ -45,7 +46,7 @@ if(isset($_POST['buttonAction'])) {
         $err_msg.=delMsg($msi,$dx);
       }
       else {
-        $err_msg.='Send query error: '.$msi->error;
+        $err_msg.='Send query error: '.$msi->error.' ';
       }
     }
   }
@@ -58,7 +59,6 @@ if(isset($_POST['buttonAction'])) {
 }
 // if user clicked "next" button, just retrieve next sender's e-mails
 
-$err_msg='';
 /* retrieve next sender id */
 if($result=$msi->query("select m.user_id,concat_ws(' ',".
        "cs.first_name,cs.middle_name,cs.primary_name) ".
@@ -87,7 +87,7 @@ if($result=$msi->query("select m.user_id,concat_ws(' ',".
       }
     }
     else {
-      $err_msg.='Error retrieving messages: '.$msi->error;
+      $err_msg.='Error retrieving messages: '.$msi->error.' ';
     }
   }
   else {
@@ -98,10 +98,9 @@ if($result=$msi->query("select m.user_id,concat_ws(' ',".
   }
 }
 else {
-  $err_msg.='Error retrieving next sender: '.$msi->error;
+  $err_msg.='Error retrieving next sender: '.$msi->error.' ';
 }
 
-  
 displayFooter($smarty,$err_msg);
 $smarty->assign("localmenu",1);
 $smarty->display('email_release.tpl');

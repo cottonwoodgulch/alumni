@@ -63,8 +63,8 @@ if($referrer == 'email') {
       the user's email, but the user can change it. 
     Using ContactData object here to prevent creating multiple
       hold_email recs */
-    $user_contact_data=new userData($msi,$smarty,$user_id,$user_id);
-    checkHold($msi,$user_contact_data,$replyto,$err_msg);
+    $user_contact_data=new ContactData($msi,$smarty,$user_id,$user_id);
+    checkHold($msi,$user_id,$user_contact_data,$replyto,$err_msg);
     unset($user_contact_data);
     if($on_line) {
       $target_contact_data=new ContactData($msi,$smarty,$user_id,
@@ -85,7 +85,7 @@ if($referrer == 'email') {
       else {
         // invite - user provided target e-mail address
         mail($to,$subject,$message,$mailHeader,$mailParams);
-        checkHold($msi,$target_contact_data,$to,$err_msg);
+        checkHold($msi,$user_id,$target_contact_data,$to,$err_msg);
       }
       unset($target_contact_data);
     }
@@ -139,7 +139,8 @@ if($referrer == 'email') {
             else {
               $stmt->execute();
               $stmt->close();
-              if(!checkHold($msi,$target_contact_data,$to,$err_msg)) {
+              if(!checkHold($msi,$user_id,$target_contact_data,
+                  $to,$err_msg)) {
                 $msi_error=true;
               }
             }
@@ -277,7 +278,7 @@ $smarty->assign('roster_id',$roster_id);
 $smarty->assign('message',$message);
 $smarty->display($email_type.'.tpl');
 
-function checkHold($msi,$contact_data,$email,&$err_msg) {
+function checkHold($msi,$user_id,$contact_data,$email,&$err_msg) {
   // if $email isn't in db for $contact_id, create hold_email rec
   foreach($contact_data->em as $ex) {
     if($ex['email']['v'] == $email) {
@@ -286,11 +287,12 @@ function checkHold($msi,$contact_data,$email,&$err_msg) {
   }
   if(!$stmt=$msi->prepare('insert into hold_email '.
     '(user_id,action,contact_id,email_id,email_type_id,email) '.
-    "values (0,'A',?,0,3,?)")) {
+    "values (?,'A',?,0,3,?)")) {
     $err_msg.='checkHold prep insert error: '.$msi->error.' ';
     return false;
   }
-  if(!$stmt->bind_param('is',$contact_id,$email)) {
+  if(!$stmt->bind_param('iis',$user_id,
+      $contact_data->contact_id,$email)) {
     $err_msg.='checkHold bind param error: '.$msi->error.' ';
     return false;
   }
