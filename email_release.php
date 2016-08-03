@@ -2,6 +2,10 @@
 /* send.php */
 
 require_once 'libe.php';
+if(!$is_contact_editor) {
+  header("Location: notauthorized.php");
+}
+
 require_once 'objects.php';
 
 /* display messages in hold_msg, one user at a time */

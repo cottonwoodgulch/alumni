@@ -70,10 +70,11 @@
       </td>
     </tr><tr>
       <td class="label">
-        <label for="add_phone">Number</label></td>
-      <td><input name="add_phone"></td>
+        <label for="add_number">Number</label></td>
+      <td><input name="add_number"></td>
     </tr>
   </table>
+  <input type="hidden" name="add_formatted" value="0" />
   <input type="hidden" name="buttonAction" value="AddPhone"/>
   <input type="hidden" name="contact_id" 
          value="{$user->contact_id}"/>

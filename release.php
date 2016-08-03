@@ -2,6 +2,10 @@
 /* release.php */
 
 require_once 'libe.php';
+if(!$is_contact_editor) {
+  header("Location: notauthorized.php");
+}
+
 require_once 'objects.php';
 require_once 'releaselive.php';
 

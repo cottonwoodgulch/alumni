@@ -90,5 +90,4 @@ function getTypeData($msi,$smarty,$item,$allow_blank=false,
     $smarty->assign($item."s",$items);
   }
 }
-
 ?>

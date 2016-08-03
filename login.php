@@ -7,7 +7,8 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
   /* check username & pw in db */
   if($stmt=$msi->prepare("select contact_id,password,first_name,".   
       "password_reset from contacts where lower(username)=?")) {
-    $stmt->bind_param('s',$msi->real_escape_string(strtolower($_POST['username'])));
+    $stmt->bind_param('s',
+       $msi->real_escape_string(strtolower($_POST['username'])));
     $stmt->execute();
     $stmt->bind_result($user_id, $pwhash, $HelloName,$password_reset);
     $stmt->fetch();
