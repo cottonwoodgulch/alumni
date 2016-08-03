@@ -23,7 +23,7 @@ if(isset($_POST['buttonAction'])) {
     if($_POST['buttonAction'] == "release") {
       // Release Checked fields to live database
       //echo '<pre>'.print_r($_POST,true)."</pre>";
-      releaseLive($smarty,$msi,$user_id);
+      $err_msg.=releaseLive($smarty,$msi,$user_id);
       //echo '<pre>'.print_r($_POST,true)."</pre>";
     }
   }
