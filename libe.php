@@ -44,10 +44,14 @@ $smarty->assign('is_contact_editor',$is_contact_editor);
 include 'config.php';
 $msi = new mysqli($db_host, $db_user, $db_pw, $db_db);
 
-$sitemenu=array("home","rosters","people");
+$sitemenu=array(array('d' => 'Home','t' => 'home'),
+                array('d' => 'Rosters','t' => 'rosters'),
+                array('d' => 'People', 't' => 'people'));
 if($is_contact_editor) {
-  $sitemenu[]="release";
-  $sitemenu[]="email_release";
+  $sitemenu[]=array('d' => 'Release', 't' => 'release');
+  if($on_line) {
+    $sitemenu[]=array('d' => 'Release E-Mail','t' => 'email_release');
+  }
 }
 $smarty->assign('sitemenu',$sitemenu);
 
@@ -90,4 +94,5 @@ function getTypeData($msi,$smarty,$item,$allow_blank=false,
     $smarty->assign($item."s",$items);
   }
 }
+
 ?>

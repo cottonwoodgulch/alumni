@@ -24,7 +24,8 @@
       <div id="nav-wrapper">
         <div id="nav1"><ul class="navbar">
           {foreach $sitemenu as $menuitem}
-              <li><a class="filelist_normal" href="{$menuitem}.php">{$menuitem|capitalize}</a></li>
+              <li><a class="filelist_normal"
+               href="{$menuitem['t']}.php">{$menuitem['d']}</a></li>
           {/foreach}
           </ul>
         </div>
