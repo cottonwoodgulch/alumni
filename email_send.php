@@ -58,6 +58,8 @@ if($referrer == 'email') {
        $on_line is set in libe.php to indicate if messages can
        be sent immediately, or should be placed in the hold_msg
        and hold_target tables.
+       $email_direct is set in libe.php to indicate if immediate
+       sending is allowed - for testing
     if the e-mail address is not in the db for the contact_id,
       checkHold creates a hold_email rec. $replyto defaults to 
       the user's email, but the user can change it. 
@@ -66,7 +68,7 @@ if($referrer == 'email') {
     $user_contact_data=new ContactData($msi,$smarty,$user_id,$user_id);
     checkHold($msi,$user_id,$user_contact_data,$replyto,$err_msg);
     unset($user_contact_data);
-    if($on_line) {
+    if($on_line && $email_direct) {
       $target_contact_data=new ContactData($msi,$smarty,$user_id,
            $target_id);
       $mailHeader="From: $replyto\r\n";

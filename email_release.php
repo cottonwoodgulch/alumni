@@ -33,10 +33,10 @@ if(isset($_POST['buttonAction'])) {
          "where m.hold_msg_id=$dx")) {
         $result=$msi->use_result();
         while($row=$result->fetch_assoc()) {
-          $mailHeader='From: '.$row['user_email'].'\r\n';
-          $mailHeader.='Reply-To: '.$row['user_email'].'\r\n';
+          $mailHeader='From: '.$row['user_email']."\r\n";
+          $mailHeader.='Reply-To: '.$row['user_email']."\r\n";
           $mailHeader .= "X-Mailer: www.cottonwoodgulch.org\r\n";    
-          $mailHeader .= 'X-ID: '.$row['user_id'].'\r\n';
+          $mailHeader .= 'X-ID: '.$row['user_id']."\r\n";
           $mailHeader .= "Bcc: jtbhyde@gmail.com\r\n";	
           $mailParams='-f'.$row['user_email'];
           mail($row['target_email'],$subject,$message,$mailHeader,

@@ -9,6 +9,7 @@ date_default_timezone_set('America/New_York');
 /* If sendmail is available, send emails immediately.
    If not, place in hold_email table for later release */
 $on_line=false;
+$email_direct=false;
 
 $smarty = new Smarty();
 $smarty->addTemplateDir(__DIR__ . '/templates');
