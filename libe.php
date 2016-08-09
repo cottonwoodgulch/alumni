@@ -50,9 +50,7 @@ $sitemenu=array(array('d' => 'Home','t' => 'home'),
                 array('d' => 'People', 't' => 'people'));
 if($is_contact_editor) {
   $sitemenu[]=array('d' => 'Release', 't' => 'release');
-  if($on_line) {
-    $sitemenu[]=array('d' => 'Release E-Mail','t' => 'email_release');
-  }
+  $sitemenu[]=array('d' => 'Release E-Mail','t' => 'email_release');
 }
 $smarty->assign('sitemenu',$sitemenu);
 
