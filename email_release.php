@@ -39,8 +39,14 @@ if(isset($_POST['buttonAction'])) {
           $mailHeader .= 'X-ID: '.$row['user_id']."\r\n";
           $mailHeader .= "Bcc: jtbhyde@gmail.com\r\n";	
           $mailParams='-f'.$row['user_email'];
-          mail($row['target_email'],$subject,$message,$mailHeader,
-             $mailParams);
+          mail($row['target_email'],$row['subject'],$row['message'],
+             $mailHeader,$mailParams);
+          /*echo '<br />Sending or inviting:';
+          echo '<br />to: '.$row['target_email'];
+          echo '<br />header: '.$mailHeader;
+          echo '<br />subject: '.$row['subject'];
+          echo '<br />message: '.$row['message'];
+          echo '<br />params: '.$mailParams; */
         }
         $result->free();
         $err_msg.=delMsg($msi,$dx);
