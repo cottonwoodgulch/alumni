@@ -95,12 +95,11 @@ if($result=$msi->query("select m.user_id,concat_ws(' ',".
     else {
       $err_msg.='Error retrieving messages: '.$msi->error.' ';
     }
+    $smarty->assign("localmenu",1);
   }
   else {
-    $smarty->assign('endmessage',
-      $previous_sender==0 ?
-         "No messages to send" :
-         "No more messages to send");
+    $smarty->assign('endmessage',$previous_sender==0 ?
+        "No messages to send" : "No more messages to send");
   }
 }
 else {
@@ -108,7 +107,6 @@ else {
 }
 
 displayFooter($smarty,$err_msg);
-$smarty->assign("localmenu",1);
 $smarty->display('email_release.tpl');
 
 function delMsg($msi,$hold_msg_id) {

@@ -2,7 +2,7 @@
    a template that extends page.tpl *}
 
   {if isset($roster)}
-    <h4>Rosters:</h4>
+    <p style="font-weight: bold;margin: 2px 0 10px">Rosters:</p>
     <ul class="link">
     {foreach $roster->rd as $rd}
       <li><a class="filelist_normal" 

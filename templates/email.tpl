@@ -2,7 +2,7 @@
 
 {block name="content"}
 <form method="post" action="email_send.php?target_id={$target_id}
-   &email_type={$email_type}&referrer=email">
+   &email_type={$email_type}&roster_id={$roster_id}&referrer={$referrer}">
 <table class="edit">
 {block name="addresses"}
 {/block}
@@ -19,11 +19,9 @@
   </textarea>
   </td></tr>
   <tr><td></td><td>
-  {block name="submit_send"}
-    <input type="submit" value="Send"/>
+    <button type="submit" name="buttonAction" value="send">Submit</button>
     <button 
-      formaction="rosters.php?roster_id={$roster_id}">Cancel</button>
-  {/block}
+      formaction="{$referrer}.php?target_id={$target_id}&roster_id={$roster_id}&alum_id={$target_id}">Cancel</button>
   </td></tr>
 </table>
 <input type="hidden" name="user_first_name"
@@ -32,7 +30,6 @@
   value="{$target_first_name}" />
 <input type="hidden" name="target_name"
   value="{$target_name}" />
-<input type="hidden" name="roster_id" value="{$roster_id}" />
 </form>
 {/block}
 

@@ -1,6 +1,8 @@
 {* this template section needs to be {include}d in 
    a template that extends page.tpl *}
 
+<p style="font-weight: bold;margin: 2px 0 10px">
+  {$user->ud.first_name.v} {$user->ud.middle_name.v} {$user->ud.primary_name.v}</p>
 <table class="edit">
     <tr>
       <td>
@@ -74,4 +76,4 @@
         </table>
       </td>
     </tr>
-</table>
+</table><br />

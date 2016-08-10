@@ -94,10 +94,10 @@
            {if $rd.nickname != ""}"{$rd.nickname}"{/if}</td>
         <td>{$rd.role}</td>
         {if $rd.deceased == 0}
-        <td><a href="email_send.php?target_id={$rd.contact_id}&roster_id={$roster_id}&email_type=invite&referrer=roster_members">Invite</a>
+        <td><a href="email_send.php?target_id={$rd.contact_id}&roster_id={$roster_id}&email_type=invite&referrer=rosters">Invite</a>
         </td>
         {if $rd.is_email != 0}
-        <td><a href="email_send.php?target_id={$rd.contact_id}&roster_id={$roster_id}&email_type=send&referrer=roster_members" >Send E-Mail</a>
+        <td><a href="email_send.php?target_id={$rd.contact_id}&roster_id={$roster_id}&email_type=send&referrer=rosters" >Send E-Mail</a>
         </td>
         {/if}
         {/if}

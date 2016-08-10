@@ -29,6 +29,25 @@
     {if $is_contact_viewer || ($user->contact_id == $alum_id)}
       {include file='templates/display_user.tpl'}
     {/if}  {* user allowed to view this contact's data *}
+    {if $user->ud['deceased']['v'] == 0}
+      <table class="edit">
+      <tr><td colspan="2"><b>Email {if $user->ud['nickname']['v'] != ""}
+         {$user->ud['nickname']['v']}
+         {else}{$user->ud['first_name']['v']}{/if}:</b></td></tr>
+      <tr><td>
+        <a href="email_send.php?target_id={$user->contact_id}&roster_id=
+          &email_type=invite&referrer=people">I have the e-mail address</a>
+      </td>
+      {if $contact->em}
+        <td>
+          <a href="email_send.php?target_id={$user->contact_id}&roster_id=
+            &email_type=send&referrer=people">Use the e-mail address from the database</a>
+        </td>
+      {/if}
+      </tr>
+      </table>
+    {/if}
+    <br />
     {include file='templates/display_rosters.tpl'}
   {/if}    {* isset user *}
 {/block}

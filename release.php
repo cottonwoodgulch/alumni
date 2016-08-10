@@ -54,7 +54,7 @@ if($msi->real_query(
     echo '<pre>'.print_r($x,true).'</pre>';*/
     $smarty->assign('contact',new ContactData($msi,$smarty,
        $user_id,$row[0]));
-    
+    $smarty->assign("localmenu",1);
   }
   else {
     $smarty->assign('endmessage',
@@ -67,7 +67,6 @@ else {
   $err_msg.='release query failed: '.$msi->error.' ';
 }
 displayFooter($smarty,$err_msg);
-$smarty->assign("localmenu",1);
 $smarty->assign("changeclasses",1);
 $smarty->display('release.tpl');
 ?>

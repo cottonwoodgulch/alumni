@@ -13,13 +13,15 @@ require_once 'objects.php';
 
 $err_msg='';
 $referrer=$_GET['referrer'];
+$smarty->assign('referrer',$referrer);
 $email_type=$_GET['email_type'];
 $smarty->assign('email_type',$email_type);
 $target_id=$_GET['target_id'];
 $smarty->assign('target_id',$target_id);
-$roster_id=$_POST['roster_id'];
+$roster_id=isset($_GET['roster_id']) ? $_GET['roster_id'] : '';
+$buttonaction=isset($_POST['buttonAction']) ? $_POST['buttonAction'] : '';
 
-if($referrer == 'email') {
+if($buttonaction == 'send') {
   /* Check & send e-mail. Requires replyto, to, subject, message */
   $target_first_name=$_POST['target_first_name'];
   $smarty->assign('target_first_name',$target_first_name);
@@ -158,11 +160,13 @@ if($referrer == 'email') {
         $msi->autocommit(true);
       }
       if(strlen(trim($err_msg)) < 1) {
-        header("Location: rosters.php?roster_id=$roster_id ");
+        // email_send needs target_id and people.php needs alum_id
+        header("Location: $referrer.php?roster_id=$roster_id".
+          "&target_id=$target_id&alum_id=$target_id");
       }
     } // on_line
   }
-  // else, error, display messages in footer on email_send.tpl
+  // else, error, display messages in footer on send.tpl or invite.tpl
 }
 
 else {
@@ -272,7 +276,6 @@ Yours,
       'Rosters-in-common: unable to create mysql statement object: '.
       $msi->error;
   }
-  $roster_id=$_GET['roster_id'];
 }
 
 displayFooter($smarty,$err_msg);
