@@ -8,7 +8,7 @@ date_default_timezone_set('America/New_York');
 
 /* If sendmail is available, send emails immediately.
    If not, place in hold_email table for later release */
-$on_line=true;
+$on_line=false;
 $email_direct=false;
 
 $smarty = new Smarty();
@@ -48,7 +48,7 @@ $msi = new mysqli($db_host, $db_user, $db_pw, $db_db);
 $sitemenu=array(array('d' => 'Home','t' => 'home'),
                 array('d' => 'Rosters','t' => 'rosters'),
                 array('d' => 'People', 't' => 'people'));
-if($is_contact_editor) {
+if($is_contact_editor && $on_line) {
   $sitemenu[]=array('d' => 'Release', 't' => 'release');
   if($on_line) {
     $sitemenu[]=array('d' => 'Release E-Mail','t' => 'email_release');

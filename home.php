@@ -11,6 +11,7 @@ $smarty->assign('contact',new ContactData($msi,$smarty,
 $tr=new RosterData($msi,$smarty,$user_id);
 $smarty->assign('roster',$tr);
 $smarty->assign('rostercount',$tr->roster_count);
+$smarty->assign('referrer','home');
 $smarty->display('home.tpl');
 
 ?>

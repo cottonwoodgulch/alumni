@@ -22,11 +22,6 @@
           <tr>
             <td>Contact ID: {$user->contact_id}</td>
           </tr>
-          <tr><td>&nbsp;</td></tr>
-          <tr><td><form action="edit_contact.php" method="post">
-            <input type="submit" value="Edit Data" /></td>
-            <input name="contact_id" type="hidden" value="{$user->contact_id}">
-          </form></td></tr>
         </table>
       </td>
       <td>
@@ -76,4 +71,18 @@
         </table>
       </td>
     </tr>
+</table>
+<table class="edit">
+  <tr>
+    <td><form action="edit_contact.php" method="post">
+      <input type="submit" value="Edit Data" /></td>
+      <input name="contact_id" type="hidden" value="{$user->contact_id}"/>
+    </form></td>
+    {if $is_contact_editor && is_null($user->ud.username.v)}
+      <td><form action="username.php" method="post">
+        <input type="submit" value="Create User Account" /></td>
+        <input name="contact_id" type="hidden" value="{$user->contact_id}"/>
+      </form></td>
+    {/if}
+  </tr>
 </table><br />

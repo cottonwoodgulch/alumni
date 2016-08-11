@@ -24,7 +24,6 @@ class ContactData {
     /* combine and note changes */
     $this->getChange($this->ad,$ud_hold,"address");
  
-
     $this->ph=$this->getLive($msi,$smarty,"phone",$user_id);
     $ud_hold=$this->getHold($msi,$smarty,"phone");
     //echo '<pre>'.print_r($ud_hold,true).'</pre><br />';
@@ -260,7 +259,7 @@ class UserData {
           "h.primary_name,h.nickname,".
           "ifnull(h.degree_id,0) degree_id,".
           "d.degree,date_format(h.birth_date,'%m/%d/%Y') birth_date,".
-          "ifnull(h.gender,'') gender ".
+          "ifnull(h.gender,'') gender,h.username ".
           "from hold_contact h ".
           "left join contacts c on c.contact_id=h.user_id ".
           "left join titles t on t.title_id=c.title_id ".
@@ -291,7 +290,7 @@ class UserData {
           "c.primary_name,c.nickname,".
           "ifnull(c.degree_id,0) degree_id,".
           "d.degree,date_format(c.birth_date,'%m/%d/%Y') birth_date,".
-          "ifnull(c.gender,'') gender ".
+          "ifnull(c.gender,'') gender,c.username ".
           "from contacts c ".
           "left join titles t on t.title_id=c.title_id ".
           "left join degrees d on d.degree_id=c.degree_id ".

@@ -19,7 +19,8 @@ create table hold_contact (
   degree_id int(11),
   nickname varchar(50),
   birth_date date,
-  gender enum('Male','Female')
+  gender enum('Male','Female'),
+  username varchar(255)
 ) engine innodb;  
 
 create table hold_address (

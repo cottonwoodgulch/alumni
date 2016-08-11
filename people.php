@@ -63,6 +63,7 @@ else {
   }
   
 }
+$smarty->assign('referrer','people');
 $smarty->display('people.tpl');
 
 ?>
