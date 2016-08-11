@@ -38,9 +38,8 @@ else {
 
 if(!$is_error && $_POST['buttonAction'] == 'Cancel') {
   if($password_reset) {
-    // user is required to reset password - cancel not allowed
-    $is_error=true;
-    $err_msg='Password change is required';
+    // reset is required
+    header("Location: logout.php");
   }
   else {
     header("Location: index.php");

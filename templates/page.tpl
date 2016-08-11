@@ -74,13 +74,11 @@
 {/if}
 
 {if isset($footer)}
-  {block name="footer_wrapper"}
-    <div id="footer">
-      {block name="footer"}
-      {$footer}
-      {/block}
-    </div>
-  {/block}
+  <div id="footer">
+    {block name="footer"}
+    {$footer}
+    {/block}
+  </div>
 {/if}
 
 </body></html>
