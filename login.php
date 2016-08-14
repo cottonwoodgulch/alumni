@@ -17,6 +17,7 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
     if($phpass->CheckPassword($_POST['password'],$pwhash)) {
       $_SESSION['user_id'] = $user_id;
       $_SESSION['HelloName'] = $HelloName;
+      $_SESSION['username']=$_POST['username'];
       if(!$password_reset) {
         header("Location: pwreset.php");
       }

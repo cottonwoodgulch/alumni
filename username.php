@@ -73,7 +73,7 @@ if(!$is_error) {
     $smarty->assign('pw',strtolower($alum->ud['first_name']['v']).'_gulch');
   }
 }
-displayFooter($smarty,$err_msg);
+displayFooter($smarty,$err_msg);;
 $smarty->display('username.tpl');
 
 function possibleNames($tcount,$alum) {

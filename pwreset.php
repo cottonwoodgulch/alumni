@@ -23,40 +23,47 @@ if(!$is_error) {
        1 for "password has been reset"
        0 for "password must be reset"
      for this app, $password_reset is "password reset is req'd" */
-  $password_reset=!$row[1];
+  $password_reset=$row[1];
   unset($row);
 }
 
 if($password_reset) {
   $smarty->assign('heading',
-     $_SESSION['HelloName'].', please reset your password');
+     'Changing password for '.$_SESSION['HelloName']);
 }
 else {
   $smarty->assign('heading',
-     'Changing password for '.$_SESSION['HelloName']);
+     $_SESSION['HelloName'].', please reset your password');
 }
 
 if(!$is_error && $_POST['buttonAction'] == 'Cancel') {
   if($password_reset) {
-    // user is required to reset password - cancel not allowed
-    $is_error=true;
-    $err_msg='Password change is required';
+    header("Location: index.php");
   }
   else {
-    header("Location: index.php");
+    // reset is required, user cancelled, so log 'em out
+    header("Location: logout.php");
   }
 }
 
 if(!$is_error && isset($_POST['newpass'])) {
   $newpass=$_POST['newpass'];
-  if($password_reset) {
-    // user is required to change password
-    $phpass = new PasswordHash(12, false);
-    if($phpass->CheckPassword($newpass,$oldpass)) {
-      $err_msg.='Please CHANGE password ';
-      $is_error=true;
+  
+  if(strlen($newpass) < 6) {
+    $err_msg.='Password is too short';
+    $is_error=true;
+  }
+  
+  if(!$is_error) {
+    if(!$password_reset) {
+      // user is required to change password
+      $phpass = new PasswordHash(12, false);
+        if($phpass->CheckPassword($newpass,$oldpass)) {
+        $err_msg.='Please CHANGE password ';
+        $is_error=true;
+      }
+      unset($phpass);
     }
-    unset($phpass);
   }
 
   if(!$is_error) {

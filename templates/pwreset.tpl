@@ -21,16 +21,12 @@
       </tr>
       <tr>
         <td></td>
-        <td><input type="submit" name="buttonAction"
-           value="Submit" />
-        <input type="submit" name="buttonAction"
-           value="Cancel" /></td>
+        <td><button type="submit" name="buttonAction"
+           value="Submit">Submit</button>
+        <button type="submit" name="buttonAction"
+           value="Cancel">Cancel</button></td>
       </tr>
     </table>
   </form>
   <p>Need help? Call the office - 505-248-0563</p>
-{/block}
-
-{block name="footer"}
-  {$footer}
 {/block}

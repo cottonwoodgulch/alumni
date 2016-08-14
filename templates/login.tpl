@@ -22,7 +22,3 @@
       </form>
       <p>Forgot your password? Need an account? Call the office - 505-248-0563</p>
 {/block}
-
-{block name="footer"}
-  {$footer}
-{/block}
