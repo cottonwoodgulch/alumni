@@ -8,7 +8,7 @@ date_default_timezone_set('America/New_York');
 
 /* If sendmail is available, send emails immediately.
    If not, place in hold_email table for later release */
-$on_line=false;
+$on_line=true;
 $email_direct=false;
 
 $smarty = new Smarty();
@@ -53,6 +53,7 @@ if($is_contact_editor && $on_line) {
   if($on_line) {
     $sitemenu[]=array('d' => 'Release E-Mail','t' => 'email_release');
   }
+  $sitemenu[]=array('d' => 'Campaign','t' => 'campaign');
 }
 $smarty->assign('sitemenu',$sitemenu);
 
