@@ -1,24 +1,23 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "c0db5fd36db7e76a2a5044db2612e215",
-    "content-hash": "938bde0e124f8e4fe1c891aa40d5a9b7",
+    "content-hash": "30ce6b47f49dc6117c244f1145aa48c2",
     "packages": [
         {
             "name": "components/jquery",
-            "version": "2.2.1",
+            "version": "2.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/components/jquery.git",
-                "reference": "7894addbce3c4de6f82449610e6f8e168b49e9b0"
+                "reference": "981036fcb56668433a7eb0d1e71190324b4574df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/components/jquery/zipball/7894addbce3c4de6f82449610e6f8e168b49e9b0",
-                "reference": "7894addbce3c4de6f82449610e6f8e168b49e9b0",
+                "url": "https://api.github.com/repos/components/jquery/zipball/981036fcb56668433a7eb0d1e71190324b4574df",
+                "reference": "981036fcb56668433a7eb0d1e71190324b4574df",
                 "shasum": ""
             },
             "type": "component",
@@ -47,7 +46,7 @@
             ],
             "description": "jQuery JavaScript Library",
             "homepage": "http://jquery.com",
-            "time": "2016-02-24 08:16:25"
+            "time": "2016-05-25T06:43:59+00:00"
         },
         {
             "name": "components/jqueryui",
@@ -132,23 +131,7 @@
                 }
             ],
             "description": "jQuery UI is a curated set of user interface interactions, effects, widgets, and themes built on top of the jQuery JavaScript Library. Whether you're building highly interactive web applications or you just need to add a date picker to a form control, jQuery UI is the perfect choice.",
-            "time": "2015-03-13 14:48:12"
-        },
-        {
-            "name": "openwall/phpass",
-            "version": "0.3",
-            "dist": {
-                "type": "tar",
-                "url": "http://www.openwall.com/phpass/phpass-0.3.tar.gz",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "PasswordHash.php"
-                ]
-            }
+            "time": "2015-03-13T14:48:12+00:00"
         },
         {
             "name": "owasp/phprbac",
@@ -195,7 +178,7 @@
                 "rbac",
                 "security"
             ],
-            "time": "2014-03-14 13:16:56"
+            "time": "2014-03-14T13:16:56+00:00"
         },
         {
             "name": "smarty/smarty",
@@ -203,16 +186,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/smarty-php/smarty.git",
-                "reference": "b39f561083e0ff7c50ecef05668c880ede279bd3"
+                "reference": "5a72624380111dd11472a538406c2323b7c6e4b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/b39f561083e0ff7c50ecef05668c880ede279bd3",
-                "reference": "b39f561083e0ff7c50ecef05668c880ede279bd3",
+                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/5a72624380111dd11472a538406c2323b7c6e4b1",
+                "reference": "5a72624380111dd11472a538406c2323b7c6e4b1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "6.4.1 || ^5.7 || ^4.8",
+                "smarty/smarty-lexer": "^3.1"
             },
             "type": "library",
             "extra": {
@@ -222,9 +209,7 @@
             },
             "autoload": {
                 "classmap": [
-                    "libs/Smarty.class.php",
-                    "libs/SmartyBC.class.php",
-                    "libs/sysplugins/"
+                    "libs/"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -250,7 +235,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-02-20 21:00:19"
+            "time": "2020-05-05T13:08:31+00:00"
         }
     ],
     "packages-dev": [],
@@ -262,5 +247,6 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

@@ -57,19 +57,16 @@ if(!$is_error && isset($_POST['newpass'])) {
   if(!$is_error) {
     if(!$password_reset) {
       // user is required to change password
-      $phpass = new PasswordHash(12, false);
-        if($phpass->CheckPassword($newpass,$oldpass)) {
+      if(password_verify($newpass,$oldpass)) {
         $err_msg.='Please CHANGE password ';
         $is_error=true;
       }
-      unset($phpass);
     }
   }
 
   if(!$is_error) {
     if($_POST['newpass'] == $_POST['retype']) {
-      $phpass = new PasswordHash(12, false);
-      $pwhash=$phpass->HashPassword($_POST['newpass']);
+      $pwhash=password_hash($_POST['newpass'],PASSWORD_DEFAULT);
       if(!$msi->query("update contacts set password='$pwhash',".
           "password_reset=1 where contact_id=$user_id")) {
         $is_err=true;

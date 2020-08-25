@@ -26,8 +26,7 @@ if(!$is_error) {
     $password=$_POST['pw'];
     // check that username is not in use
     if(nameAvailable($msi,$username,$is_error,$err_msg)) {
-      $phpass = new PasswordHash(12, false);
-      $pwhash=$phpass->HashPassword($password);
+      $pwhash=password_hash($password)
       if(!$stmt=$msi->prepare('update contacts set username=?,password=?,'.
          'password_reset=0 where contact_id=?')) {
         $is_error=true;

@@ -28,6 +28,10 @@ else {
   }
 }
 
+// database connection
+include 'config.php';
+$msi = new mysqli($db_host, $db_user, $db_pw, $db_db);
+
 /* Set permissions.
    Viewer can see everyone's information, and suggest changes
    Editor can see info, and release suggested changes to live db
@@ -41,20 +45,25 @@ $is_contact_editor=
    $rbac->Users->hasRole('Contact Information Editor',$user_id);
 $smarty->assign('is_contact_editor',$is_contact_editor);
 
-// database connection
-include 'config.php';
-$msi = new mysqli($db_host, $db_user, $db_pw, $db_db);
-
 $sitemenu=array(array('d' => 'Home','t' => 'home'),
-                array('d' => 'Rosters','t' => 'rosters'),
-                array('d' => 'People', 't' => 'people'));
+                array('d' => 'Rosters','t' => 'rosters', 'c' => 0),
+                array('d' => 'People', 't' => 'people', 'c' => 0));
 if($is_contact_editor && $on_line) {
-  $sitemenu[]=array('d' => 'Release', 't' => 'release');
+  $sitemenu[]=array('d' => 'Release', 't' => 'release', 'c' => 0);
   if($on_line) {
-    $sitemenu[]=array('d' => 'Release E-Mail','t' => 'email_release');
+    $sitemenu[]=array('d' => 'Release E-Mail','t' => 'email_release', 'c' => 0);
   }
-  $sitemenu[]=array('d' => 'Campaign','t' => 'campaign');
 }
+foreach($sitemenu as &$sm) {
+  if (stripos(parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH), $sm['t']))
+  {
+    $sm['c']=1;
+  }
+  else {
+    $sm['c']=0;
+  }
+}
+unset($sm);
 $smarty->assign('sitemenu',$sitemenu);
 
 function displayFooter($smarty,$err_msg) {

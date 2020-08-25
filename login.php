@@ -13,8 +13,8 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
     $stmt->bind_result($user_id, $pwhash, $HelloName,$password_reset);
     $stmt->fetch();
     $stmt->close();
-    $phpass = new PasswordHash(12, false);
-    if($phpass->CheckPassword($_POST['password'],$pwhash)) {
+
+    if(password_verify($_POST['password'],$pwhash)) {
       $_SESSION['user_id'] = $user_id;
       $_SESSION['HelloName'] = $HelloName;
       $_SESSION['username']=$_POST['username'];
