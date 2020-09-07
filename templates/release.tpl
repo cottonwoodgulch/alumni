@@ -19,7 +19,7 @@
         onchange="changeCheck('#user_data','.user_data')" />
         </td>
   <td></td><td>Current</td><td>Proposed</td><td>By</td></tr>
-  <tr><td class="release">
+  {*<tr><td class="release">
       <input type="checkbox" class="user_data"
              name="su_u_title_id"></td>
       <td>Title</td>
@@ -27,7 +27,7 @@
       <td>{$user->ud.title.v}</td>
       
       <td>{$user->ud.user_name.v}</td>
-  </tr>
+  </tr>*}
      
   <tr><td class="release">
       <input type="checkbox" class="user_data"

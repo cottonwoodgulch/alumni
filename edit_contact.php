@@ -6,7 +6,6 @@ require_once 'updateHold.php';
 
 if(isset($_POST['contact_id'])) {
   $contact_id=$_POST['contact_id'];
-
   /* If ButtonAction is supplied, this is a page reset,
        which calls for data update.
        updateHold.php places changes in hold_xxx table
@@ -19,11 +18,9 @@ if(isset($_POST['contact_id'])) {
   $smarty->assign('user',$user_data);
   $contact_data=new ContactData($msi,$smarty,$user_id,$contact_id);
   $smarty->assign('contact',$contact_data);
-
-  /* retrieve titles, degrees, address-, phone-,
-     and e-mail types for drop-downs */
+  /* retrieve degrees, address-, phone-, and e-mail types
+     for drop-downs */
   getTypes($msi,$smarty);
-  
   if(isset($_POST['referrer']) && $_POST['referrer'] == 'release') {
     /* Referred by release screen - display button to return. */
     $smarty->assign('referrer','release');

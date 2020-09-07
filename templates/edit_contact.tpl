@@ -119,24 +119,6 @@
     <table class="edit">
       <tr>
         <td class="label">
-          <label for="title_id">Title</label>
-        </td>
-        <td>
-          <select class="{$user->ud.title_id.c}"
-            name="title_id" id="title_id">
-            {foreach $titles as $tx}
-            {if $user->ud.title_id.v == $tx['title_id']}
-              <option value="{$tx.title_id}" selected="selected">
-                 {$tx.title}</option>
-            {else}
-              <option value="{$tx.title_id}">{$tx.title}</option>
-            {/if}
-            {/foreach}
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td class="label">
           <label for="first_name">First Name</label>
         </td>
         <td>

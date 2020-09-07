@@ -8,8 +8,7 @@
       <td>
         <table class="edit">
           <tr>
-            <td>{if $user->ud.title.v != ''}{$user->ud.title.v} {/if}
-                {$user->ud.first_name.v} {if $user->ud.nickname.v != ''}"{$user->ud.nickname.v}" {/if}
+            <td>{$user->ud.first_name.v} {if $user->ud.nickname.v != ''}"{$user->ud.nickname.v}" {/if}
                 {$user->ud.middle_name.v} {$user->ud.primary_name.v}
                 {if $user->ud.degree.v != ''}{$user->ud.degree.v}{/if}</td>
           </tr>

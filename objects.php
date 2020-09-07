@@ -254,15 +254,12 @@ class UserData {
     if($stmt=$msi->prepare("select user_id,concat(c.first_name,' ',".
           "if(c.middle_name is null || c.middle_name='','',".
           "concat(c.middle_name,' ')),c.primary_name) user_name,".
-          "ifnull(h.title_id,0) title_id,".
-          "t.title,h.first_name,h.middle_name,".
-          "h.primary_name,h.nickname,".
+          "h.first_name,h.middle_name,h.primary_name,h.nickname,".
           "ifnull(h.degree_id,0) degree_id,".
           "d.degree,date_format(h.birth_date,'%m/%d/%Y') birth_date,".
-          "ifnull(h.gender,'') gender,h.username ".
+          "ifnull(h.gender,'') gender,h.deceased,h.username ".
           "from hold_contact h ".
           "left join contacts c on c.contact_id=h.user_id ".
-          "left join titles t on t.title_id=c.title_id ".
           "left join degrees d on d.degree_id=c.degree_id ".
           "where h.contact_id=?")) {
       $stmt->bind_param('i',$this->contact_id);
@@ -285,14 +282,11 @@ class UserData {
           "concat(c.first_name,' ',".
           "if(c.middle_name is null || c.middle_name='','',".
           "concat(c.middle_name,' ')),c.primary_name) user_name,".
-          "ifnull(c.title_id,0) title_id,".
-          "t.title,c.first_name,c.middle_name,".
-          "c.primary_name,c.nickname,".
+          "c.first_name,c.middle_name,c.primary_name,c.nickname,".
           "ifnull(c.degree_id,0) degree_id,".
           "d.degree,date_format(c.birth_date,'%m/%d/%Y') birth_date,".
-          "ifnull(c.gender,'') gender,c.username ".
+          "ifnull(c.gender,'') gender,c.deceased,c.username ".
           "from contacts c ".
-          "left join titles t on t.title_id=c.title_id ".
           "left join degrees d on d.degree_id=c.degree_id ".
           "where contact_id=?")) {
       $stmt->bind_param('i',$this->contact_id);

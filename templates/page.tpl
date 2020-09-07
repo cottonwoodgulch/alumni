@@ -31,7 +31,7 @@
         </div>
         <div id="nav2">
           <ul class="drop-down">
-          <li><b>{$HelloName}</b>
+          <li><b>Tom{*{$HelloName}*}</b>
               <img src="images/dropdownarrow.png" />
             <ul class="fallback">
               <li><a class="filelist_normal" href="pwreset.php">Change Password</li>

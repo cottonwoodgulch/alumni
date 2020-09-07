@@ -66,6 +66,10 @@ foreach($sitemenu as &$sm) {
 unset($sm);
 $smarty->assign('sitemenu',$sitemenu);
 
+function buildErrorMessage($errmsg,$newerr) {
+  return $errmsg . strlen($errmsg) ? '<br />' : '' . $newerr;
+}
+
 function displayFooter($smarty,$err_msg) {
   /* footer will display if the smarty variable footer is set */
   if(strlen(trim($err_msg)) > 0) {
@@ -78,7 +82,6 @@ function displayFooter($smarty,$err_msg) {
 }
 
 function getTypes($msi,$smarty) {
-  getTypeData($msi,$smarty,'title',true,'where deprecated=0');
   getTypeData($msi,$smarty,'degree',true);
   getTypeData($msi,$smarty,'address_type');
   getTypeData($msi,$smarty,'phone_type');
@@ -99,7 +102,7 @@ function getTypeData($msi,$smarty,$item,$allow_blank=false,
     $stmt->close();
     $result->free();
     if($allow_blank) {
-      /* create a blank for no title */
+      /* create a blank for no degree */
       $items[]=array($item."_id" => 0, $item => '');
     }
     $smarty->assign($item."s",$items);

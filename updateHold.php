@@ -112,14 +112,13 @@
       $user_data=new UserData($msi,$smarty,$user_id,$contact_id);
       if(isChange($user_data->ud,0,"o")) {
         $stmt=$msi->prepare("insert into hold_contact ".
-          "(contact_id,user_id,title_id,primary_name,".
+          "(contact_id,user_id,primary_name,".
           "first_name,middle_name,degree_id,nickname,".
           "birth_date,gender,username) values ".
-          "(?,?,?,?,?,?,?,?,str_to_date(?,'%m/%d/%Y'),?,?)");
-        $stmt->bind_param("iiisssissss",
+          "(?,?,?,?,?,?,?,str_to_date(?,'%m/%d/%Y'),?,?)");
+        $stmt->bind_param("iisssissss",
           $contact_id,
           $user_id,
-          $_POST["title_id"],
           $_POST["primary_name"],
           $_POST["first_name"],
           $_POST["middle_name"],
